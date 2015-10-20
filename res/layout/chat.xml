@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"    android:clipToPadding="true"
+    android:fitsSystemWindows="true" >
+
+    <com.science.strangertofriend.widget.RippleView
+        android:id="@+id/rippleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"
+        app:rv_ripplePadding="30dp"
+        ripple:rv_type="simpleRipple"
+        ripple:rv_zoom="false" >
+
+        <Button
+            android:id="@+id/find_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_click"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="@string/find_password"
+            android:textColor="#fff"
+            android:textSize="23sp" />
+    </com.science.strangertofriend.widget.RippleView>
+
+</RelativeLayout>

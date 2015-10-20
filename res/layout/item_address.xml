@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical" >
+
+    <TextView
+        android:id="@+id/catalog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#e3e3e3"
+        android:paddingBottom="5dip"
+        android:paddingLeft="10dip"
+        android:paddingTop="5dip"
+        android:text="@string/a"
+        android:textColor="#898989"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/avater_list"
+        android:layout_below="@id/catalog"
+        android:layout_margin="10dip" >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/friend_avatar"
+            android:layout_width="@dimen/avater_list"
+            android:layout_height="@dimen/avater_list"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:src="@drawable/chat_default_user_avatar"
+            app:border_color="#fff"
+            app:border_width="0dp" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_toRightOf="@id/friend_avatar"
+            android:textColor="#3e3e39"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

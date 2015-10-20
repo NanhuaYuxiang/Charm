@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.science.strangertofriend.widget.RevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/reveal_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/user_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.science.strangertofriend.widget.DampView
+            android:id="@+id/dampview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <!-- 此处必须设置imageview的scaleType为centerCrop,当然在代码中设置也可以 -->
+
+                    <ImageView
+                        android:id="@+id/user_background_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/friend_add_bg_img"
+                        android:contentDescription="@null"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/myself_bg" />
+
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/scanner_back_img"
+                        android:contentDescription="@null"
+                        android:minHeight="55dp"
+                        android:minWidth="55dp"
+                        android:scaleType="centerInside" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/avatar"
+                            android:layout_width="@dimen/avater_user"
+                            android:layout_height="@dimen/avater_user"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="15dp"
+                            android:src="@drawable/default_user_img"
+                            app:border_color="#FFEEEEEE"
+                            app:border_width="4dp" />
+
+                        <LinearLayout
+                            android:id="@+id/linear_username"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/avatar"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:id="@+id/username"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:text="@string/username"
+                                android:textColor="#fff"
+                                android:textSize="22sp" />
+
+                            <ImageView
+                                android:id="@+id/gender"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@null" />
+                        </LinearLayout>
+
+                        <com.science.strangertofriend.widget.RippleView
+                            android:id="@+id/user_add_rippleView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/linear_username"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            app:rv_ripplePadding="10dp"
+                            ripple:rv_type="simpleRipple"
+                            ripple:rv_zoom="false" >
+
+                            <Button
+                                android:id="@+id/user_add"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/add_friend_button"
+                                android:drawableLeft="@drawable/user_add"
+                                android:drawablePadding="10dp"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:text="@string/add_friend"
+                                android:textColor="#8f8f8f"
+                                android:textSize="20sp" />
+                        </com.science.strangertofriend.widget.RippleView>
+                    </RelativeLayout>
+                </FrameLayout>
+
+                <!-- 我的账号 -->
+
+                <TextView
+                    android:id="@+id/friend_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/friend_number"
+                    android:textColor="#f698b2"
+                    android:textSize="20sp" />
+
+                <View
+                    android:id="@+id/friend_name_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#f698b2" />
+
+                <TextView
+                    android:id="@+id/friend_number_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/acount"
+                    android:gravity="center_vertical"
+                    android:textSize="16sp" />
+
+                <!-- 个人信息开始 -->
+
+                <RelativeLayout
+                    android:id="@+id/friend_message_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp" >
+
+                    <TextView
+                        android:id="@+id/friend_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/user_message"
+                        android:textColor="#f698b2"
+                        android:textSize="20sp" />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/friend_message_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="1dp"
+                    android:background="#f698b2" />
+
+                <!-- 基本信息结束 -->
+
+
+                <!-- 当前位置 -->
+
+                <RelativeLayout
+                    android:id="@+id/friend_position_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/current_place"
+                        android:gravity="center_vertical"
+                        android:text="@string/user_position"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/friend_position_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/friend_position_content"
+                        android:textColor="#686868"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <!-- 出生 -->
+
+                <RelativeLayout
+                    android:id="@+id/friend_birth_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/birth"
+                        android:gravity="center_vertical"
+                        android:text="@string/user_birth"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/friend_birth_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/user_unconsummate"
+                        android:textColor="#686868"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <!-- 家乡 -->
+
+                <RelativeLayout
+                    android:id="@+id/friend_home_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/hometown"
+                        android:gravity="center_vertical"
+                        android:text="@string/user_home"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/friend_home_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/user_unconsummate"
+                        android:textColor="#686868"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <!-- 恋爱 -->
+
+                <RelativeLayout
+                    android:id="@+id/friend_inlove_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/inlove"
+                        android:gravity="center_vertical"
+                        android:text="@string/user_inlove"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/friend_inlove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/user_unconsummate"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <!-- 星座 -->
+
+                <RelativeLayout
+                    android:id="@+id/user_start_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/xingzuo"
+                        android:gravity="center_vertical"
+                        android:text="@string/user_xingzuo"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/friend_constellation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/user_unconsummate"
+                        android:textColor="#686868"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+                <!-- 个性签名 -->
+
+                <LinearLayout
+                    android:id="@+id/user_mystatement_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/user_sign"
+                        android:gravity="center_vertical"
+                        android:text="@string/user_sign"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/friend_mystatement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="@string/user_unconsummate"
+                        android:textColor="#686868"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.science.strangertofriend.widget.DampView>
+    </RelativeLayout>
+
+</com.science.strangertofriend.widget.RevealLayout>

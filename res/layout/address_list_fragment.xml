@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/address_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff" >
+
+        <com.science.strangertofriend.utils.ClearEditText
+            android:id="@+id/filter_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="8dp"
+            android:layout_toLeftOf="@+id/sidrbar"
+            android:background="@drawable/search_bar_edit_selector"
+            android:drawableLeft="@drawable/search_bar_icon_normal"
+            android:hint="@string/hint_search"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:singleLine="true"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/filter_edit"
+            android:layout_gravity="top"
+            android:layout_toLeftOf="@+id/sidrbar"
+            android:orientation="horizontal" >
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <com.baoyz.swipemenulistview.SwipeMenuListView
+                    android:id="@+id/country_lvcountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scrollbars="none" >
+                </com.baoyz.swipemenulistview.SwipeMenuListView>
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+            <TextView
+                android:id="@+id/dialog"
+                android:layout_width="80.0dip"
+                android:layout_height="80.0dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/show_head_toast_bg"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="30.0dip"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <com.science.strangertofriend.widget.SideBar
+            android:id="@+id/sidrbar"
+            android:layout_width="30.0dip"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+</io.codetail.widget.RevealFrameLayout>
