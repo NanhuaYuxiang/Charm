@@ -45,14 +45,14 @@ public class ShakeFragment extends Fragment implements ScreenShotable {
 	private View mRootView;
 
 	// 摇一摇
-	private RelativeLayout mImgUp;
-	private RelativeLayout mImgDn;
-	private Vibrator mVibrator;
+	private RelativeLayout mImgUp;//摇动手机后向上的半个图片
+	private RelativeLayout mImgDn;//摇动手机后向下的半个图片
+	private Vibrator mVibrator;//振子
 	private ShakeListener mShakeListener = null;
 	private ImageView shake_line_up;
 	private ImageView shake_line_down;
 	private ImageView shakeBg;
-	private SoundPool soundPool;// 声明一个SoundPool
+	private SoundPool soundPool;// 声明一个SoundPool（声音池）
 	private int music;// 定
 	private int musicMatch;// 定
 	private boolean flg = true;

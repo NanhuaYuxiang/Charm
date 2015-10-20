@@ -50,7 +50,7 @@
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="0EDbtjyfixvEuZseysANcMov" />
+            android:value="2IivAUHH423REURXebA8WVKm" />
 
         <activity
             android:name="com.science.strangertofriend.ui.WelcomeActivity"

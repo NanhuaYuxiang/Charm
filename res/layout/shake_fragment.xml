@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffe1e0de" >
-
+		<!-- 摇动手机显示的背景 -->
         <ImageView
             android:id="@+id/shakeBg"
             android:layout_width="match_parent"

@@ -45,8 +45,8 @@ public class AppContext extends Application {
 
 		// U need your AVOS key and so on to run the code.
 		AVOSCloud.initialize(getApplicationContext(),
-				"naxbv0f9j653brj453n6yzcvlwx44oeuuw1uve2bvzipd3gu",
-				"hf1nu0zrbbwupc18c363kwuluu00gf7ujaku0bfr5boapqbc");
+				"u30ryjydwuqfa8edh8oo6af2kf78cgh3uatpa3bj5s837rla",
+				"u44at27q33q07n14i0xdp7clqgq0d5x9a8o4trssw3t7gija");
 		// ∆Ù”√±¿¿£¥ÌŒÛÕ≥º∆
 		AVAnalytics.enableCrashReport(this.getApplicationContext(), true);
 		AVOSCloud.setDebugLogEnabled(true);

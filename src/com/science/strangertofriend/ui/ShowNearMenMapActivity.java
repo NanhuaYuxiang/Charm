@@ -156,6 +156,7 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		mLocationMenList = new ArrayList<LocationMenList>();
 		mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout);
 		mMapLayout = (FrameLayout) findViewById(R.id.map_layout);
+		//设置透明色
 		mMapLayout.setBackgroundColor(Color.TRANSPARENT);
 
 		AVUser currentUser = AVUser.getCurrentUser();
@@ -173,14 +174,14 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		mLocationClient = new LocationClient(getApplicationContext());
 		mLocationListener = new MyLocationListener();
 		mLocationClient.registerLocationListener(mLocationListener);
-
+		
 		LocationClientOption option = new LocationClientOption();
 		// option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
 		// option.setNeedDeviceDirect(true);//返回的定位结果包含手机机头的方向
 		option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
 		option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
 		option.setOpenGps(true);
-		option.setScanSpan(3600000);// 设置发起定位请求的间隔时间为1000ms
+		option.setScanSpan(10000);// 每隔十秒发一次定位请求
 		mLocationClient.setLocOption(option);
 
 		// 定位到我的位置
