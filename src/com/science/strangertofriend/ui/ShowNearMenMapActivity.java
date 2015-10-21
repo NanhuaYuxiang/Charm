@@ -45,6 +45,8 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
@@ -52,6 +54,7 @@ import com.science.strangertofriend.AppContext;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.bean.LocationMenList;
 import com.science.strangertofriend.game.puzzle.PuzzleActivity;
+import com.science.strangertofriend.listener.MyOrientationListener;
 import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.utils.Utils;
 import com.science.strangertofriend.widget.RevealLayout;
@@ -91,7 +94,9 @@ public class ShowNearMenMapActivity extends BaseActivity {
 	private ArrayList<LocationMenList> mLocationMenList;
 
 	// 自定义定位图标
-	// private BitmapDescriptor mIconLocation;
+	private BitmapDescriptor mIconLocation;
+	private float currentX;
+	private MyOrientationListener myOrientationListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +161,7 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		mLocationMenList = new ArrayList<LocationMenList>();
 		mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout);
 		mMapLayout = (FrameLayout) findViewById(R.id.map_layout);
-		//设置透明色
+		// 设置透明色
 		mMapLayout.setBackgroundColor(Color.TRANSPARENT);
 
 		AVUser currentUser = AVUser.getCurrentUser();
@@ -174,15 +179,27 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		mLocationClient = new LocationClient(getApplicationContext());
 		mLocationListener = new MyLocationListener();
 		mLocationClient.registerLocationListener(mLocationListener);
-		
+
 		LocationClientOption option = new LocationClientOption();
 		// option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
 		// option.setNeedDeviceDirect(true);//返回的定位结果包含手机机头的方向
 		option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
 		option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
 		option.setOpenGps(true);
-		option.setScanSpan(10000);// 每隔十秒发一次定位请求
+		option.setScanSpan(1000);// 每隔1秒发一次定位请求
 		mLocationClient.setLocOption(option);
+
+		// 给方向箭头添加方向传感器监听
+		myOrientationListener = new MyOrientationListener(context);
+
+		myOrientationListener
+				.setOnOrientationListener(new com.science.strangertofriend.listener.MyOrientationListener.OnOrientationListener() {
+
+					@Override
+					public void onOrientationChanged(float x) {
+						currentX = x;
+					}
+				});
 
 		// 定位到我的位置
 		mMapLocation.setOnClickListener(new OnClickListener() {
@@ -193,8 +210,6 @@ public class ShowNearMenMapActivity extends BaseActivity {
 			}
 		});
 
-		// mIconLocation = BitmapDescriptorFactory
-		// .fromResource(R.drawable.navi_map_gps_locked);
 	}
 
 	private void initMarker() {
@@ -209,16 +224,19 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		public void onReceiveLocation(BDLocation location) {
 
 			MyLocationData data = new MyLocationData.Builder()
-					.accuracy(location.getRadius())
+					.direction(currentX).accuracy(location.getRadius())
 					.latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
 			mBaiduMap.setMyLocationData(data);
 
+			// 自定义方向箭头
+			mIconLocation = BitmapDescriptorFactory
+					.fromResource(R.drawable.navi_map_gps_locked);
+
 			// 设置自定义图标
-			// MyLocationConfiguration configuration = new
-			// MyLocationConfiguration(
-			// LocationMode.NORMAL, true, mIconLocation);
-			// mBaiduMap.setMyLocationConfigeration(configuration);
+			MyLocationConfiguration configuration = new MyLocationConfiguration(
+					LocationMode.NORMAL, true, mIconLocation);
+			mBaiduMap.setMyLocationConfigeration(configuration);
 
 			// 更新经纬度
 			mLatitude = location.getLatitude();
@@ -312,7 +330,7 @@ public class ShowNearMenMapActivity extends BaseActivity {
 			TextView textView = new TextView(context);
 			textView.setBackgroundResource(R.drawable.location_tips);
 			textView.setPadding(23, 20, 20, 40);
-			textView.setTextColor(Color.WHITE);
+			textView.setTextColor(Color.RED);
 			textView.setText(menList.getUsername());
 
 			InfoWindow infoWindow;
@@ -457,6 +475,9 @@ public class ShowNearMenMapActivity extends BaseActivity {
 			mLocationClient.start();
 		}
 		mLocationClient.requestLocation();
+
+		// 开启方向传感器
+		myOrientationListener.start();
 	}
 
 	@Override
@@ -465,6 +486,9 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		// 停止定位
 		mBaiduMap.setMyLocationEnabled(false);
 		mLocationClient.stop();
+
+		// 停止方向传感器
+		myOrientationListener.stop();
 	}
 
 	@Override
