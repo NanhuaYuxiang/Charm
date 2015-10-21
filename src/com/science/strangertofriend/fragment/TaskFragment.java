@@ -7,28 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import yalantis.com.sidemenu.interfaces.ScreenShotable;
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ImageView;
-
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
@@ -52,44 +30,59 @@ import com.science.strangertofriend.adapter.SwingBottomInAnimationAdapter;
 import com.science.strangertofriend.ui.ChatRoomActivity;
 import com.science.strangertofriend.utils.AVService;
 
+import yalantis.com.sidemenu.interfaces.ScreenShotable;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 /**
- * @description 任务界面
- * 
- * @author 赵鑫
- * @school University of South China
- * @email apologizetoher@Gmail.com
- * @2015-10-21
- * 
- */
 
-public class MessageFragment extends Fragment implements ScreenShotable,
-		OnRefreshListener {
-
-	private ImageView mChatNofriend;
+* @description 任务界面
+* 
+* @author 赵鑫
+* @school University of South China
+* @email apologizetoher@Gmail.com
+* @2015-10-21
+*/
+public class TaskFragment extends Fragment implements ScreenShotable, OnRefreshListener{
+	private ImageView mImgNoTask;
 	private View mContainerView;
 	private Bitmap mBitmap;
 	private View mRootView;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-	private SwipeMenuListView mMessageList;
+	private SwipeMenuListView mTaskList;
 	public static MessageListAdapter mMessageListAdapter;
 	public static List<Map<String, Object>> mRequestList;
 	private static String mCurrentUsername;
 
-	// private static String mFriend;
-	// private static String mMessage;
-	// private static String mSendTime;
 
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		this.mContainerView = view.findViewById(R.id.message_container);
+		this.mContainerView = view.findViewById(R.id.task_container);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-		mRootView = inflater.inflate(R.layout.message_fragment, container,
+		mRootView = inflater.inflate(R.layout.task_recently, container,
 				false);
 
 		initView();
@@ -102,7 +95,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	@SuppressLint("ResourceAsColor")
 	private void initView() {
 
-		mChatNofriend = (ImageView) mRootView.findViewById(R.id.chat_nofriend);
+		mImgNoTask = (ImageView) mRootView.findViewById(R.id.img_noTask);
 
 		// 刷新初始化
 		mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView
@@ -114,8 +107,8 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 				android.R.color.holo_orange_light,
 				android.R.color.holo_red_light);
 
-		mMessageList = (SwipeMenuListView) mRootView
-				.findViewById(R.id.message_listView);
+		mTaskList = (SwipeMenuListView) mRootView
+				.findViewById(R.id.task_listView);
 		mRequestList = new ArrayList<Map<String, Object>>();
 
 		if (AVUser.getCurrentUser() != null) {
@@ -130,8 +123,8 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 		// 动态列表
 		SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(
 				mMessageListAdapter);
-		swingBottomInAnimationAdapter.setAbsListView(mMessageList);
-		mMessageList.setAdapter(swingBottomInAnimationAdapter);
+		swingBottomInAnimationAdapter.setAbsListView(mTaskList);
+		mTaskList.setAdapter(swingBottomInAnimationAdapter);
 
 		getMessageList();
 	}
@@ -147,7 +140,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 			@Override
 			public void done(List<AVObject> list, AVException e) {
 				if (list != null && list.size() != 0) {
-					mChatNofriend.setVisibility(View.GONE);
+					mImgNoTask.setVisibility(View.GONE);
 					mRequestList.clear();
 					for (AVObject avo : list) {
 
@@ -164,8 +157,8 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 				} else {
 					mRequestList.clear();
 					mMessageListAdapter.notifyDataSetChanged();
-					mChatNofriend.setVisibility(View.VISIBLE);
-					mChatNofriend.setImageDrawable(getResources().getDrawable(
+					mImgNoTask.setVisibility(View.VISIBLE);
+					mImgNoTask.setImageDrawable(getResources().getDrawable(
 							R.drawable.chat_nofriend));
 				}
 			}
@@ -211,10 +204,10 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 		};
 
 		// set creator
-		mMessageList.setMenuCreator(creator);
+		mTaskList.setMenuCreator(creator);
 
 		// step 2. listener item click event
-		mMessageList.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		mTaskList.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public void onMenuItemClick(int position, SwipeMenu menu, int index) {
 				switch (index) {
@@ -234,7 +227,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 		});
 
 		// set SwipeListener
-		mMessageList.setOnSwipeListener(new OnSwipeListener() {
+		mTaskList.setOnSwipeListener(new OnSwipeListener() {
 
 			@Override
 			public void onSwipeStart(int position) {
@@ -251,7 +244,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 		// listView.setCloseInterpolator(new BounceInterpolator());
 
 		// test item long click
-		mMessageList.setOnItemLongClickListener(new OnItemLongClickListener() {
+		mTaskList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@SuppressLint("ShowToast")
 			@Override
@@ -263,7 +256,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 			}
 		});
 
-		mMessageList.setOnItemClickListener(new OnItemClickListener() {
+		mTaskList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -351,7 +344,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	 * @param position
 	 */
 	private void findMessageListFriend(final String message, final int position) {
-		mChatNofriend.setVisibility(View.GONE);
+		mImgNoTask.setVisibility(View.GONE);
 		AVQuery<AVObject> query = new AVQuery<AVObject>("MessageList");
 		query.whereEqualTo("currentUser", mCurrentUsername);
 		query.whereEqualTo("friend", mRequestList.get(position).get("friend")
@@ -418,7 +411,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 						mContainerView.getHeight(), Bitmap.Config.ARGB_8888);
 				Canvas canvas = new Canvas(bitmap);
 				mContainerView.draw(canvas);
-				MessageFragment.this.mBitmap = bitmap;
+				TaskFragment.this.mBitmap = bitmap;
 			}
 		}, 0);
 

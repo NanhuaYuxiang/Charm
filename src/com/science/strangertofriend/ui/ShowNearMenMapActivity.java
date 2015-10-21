@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,16 +61,16 @@ import com.science.strangertofriend.utils.Utils;
 import com.science.strangertofriend.widget.RevealLayout;
 
 /**
- * @description 地图显示附近的人
+ * @description 地图显示附近的任务
  * 
- * @author 幸运Science 陈土燊
+ * @author 赵鑫
  * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-1
+ * @email apologizetoher@Gmail.com
+ * @2015-10-21
  * 
  */
 
-public class ShowNearMenMapActivity extends BaseActivity {
+public class ShowNearMenMapActivity extends BaseActivity implements OnClickListener {
 
 	private MapView mMapView = null;
 	private BaiduMap mBaiduMap;
@@ -97,7 +98,7 @@ public class ShowNearMenMapActivity extends BaseActivity {
 	private BitmapDescriptor mIconLocation;
 	private float currentX;
 	private MyOrientationListener myOrientationListener;
-
+	private ImageView add_task;//添加任务
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -144,6 +145,8 @@ public class ShowNearMenMapActivity extends BaseActivity {
 	}
 
 	private void initComponent() {
+		add_task=(ImageView) findViewById(R.id.add_task);
+		add_task.setOnClickListener(this);
 		// 获取地图控件引用
 		mMapView = (MapView) findViewById(R.id.bmapView);
 		mBaiduMap = mMapView.getMap();
@@ -172,6 +175,7 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		} else {
 			Toast.makeText(context, "您还没有登陆喔", Toast.LENGTH_LONG).show();
 		}
+		
 	}
 
 	private void initLocation() {
@@ -496,6 +500,14 @@ public class ShowNearMenMapActivity extends BaseActivity {
 		super.onPause();
 		// 在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
 		mMapView.onPause();
+	}
+	/**
+	 * 添加任务
+	 * @param v
+	 */
+	@Override
+	public void onClick(View v) {
+		
 	}
 
 }
