@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -86,89 +87,91 @@ public class AddTaskActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// if (!theme.getText().toString().isEmpty()) {
-				//
-				// if (!description.getText().toString().isEmpty()) {
-				//
-				// if (!endTime.getText().toString().isEmpty()) {
-				//
-				// if (!publishedPrice.getText().toString().isEmpty()) {
-				// // progressDialogShow();
-				// // publishTask();
-				// AVObject test = new AVObject("test");
-				// test.put("test1", "33333");
-				// test.put("test2", "444444");
-				//
-				// test.saveInBackground(new SaveCallback() {
-				//
-				// @Override
-				// public void done(AVException arg0) {
-				// if(arg0==null){
-				// Toast.makeText(AddTaskActivity.this, "OK",
-				// Toast.LENGTH_SHORT);
-				// }else {
-				//
-				// Toast.makeText(AddTaskActivity.this, "failed",
-				// Toast.LENGTH_SHORT);
-				// }
-				// }
-				// });
-				//
-				// } else {
-				// Toast.makeText(AddTaskActivity.this,
-				// "请填写任务香金数", Toast.LENGTH_SHORT).show();
-				// }
-				//
-				// } else {
-				// Toast.makeText(AddTaskActivity.this, "请填写任务截止时间",
-				// Toast.LENGTH_SHORT).show();
-				// }
-				//
-				// } else {
-				// Toast.makeText(AddTaskActivity.this, "请填写任务描述",
-				// Toast.LENGTH_SHORT).show();
-				// }
-				//
-				// } else {
-				// Toast.makeText(AddTaskActivity.this, "请填写任务主题",
-				// Toast.LENGTH_SHORT).show();
-				// }
-				
-				Log.e("AddTaskActivity", "bt is clicked");
-				Log.e("AddTaskActivity", theme.getText().toString());
-				Log.e("AddTaskActivity", endTime.getText().toString());
-				Log.e("AddTaskActivity", publishedLocation.getText().toString());
-				Log.e("AddTaskActivity", publishedPrice.getText().toString());
-				
-				
+				if (!theme.getText().toString().isEmpty()) {
+
+					if (!description.getText().toString().isEmpty()) {
+
+						if (!endTime.getText().toString().isEmpty()) {
+
+							if (!publishedPrice.getText().toString().isEmpty()) {
+								 progressDialogShow();
+//								 publishTask();
+//								AVObject test = new AVObject("test");
+//								test.put("test1", "33333");
+//								test.put("test2", "444444");
+//
+//								test.saveInBackground(new SaveCallback() {
+//
+//									@Override
+//									public void done(AVException arg0) {
+//										if (arg0 == null) {
+//											Toast.makeText(
+//													AddTaskActivity.this, "OK",
+//													Toast.LENGTH_SHORT);
+//										} else {
+//
+//											Toast.makeText(
+//													AddTaskActivity.this,
+//													"failed",
+//													Toast.LENGTH_SHORT);
+//										}
+//									}
+//								});
+
+							} else {
+								Toast.makeText(AddTaskActivity.this,
+										"请填写任务香金数", Toast.LENGTH_SHORT).show();
+							}
+
+						} else {
+							Toast.makeText(AddTaskActivity.this, "请填写任务截止时间",
+									Toast.LENGTH_SHORT).show();
+						}
+
+					} else {
+						Toast.makeText(AddTaskActivity.this, "请填写任务描述",
+								Toast.LENGTH_SHORT).show();
+					}
+
+				} else {
+					Toast.makeText(AddTaskActivity.this, "请填写任务主题",
+							Toast.LENGTH_SHORT).show();
+				}
+
+//				Log.e("AddTaskActivity", "bt is clicked");
+//				Log.e("AddTaskActivity", theme.getText().toString());
+//				Log.e("AddTaskActivity", endTime.getText().toString());
+//				Log.e("AddTaskActivity", publishedLocation.getText().toString());
+//				Log.e("AddTaskActivity", publishedPrice.getText().toString());
+//
 //				if (!theme.getText().toString().isEmpty()
 //						&& !description.getText().toString().isEmpty()
 //						&& !endTime.getText().toString().isEmpty()
 //						&& !publishedLocation.getText().toString().isEmpty()
 //						&& !publishedPrice.getText().toString().isEmpty()) {
-					Log.e("if", "无空值");
-					AVObject test = new AVObject("test");
-					test.put("test1", "555555555");
-					test.put("test2", "666666666");
-					
-					test.saveInBackground(new SaveCallback() {
-						
-						@Override
-						public void done(AVException arg0) {
-							if (arg0 == null) {
-								Toast.makeText(AddTaskActivity.this, "OK",
-										Toast.LENGTH_SHORT);
-							} else {
-								
-								Toast.makeText(AddTaskActivity.this, "failed",
-										Toast.LENGTH_SHORT);
-							}
-						}
-					});
-//				}else {
-//					Toast.makeText(AddTaskActivity.this, "请填写完整任务信息", Toast.LENGTH_SHORT).show();
+//					AVObject test = new AVObject("test");
+//					test.put("test1", "555555555");
+//					test.put("test2", "666666666");
+//
+//					test.saveInBackground(new SaveCallback() {
+//
+//						@Override
+//						public void done(AVException arg0) {
+//							if (arg0 == null) {
+//								Toast.makeText(AddTaskActivity.this, "OK",
+//										Toast.LENGTH_SHORT);
+//							} else {
+//
+//								Toast.makeText(AddTaskActivity.this, "failed",
+//										Toast.LENGTH_SHORT);
+//							}
+//						}
+//					});
+//				} else {
+//					Toast.makeText(AddTaskActivity.this, "请填写完整任务信息",
+//							Toast.LENGTH_SHORT).show();
 //				}
-////
+				//
 			}
 
 		});
@@ -201,16 +204,16 @@ public class AddTaskActivity extends BaseActivity {
 		String lacationString = publishedLocation.getText().toString();
 		publisherName = AVUser.getCurrentUser().getUsername();
 		String price = publishedPrice.getText().toString();
-		AVService.addNewTask(publisherName, endTimeString, 30.000, 40.000,
+		AVService.addNewTask(publisherName,themeString,descriptionString, endTimeString, ShowNearMenMapActivity.getLatitude(), ShowNearMenMapActivity.getLongitude(),
 				price, new SaveCallback() {
 
 					@Override
 					public void done(AVException exception) {
 						if (exception == null) {
-							// mHandler.obtainMessage(1).sendToTarget();
+							 mHandler.obtainMessage(1).sendToTarget();
 							Log.e("AddTaskActivity", "保存成功");
 						} else {
-							// mHandler.obtainMessage(2).sendToTarget();
+							 mHandler.obtainMessage(2).sendToTarget();
 							Log.e("AddTaskActivity", "保存失败");
 						}
 					}
@@ -221,24 +224,32 @@ public class AddTaskActivity extends BaseActivity {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
-				AddTaskActivity.this.finish();
 				final SweetAlertDialog dialog = new SweetAlertDialog(
 						AddTaskActivity.this, SweetAlertDialog.SUCCESS_TYPE);
 				dialog.setTitleText("Good job");
-				dialog.setConfirmText("Saved successfully");
+				dialog.setContentText("Saved successfully");
 				dialog.show();
 				dialog.setCancelable(false);
 				Log.e("AddTaskActivity", "保存成功");
-				new CountDownTimer(800 * 4, 800) {
-					public void onTick(long millisUntilFinished) {
-						colorProgress(dialog);
+//				new CountDownTimer(800 * 4, 800) {
+//					public void onTick(long millisUntilFinished) {
+//						colorProgress(dialog);
+//					}
+//
+//					public void onFinish() {
+//						i = -1;
+//						dialog.dismiss();
+//					}
+//				}.start();
+				
+				dialog.setConfirmText("确认");
+				dialog.setConfirmClickListener(new OnSweetClickListener() {
+					
+					public void onClick(SweetAlertDialog sweetAlertDialog) {
+						
+						AddTaskActivity.this.finish();
 					}
-
-					public void onFinish() {
-						i = -1;
-						dialog.dismiss();
-					}
-				}.start();
+				});
 				break;
 			case 2:
 				Log.e("AddTaskActivity", "保存失败");
@@ -279,10 +290,10 @@ public class AddTaskActivity extends BaseActivity {
 
 		theme = (EditText) findViewById(R.id.theme);
 		description = (EditText) findViewById(R.id.description);
-		endTime = (EditText) findViewById(R.id.time);
+		endTime = (EditText) findViewById(R.id.time_task);
 		publishedPrice = (EditText) findViewById(R.id.price);
 		bt_publish = (Button) findViewById(R.id.distribute);
-		publishedLocation=(EditText) findViewById(R.id.location);
+		publishedLocation = (EditText) findViewById(R.id.location);
 	}
 
 }

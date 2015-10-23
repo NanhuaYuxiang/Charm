@@ -191,10 +191,14 @@ public class AVService {
 	 * @param latitude  纬度
 	 * @param longititude   经度
 	 * @param price 任务香金数
+	 * @param des 任务描述
+	 * @param theme 任务主题
 	 */
-	public static void addNewTask(String publisherName,String endTime,double latitude, double longititude,String price,SaveCallback saveCallback){
+	public static void addNewTask(String publisherName,String theme,String des,String endTime,double latitude, double longititude,String price,SaveCallback saveCallback){
 		AVObject task=new AVObject("Task");
 		task.put("publisherName", publisherName);
+		task.put("theme", theme);
+		task.put("TaskDescription", des);
 		task.put("endTime", endTime);
 		task.put("latitude", latitude);
 		task.put("longititude", longititude);
