@@ -100,7 +100,8 @@
         </activity>
         <activity android:name="com.science.strangertofriend.ui.RankingActivity" >
         </activity>
-
+        <activity android:name="com.science.strangertofriend.ui.AddTaskActivity" >
+        </activity>
         <!-- 百度地图定位开始 -->
         <service
             android:name="com.baidu.location.f"

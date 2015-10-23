@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -84,11 +83,11 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 	private LocationClient mLocationClient;
 	private MyLocationListener mLocationListener;
 	private boolean isFirstIn = true;
-	private double mLatitude;
-	private double mLongtitude;
+	private static double mLatitude;
+	private static double mLongtitude;
 	private ImageView mMapLocation;
 	private AVGeoPoint mMyPoint;
-
+	
 	// 覆盖物相关
 	private BitmapDescriptor mMarkDescriptor;
 	// 列表数据
@@ -145,6 +144,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 	}
 
 	private void initComponent() {
+		
 		add_task=(ImageView) findViewById(R.id.add_task);
 		add_task.setOnClickListener(this);
 		// 获取地图控件引用
@@ -507,7 +507,13 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 	 */
 	@Override
 	public void onClick(View v) {
-		
+		Intent intent=new Intent(this,AddTaskActivity.class);
+		startActivity(intent);
+	}	
+	public static double getLatitude(){
+		return mLatitude;
 	}
-
+	public static double getLongitude(){
+		return mLongtitude;
+	}
 }

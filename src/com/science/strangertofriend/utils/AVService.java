@@ -3,6 +3,8 @@ package com.science.strangertofriend.utils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.R.bool;
+
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVGeoPoint;
@@ -181,7 +183,24 @@ public class AVService {
 		userInformation.put("personalStatement", personalStatement);
 		userInformation.saveInBackground(saveCallback);
 	}
-
+	
+	/**
+	 * 
+	 * @param publisherName 发布任务人姓名 
+	 * @param endTime 任务截止时间
+	 * @param latitude  纬度
+	 * @param longititude   经度
+	 * @param price 任务香金数
+	 */
+	public static void addNewTask(String publisherName,String endTime,double latitude, double longititude,String price,SaveCallback saveCallback){
+		AVObject task=new AVObject("Task");
+		task.put("publisherName", publisherName);
+		task.put("endTime", endTime);
+		task.put("latitude", latitude);
+		task.put("longititude", longititude);
+		task.put("price", price);
+		task.saveInBackground(saveCallback);
+	}
 	// APP每天签到
 	public static void dailySign(String username, int signTimes,
 			String signDate, String signPosition, SaveCallback saveCallback) {

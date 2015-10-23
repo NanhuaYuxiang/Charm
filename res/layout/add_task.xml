@@ -37,6 +37,15 @@
             android:textColor="#fff"
             android:textSize="20sp" />
     </RelativeLayout>
+    <!-- task相关的图片 -->
+
+   <!-- <ImageView
+        android:id="@+id/img"
+        android:layout_width="260dp"
+        android:layout_height="140dp"
+        android:layout_below="@id/title_layout"
+        android:layout_centerHorizontal="true"
+        />  -->
 
     <com.science.strangertofriend.widget.RevealLayout
         android:id="@+id/reveal_layout"
@@ -50,17 +59,17 @@
             android:layout_height="match_parent" >
 
             <RelativeLayout
-                android:id="@+id/alter_information_layout"
+                android:id="@+id/add_task_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 android:layout_marginTop="10dp" >
 
-                <!-- 出生日期 -->
+                <!-- 主题 -->
 
                 <RelativeLayout
-                    android:id="@+id/birth_layout"
+                    android:id="@+id/theme_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp" >
@@ -71,11 +80,11 @@
                         android:layout_alignParentLeft="true"
                         android:drawableLeft="@drawable/birth"
                         android:gravity="center_vertical"
-                        android:text="@string/user_birth"
+                        android:text="主题描述"
                         android:textSize="16sp" />
 
                     <EditText
-                        android:id="@+id/birth"
+                        android:id="@+id/theme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -85,22 +94,23 @@
                         android:textColor="#686868"
                         android:textSize="16sp" />
                 </RelativeLayout>
-				<!-- 分割线 -->
+                <!-- 分割线 -->
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/birth_layout"
+                    android:layout_below="@id/theme_layout"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:background="#ccc" />
 
-                <!-- 家乡 -->
+                <!-- 描述 -->
 
                 <RelativeLayout
-                    android:id="@+id/hometown_layout"
+                    android:id="@+id/description_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/birth_layout"
+                    android:layout_below="@id/theme_layout"
                     android:layout_marginTop="15dp" >
 
                     <TextView
@@ -109,11 +119,11 @@
                         android:layout_alignParentLeft="true"
                         android:drawableLeft="@drawable/hometown"
                         android:gravity="center_vertical"
-                        android:text="@string/user_home"
+                        android:text="任务描述"
                         android:textSize="16sp" />
 
                     <EditText
-                        android:id="@+id/hometown"
+                        android:id="@+id/description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -127,18 +137,18 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/hometown_layout"
+                    android:layout_below="@id/description_layout"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:background="#ccc" />
 
-                <!-- 恋爱 -->
+                <!-- 时间 -->
 
                 <RelativeLayout
-                    android:id="@+id/inlove_layout"
+                    android:id="@+id/time_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/hometown_layout"
+                    android:layout_below="@id/description_layout"
                     android:layout_marginTop="15dp" >
 
                     <TextView
@@ -147,11 +157,11 @@
                         android:layout_alignParentLeft="true"
                         android:drawableLeft="@drawable/inlove"
                         android:gravity="center_vertical"
-                        android:text="@string/user_inlove"
+                        android:text="截止时间"
                         android:textSize="16sp" />
 
                     <EditText
-                        android:id="@+id/inlove"
+                        android:id="@+id/time_task"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -165,18 +175,18 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/inlove_layout"
+                    android:layout_below="@id/time_layout"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:background="#ccc" />
 
-                <!-- 星座 -->
+                <!-- 地点 -->
 
                 <RelativeLayout
-                    android:id="@+id/constellation_layout"
+                    android:id="@+id/location_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/inlove_layout"
+                    android:layout_below="@id/time_layout"
                     android:layout_marginTop="15dp" >
 
                     <TextView
@@ -185,11 +195,11 @@
                         android:layout_alignParentLeft="true"
                         android:drawableLeft="@drawable/xingzuo"
                         android:gravity="center_vertical"
-                        android:text="@string/user_xingzuo"
+                        android:text="任务地点"
                         android:textSize="16sp" />
 
                     <EditText
-                        android:id="@+id/constellation"
+                        android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -203,22 +213,21 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/constellation_layout"
+                    android:layout_below="@id/location_layout"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:background="#ccc" />
 
-                <!-- 个人宣言 -->
+                <!-- 出价 -->
 
                 <LinearLayout
-                    android:id="@+id/personal_statement_layout"
+                    android:id="@+id/price_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/constellation_layout"
+                    android:layout_below="@id/location_layout"
                     android:layout_marginTop="15dp" >
 
                     <TextView
-                        android:id="@+id/personal_statement_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -226,11 +235,11 @@
                         android:drawableLeft="@drawable/user_sign"
                         android:gravity="center_vertical"
                         android:singleLine="true"
-                        android:text="@string/user_sign"
+                        android:text="任务香金"
                         android:textSize="16sp" />
 
                     <EditText
-                        android:id="@+id/personal_statement"
+                        android:id="@+id/price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -245,37 +254,38 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/personal_statement_layout"
+                    android:layout_below="@id/price_layout"
                     android:layout_marginLeft="3dp"
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="3dp"
                     android:background="#ccc" />
             </RelativeLayout>
 
-            <com.science.strangertofriend.widget.RippleView
+          <!--   <com.science.strangertofriend.widget.RippleView
                 android:id="@+id/rippleView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/alter_information_layout"
+                android:layout_below="@id/add_task_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 android:layout_marginTop="30dp"
                 app:rv_ripplePadding="30dp"
                 ripple:rv_type="simpleRipple"
-                ripple:rv_zoom="false" >
+                ripple:rv_zoom="false" > -->
 
                 <Button
-                    android:id="@+id/save"
+                    android:id="@+id/distribute"
+                    android:layout_below="@id/add_task_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_click"
                     android:paddingBottom="7dp"
                     android:paddingTop="7dp"
-                    android:text="@string/save_alter"
+                    android:text="发布"
                     android:textColor="#fff"
                     android:textSize="18sp" />
-            </com.science.strangertofriend.widget.RippleView>
+           <!--  </com.science.strangertofriend.widget.RippleView> -->
         </RelativeLayout>
     </com.science.strangertofriend.widget.RevealLayout>
 

@@ -72,7 +72,7 @@ public class AlterActivity extends BaseActivity {
 		// 设置一个颜色给系统栏
 		tintManager.setTintColor(Color.parseColor("#f698b2"));
 	}
-
+	
 	private void initView() {
 
 		mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout);
