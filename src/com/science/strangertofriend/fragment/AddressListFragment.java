@@ -55,6 +55,7 @@ import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.SortAdapter;
 import com.science.strangertofriend.adapter.SwingBottomInAnimationAdapter;
 import com.science.strangertofriend.bean.SortModel;
+import com.science.strangertofriend.fragment.dealWithListView.DealWithLstView;
 import com.science.strangertofriend.ui.ChatRoomActivity;
 import com.science.strangertofriend.ui.FriendInformationActivity;
 import com.science.strangertofriend.utils.AVService;
@@ -582,7 +583,11 @@ public class AddressListFragment extends Fragment implements ScreenShotable,
 
 		List<SortModel> mSortList = new ArrayList<SortModel>();
 
-		for (AVObject avo : list) {
+		 List<AVObject> list1 = new DealWithLstView().dealWithListView(list);
+		AVObject avObject = list1.get(0);
+
+		for (AVObject avo : list1) {
+			System.out.println(avo.getString("friendEmail"));
 
 			SortModel sortModel = new SortModel();
 
