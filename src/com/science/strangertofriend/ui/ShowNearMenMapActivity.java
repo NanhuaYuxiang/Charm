@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,6 +54,8 @@ import com.baidu.mapapi.model.LatLng;
 import com.science.strangertofriend.AppContext;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.bean.LocationMenList;
+import com.science.strangertofriend.bean.Task;
+import com.science.strangertofriend.fragment.TaskFragment;
 import com.science.strangertofriend.game.puzzle.PuzzleActivity;
 import com.science.strangertofriend.listener.MyOrientationListener;
 import com.science.strangertofriend.utils.AVService;
@@ -69,7 +72,8 @@ import com.science.strangertofriend.widget.RevealLayout;
  * 
  */
 
-public class ShowNearMenMapActivity extends BaseActivity implements OnClickListener {
+public class ShowNearMenMapActivity extends BaseActivity implements
+		OnClickListener {
 
 	private MapView mMapView = null;
 	private BaiduMap mBaiduMap;
@@ -87,7 +91,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 	private static double mLongtitude;
 	private ImageView mMapLocation;
 	private AVGeoPoint mMyPoint;
-	
+
 	// 覆盖物相关
 	private BitmapDescriptor mMarkDescriptor;
 	// 列表数据
@@ -95,9 +99,12 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 
 	// 自定义定位图标
 	private BitmapDescriptor mIconLocation;
+	// 定位图表方向角
 	private float currentX;
 	private MyOrientationListener myOrientationListener;
-	private ImageView add_task;//添加任务
+	private ImageView add_task;// 添加任务
+	private List<Task> taskNearBy=new ArrayList<Task>();//检索到的附近素有符合条件的任务
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -144,8 +151,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 	}
 
 	private void initComponent() {
-		
-		add_task=(ImageView) findViewById(R.id.add_task);
+
+		add_task = (ImageView) findViewById(R.id.add_task);
 		add_task.setOnClickListener(this);
 		// 获取地图控件引用
 		mMapView = (MapView) findViewById(R.id.bmapView);
@@ -175,7 +182,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 		} else {
 			Toast.makeText(context, "您还没有登陆喔", Toast.LENGTH_LONG).show();
 		}
-		
+
 	}
 
 	private void initLocation() {
@@ -183,7 +190,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 		mLocationClient = new LocationClient(getApplicationContext());
 		mLocationListener = new MyLocationListener();
 		mLocationClient.registerLocationListener(mLocationListener);
-
+		// 配置定位器参数
 		LocationClientOption option = new LocationClientOption();
 		// option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
 		// option.setNeedDeviceDirect(true);//返回的定位结果包含手机机头的方向
@@ -264,34 +271,45 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 						Toast.LENGTH_LONG).show();
 
 				// 查找附近1000米的人
-				findMenNearby();
+//				findMenNearby();
+//				findTaskNearBy();
 			}
+			findTaskNearBy();
 		}
 	}
 
-	private void findMenNearby() {
+	/**
+	 * 查找附近的服务
+	 */
+	public void findTaskNearBy() {
 		new Thread(new Runnable() {
-
+			
 			@Override
 			public void run() {
+				AVQuery<AVObject> query = new AVQuery<>("Task");
+				// 查找附近10km内的任务
+				query.whereWithinKilometers("geoPoint", mMyPoint,10);
+				query.whereNotEqualTo("username", mUsername);
 				try {
-					AVQuery<AVObject> query = new AVQuery<>("MyLocation");
-					// 查找附近1000米的人
-					query.whereWithinKilometers("locationPoint", mMyPoint, 1);
-					query.whereNotEqualTo("username", mUsername);
-					List<AVObject> placeList = query.find();
-
-					for (AVObject avo : placeList) {
-						mLocationMenList.add(new LocationMenList(avo
-								.getString("userEmail"), avo
-								.getString("username"),
-								avo.getString("gender"), avo.getAVGeoPoint(
-										"locationPoint").getLatitude(), avo
-										.getAVGeoPoint("locationPoint")
-										.getLongitude(), new PrettyTime()
-										.format(avo.getUpdatedAt())));
+					List<AVObject> taskList = query.find();
+					Task taskBean=null;
+					for(AVObject task:taskList){
+						taskBean=new Task();
+						taskBean.setPublisherName(task.getString("publisherName"));
+						taskBean.setAccepted(false);
+						taskBean.setAccomplished(false);
+						taskBean.setEndTime(task.getString("endTime"));
+						taskBean.setPrice(task.getString("price"));
+						taskBean.setTheme(task.getString("theme"));
+						taskBean.setTaskDescription(task.getString("TaskDescription"));
+						taskBean.setType(task.getString("service_task"));
+						taskBean.setLatitude(task.getAVGeoPoint("geoPoint").getLatitude());
+						taskBean.setLongitude(task.getAVGeoPoint("geoPoint").getLongitude());
+						taskBean.setLocation(task.getString("location"));
+						taskBean.setType(task.getString("service_type"));
+						taskNearBy.add(taskBean);
 					}
-					mMenListHandler.obtainMessage(1).sendToTarget();
+					Log.e("task", taskNearBy.toString());
 				} catch (AVException e) {
 					e.printStackTrace();
 				}
@@ -299,16 +317,46 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 		}).start();
 	}
 
-	@SuppressLint("HandlerLeak")
-	private Handler mMenListHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				addOverLays(mLocationMenList);
-				break;
-			}
-		}
-	};
+//	private void findMenNearby() {
+//		new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				try {
+//					AVQuery<AVObject> query = new AVQuery<>("MyLocation");
+//					// 查找附近1000米的人
+//					query.whereWithinKilometers("locationPoint", mMyPoint, 1);
+//					query.whereNotEqualTo("username", mUsername);
+//					List<AVObject> placeList = query.find();
+//
+//					for (AVObject avo : placeList) {
+//						mLocationMenList.add(new LocationMenList(avo
+//								.getString("userEmail"), avo
+//								.getString("username"),
+//								avo.getString("gender"), avo.getAVGeoPoint(
+//										"locationPoint").getLatitude(), avo
+//										.getAVGeoPoint("locationPoint")
+//										.getLongitude(), new PrettyTime()
+//										.format(avo.getUpdatedAt())));
+//					}
+//					mMenListHandler.obtainMessage(1).sendToTarget();
+//				} catch (AVException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}).start();
+//	}
+//
+//	@SuppressLint("HandlerLeak")
+//	private Handler mMenListHandler = new Handler() {
+//		public void handleMessage(Message msg) {
+//			switch (msg.what) {
+//			case 1:
+//				addOverLays(mLocationMenList);
+//				break;
+//			}
+//		}
+//	};
 
 	// 添加覆盖物
 	private void addOverLays(List<LocationMenList> avObjects) {
@@ -501,19 +549,25 @@ public class ShowNearMenMapActivity extends BaseActivity implements OnClickListe
 		// 在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
 		mMapView.onPause();
 	}
+
 	/**
 	 * 添加任务
+	 * 
 	 * @param v
 	 */
 	@Override
 	public void onClick(View v) {
-		Intent intent=new Intent(this,AddTaskActivity.class);
+		Intent intent = new Intent(this, AddTaskActivity.class);
 		startActivity(intent);
-	}	
-	public static double getLatitude(){
+	}
+
+	public static double getLatitude() {
 		return mLatitude;
 	}
-	public static double getLongitude(){
+
+	public static double getLongitude() {
 		return mLongtitude;
 	}
+	
+	
 }

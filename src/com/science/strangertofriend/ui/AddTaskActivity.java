@@ -1,7 +1,11 @@
 package com.science.strangertofriend.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -20,18 +24,21 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
 import com.avoscloud.leanchatlib.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.science.strangertofriend.R;
+import com.science.strangertofriend.TaskType;
+import com.science.strangertofriend.adapter.MySpinnerAdapter.onItemClickListener;
 import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.widget.RevealLayout;
 
-public class AddTaskActivity extends BaseActivity {
+public class AddTaskActivity extends BaseActivity implements OnClickListener {
 	private RevealLayout mRevealLayout;
-	private RelativeLayout mLayout;
+	private RelativeLayout mLayout,mAdd_task_layout;
 	private ImageView mBackImg;// 返回按钮
 	private TextView mTitle;// 标题
 	private EditText theme, description, endTime, publishedLocation,
@@ -40,6 +47,10 @@ public class AddTaskActivity extends BaseActivity {
 	// private ImageView img_task;//任务相关图片
 	private boolean isAccepted, isaccomplished;// 是否被接受，是否被完成
 	private Button bt_publish;// 发布按钮
+
+	private RelativeLayout spinnner;// spinner的布局
+	private TextView mSpinnerTitle;
+	private List<String> task_types;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,29 +105,29 @@ public class AddTaskActivity extends BaseActivity {
 						if (!endTime.getText().toString().isEmpty()) {
 
 							if (!publishedPrice.getText().toString().isEmpty()) {
-								 progressDialogShow();
-//								 publishTask();
-//								AVObject test = new AVObject("test");
-//								test.put("test1", "33333");
-//								test.put("test2", "444444");
-//
-//								test.saveInBackground(new SaveCallback() {
-//
-//									@Override
-//									public void done(AVException arg0) {
-//										if (arg0 == null) {
-//											Toast.makeText(
-//													AddTaskActivity.this, "OK",
-//													Toast.LENGTH_SHORT);
-//										} else {
-//
-//											Toast.makeText(
-//													AddTaskActivity.this,
-//													"failed",
-//													Toast.LENGTH_SHORT);
-//										}
-//									}
-//								});
+								progressDialogShow();
+								// publishTask();
+								// AVObject test = new AVObject("test");
+								// test.put("test1", "33333");
+								// test.put("test2", "444444");
+								//
+								// test.saveInBackground(new SaveCallback() {
+								//
+								// @Override
+								// public void done(AVException arg0) {
+								// if (arg0 == null) {
+								// Toast.makeText(
+								// AddTaskActivity.this, "OK",
+								// Toast.LENGTH_SHORT);
+								// } else {
+								//
+								// Toast.makeText(
+								// AddTaskActivity.this,
+								// "failed",
+								// Toast.LENGTH_SHORT);
+								// }
+								// }
+								// });
 
 							} else {
 								Toast.makeText(AddTaskActivity.this,
@@ -138,43 +149,47 @@ public class AddTaskActivity extends BaseActivity {
 							Toast.LENGTH_SHORT).show();
 				}
 
-//				Log.e("AddTaskActivity", "bt is clicked");
-//				Log.e("AddTaskActivity", theme.getText().toString());
-//				Log.e("AddTaskActivity", endTime.getText().toString());
-//				Log.e("AddTaskActivity", publishedLocation.getText().toString());
-//				Log.e("AddTaskActivity", publishedPrice.getText().toString());
-//
-//				if (!theme.getText().toString().isEmpty()
-//						&& !description.getText().toString().isEmpty()
-//						&& !endTime.getText().toString().isEmpty()
-//						&& !publishedLocation.getText().toString().isEmpty()
-//						&& !publishedPrice.getText().toString().isEmpty()) {
-//					AVObject test = new AVObject("test");
-//					test.put("test1", "555555555");
-//					test.put("test2", "666666666");
-//
-//					test.saveInBackground(new SaveCallback() {
-//
-//						@Override
-//						public void done(AVException arg0) {
-//							if (arg0 == null) {
-//								Toast.makeText(AddTaskActivity.this, "OK",
-//										Toast.LENGTH_SHORT);
-//							} else {
-//
-//								Toast.makeText(AddTaskActivity.this, "failed",
-//										Toast.LENGTH_SHORT);
-//							}
-//						}
-//					});
-//				} else {
-//					Toast.makeText(AddTaskActivity.this, "请填写完整任务信息",
-//							Toast.LENGTH_SHORT).show();
-//				}
+				// Log.e("AddTaskActivity", "bt is clicked");
+				// Log.e("AddTaskActivity", theme.getText().toString());
+				// Log.e("AddTaskActivity", endTime.getText().toString());
+				// Log.e("AddTaskActivity",
+				// publishedLocation.getText().toString());
+				// Log.e("AddTaskActivity",
+				// publishedPrice.getText().toString());
+				//
+				// if (!theme.getText().toString().isEmpty()
+				// && !description.getText().toString().isEmpty()
+				// && !endTime.getText().toString().isEmpty()
+				// && !publishedLocation.getText().toString().isEmpty()
+				// && !publishedPrice.getText().toString().isEmpty()) {
+				// AVObject test = new AVObject("test");
+				// test.put("test1", "555555555");
+				// test.put("test2", "666666666");
+				//
+				// test.saveInBackground(new SaveCallback() {
+				//
+				// @Override
+				// public void done(AVException arg0) {
+				// if (arg0 == null) {
+				// Toast.makeText(AddTaskActivity.this, "OK",
+				// Toast.LENGTH_SHORT);
+				// } else {
+				//
+				// Toast.makeText(AddTaskActivity.this, "failed",
+				// Toast.LENGTH_SHORT);
+				// }
+				// }
+				// });
+				// } else {
+				// Toast.makeText(AddTaskActivity.this, "请填写完整任务信息",
+				// Toast.LENGTH_SHORT).show();
+				// }
 				//
 			}
 
 		});
+
+		spinnner.setOnClickListener(this);
 
 	}
 
@@ -201,19 +216,24 @@ public class AddTaskActivity extends BaseActivity {
 		String themeString = theme.getText().toString();
 		String descriptionString = description.getText().toString();
 		String endTimeString = endTime.getText().toString();
-		String lacationString = publishedLocation.getText().toString();
+		String locationString = publishedLocation.getText().toString();
 		publisherName = AVUser.getCurrentUser().getUsername();
 		String price = publishedPrice.getText().toString();
-		AVService.addNewTask(publisherName,themeString,descriptionString, endTimeString, ShowNearMenMapActivity.getLatitude(), ShowNearMenMapActivity.getLongitude(),
-				price, new SaveCallback() {
+
+		double latitude = ShowNearMenMapActivity.getLatitude();
+		double longitude = ShowNearMenMapActivity.getLongitude();
+		AVGeoPoint geoPoint = new AVGeoPoint(latitude, longitude);
+		AVService.addNewTask(publisherName, themeString, descriptionString,
+				endTimeString, geoPoint, locationString, price,
+				TaskType.SERVICE_EXPRESS, new SaveCallback() {
 
 					@Override
 					public void done(AVException exception) {
 						if (exception == null) {
-							 mHandler.obtainMessage(1).sendToTarget();
+							mHandler.obtainMessage(1).sendToTarget();
 							Log.e("AddTaskActivity", "保存成功");
 						} else {
-							 mHandler.obtainMessage(2).sendToTarget();
+							mHandler.obtainMessage(2).sendToTarget();
 							Log.e("AddTaskActivity", "保存失败");
 						}
 					}
@@ -231,22 +251,22 @@ public class AddTaskActivity extends BaseActivity {
 				dialog.show();
 				dialog.setCancelable(false);
 				Log.e("AddTaskActivity", "保存成功");
-//				new CountDownTimer(800 * 4, 800) {
-//					public void onTick(long millisUntilFinished) {
-//						colorProgress(dialog);
-//					}
-//
-//					public void onFinish() {
-//						i = -1;
-//						dialog.dismiss();
-//					}
-//				}.start();
-				
+				// new CountDownTimer(800 * 4, 800) {
+				// public void onTick(long millisUntilFinished) {
+				// colorProgress(dialog);
+				// }
+				//
+				// public void onFinish() {
+				// i = -1;
+				// dialog.dismiss();
+				// }
+				// }.start();
+
 				dialog.setConfirmText("确认");
 				dialog.setConfirmClickListener(new OnSweetClickListener() {
-					
+
 					public void onClick(SweetAlertDialog sweetAlertDialog) {
-						
+
 						AddTaskActivity.this.finish();
 					}
 				});
@@ -281,6 +301,7 @@ public class AddTaskActivity extends BaseActivity {
 
 	private void initView() {
 		mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout);
+		mAdd_task_layout=(RelativeLayout) findViewById(R.id.add_task_layout);
 		mLayout = (RelativeLayout) findViewById(R.id.layout);
 		mLayout.setBackgroundColor(Color.WHITE);
 
@@ -294,6 +315,38 @@ public class AddTaskActivity extends BaseActivity {
 		publishedPrice = (EditText) findViewById(R.id.price);
 		bt_publish = (Button) findViewById(R.id.distribute);
 		publishedLocation = (EditText) findViewById(R.id.location);
+		spinnner = (RelativeLayout) findViewById(R.id.rl_spinner);
+		mSpinnerTitle = (TextView) findViewById(R.id.tv_text);
+		task_types = new ArrayList<String>();
+		task_types.add("家政服务");
+		task_types.add("维修服务");
+		task_types.add("物流服务");
+		task_types.add("教育服务");
+		task_types.add("餐饮服务");
+		task_types.add("网络服务");
+		task_types.add("其他服务");
+	}
+
+	/**
+	 * spinner的点击监听
+	 */
+	@Override
+	public void onClick(View v) {
+		mAdd_task_layout.setVisibility(View.GONE);
+		bt_publish.setVisibility(View.GONE);
+		com.science.strangertofriend.utils.MyPopupWindow window = new com.science.strangertofriend.utils.MyPopupWindow(
+				this, spinnner.getWidth(), task_types);
+		window.showAsDropDown(spinnner, 0, 0);
+		window.setOnItemClickListener(new onItemClickListener() {
+
+			@Override
+			public void click(int position, View view) {
+				mAdd_task_layout.setVisibility(View.VISIBLE);
+				bt_publish.setVisibility(View.VISIBLE);
+				mSpinnerTitle.setText(task_types.get(position));
+				Toast.makeText(AddTaskActivity.this, "你点击了第"+(position+1)+"项", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 
 }

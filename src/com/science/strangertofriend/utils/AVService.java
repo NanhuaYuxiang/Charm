@@ -188,21 +188,24 @@ public class AVService {
 	 * 
 	 * @param publisherName 发布任务人姓名 
 	 * @param endTime 任务截止时间
-	 * @param latitude  纬度
-	 * @param longititude   经度
+	 * @param geoPoint 任务发布地点
 	 * @param price 任务香金数
 	 * @param des 任务描述
 	 * @param theme 任务主题
+	 * @param des 任务描述
+	 * @param service_type 任务类型
+	 * @param location 任务地点
 	 */
-	public static void addNewTask(String publisherName,String theme,String des,String endTime,double latitude, double longititude,String price,SaveCallback saveCallback){
+	public static void addNewTask(String publisherName,String theme,String des,String endTime,AVGeoPoint geoPoint,String location,String price,String service_type,SaveCallback saveCallback){
 		AVObject task=new AVObject("Task");
 		task.put("publisherName", publisherName);
 		task.put("theme", theme);
 		task.put("TaskDescription", des);
 		task.put("endTime", endTime);
-		task.put("latitude", latitude);
-		task.put("longititude", longititude);
+		task.put("geoPoint", geoPoint);
+		task.put("location", location);
 		task.put("price", price);
+		task.put("service_type", service_type);
 		task.saveInBackground(saveCallback);
 	}
 	// APP每天签到

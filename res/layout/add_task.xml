@@ -39,13 +39,16 @@
     </RelativeLayout>
     <!-- task相关的图片 -->
 
-   <!-- <ImageView
+
+    <!--
+        <ImageView
         android:id="@+id/img"
         android:layout_width="260dp"
         android:layout_height="140dp"
         android:layout_below="@id/title_layout"
         android:layout_centerHorizontal="true"
-        />  -->
+        />
+    -->
 
     <com.science.strangertofriend.widget.RevealLayout
         android:id="@+id/reveal_layout"
@@ -58,13 +61,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
+            <!-- 添加一个spinner，来选择任务类型 -->
+
+            <RelativeLayout
+                android:id="@+id/rl_spinner"
+                android:layout_below="@id/title_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/pice_background_selector" >
+
+                <TextView
+                    android:id="@+id/tv_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="请选择服务类型"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/jiantou" />
+            </RelativeLayout>
+            <!--  ******************************************-->
+
             <RelativeLayout
                 android:id="@+id/add_task_layout"
+                android:layout_below="@id/rl_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginTop="10dp" >
+                android:layout_marginTop="10dp"
+                android:visibility="visible" >
 
                 <!-- 主题 -->
 
@@ -261,7 +296,8 @@
                     android:background="#ccc" />
             </RelativeLayout>
 
-          <!--   <com.science.strangertofriend.widget.RippleView
+            <!--
+                 <com.science.strangertofriend.widget.RippleView
                 android:id="@+id/rippleView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -272,20 +308,21 @@
                 android:layout_marginTop="30dp"
                 app:rv_ripplePadding="30dp"
                 ripple:rv_type="simpleRipple"
-                ripple:rv_zoom="false" > -->
+                ripple:rv_zoom="false" >
+            -->
 
-                <Button
-                    android:id="@+id/distribute"
-                    android:layout_below="@id/add_task_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_click"
-                    android:paddingBottom="7dp"
-                    android:paddingTop="7dp"
-                    android:text="发布"
-                    android:textColor="#fff"
-                    android:textSize="18sp" />
-           <!--  </com.science.strangertofriend.widget.RippleView> -->
+            <Button
+                android:id="@+id/distribute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/add_task_layout"
+                android:background="@drawable/button_click"
+                android:paddingBottom="7dp"
+                android:paddingTop="7dp"
+                android:text="发布"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+            <!-- </com.science.strangertofriend.widget.RippleView> -->
         </RelativeLayout>
     </com.science.strangertofriend.widget.RevealLayout>
 
