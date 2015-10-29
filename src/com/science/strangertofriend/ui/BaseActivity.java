@@ -104,7 +104,12 @@ public class BaseActivity extends Activity {
 		}
 	}
 
-	// 查找回调
+	/**
+	 * 头像 查找回调  最终将view显示出来
+	 * @param context  当前上下文
+	 * @param view  要显示的view
+	 * @return 
+	 */
 	public FindCallback<AVObject> findGenderCallback(final Context context,
 			View view) {
 
@@ -141,7 +146,10 @@ public class BaseActivity extends Activity {
 			}
 		}
 	};
-
+	/**
+	 * 根据avobject来搜寻对应头像信息
+	 * @param objectId
+	 */
 	public void byteToDrawable(final String objectId) {
 
 		new Thread(new Runnable() {
@@ -188,9 +196,9 @@ public class BaseActivity extends Activity {
 			case 1:
 				@SuppressWarnings("deprecation")
 				DisplayImageOptions options = new DisplayImageOptions.Builder()
-						.showStubImage(R.drawable.default_load)
-						.showImageForEmptyUri(R.drawable.default_load)
-						.showImageOnFail(R.drawable.default_load)
+						.showStubImage(R.drawable.ic_launcher)
+						.showImageForEmptyUri(R.drawable.ic_launcher)
+						.showImageOnFail(R.drawable.ic_launcher)
 						.cacheInMemory(true).cacheOnDisc(true)
 						.bitmapConfig(Bitmap.Config.RGB_565).build();
 				ImageLoader.getInstance().displayImage((String) msg.obj,

@@ -11,7 +11,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
+/**
+ * 
+ * @author 赵鑫     
+ * @description 自定义spinner
+ * @email apologizetoher@Gmail.com / 491498408@qq.com
+ * @date 2015-10-26 下午7:17:04
+ */
 public class MySpinnerAdapter extends BaseAdapter{
 	
 	private int mPosition;

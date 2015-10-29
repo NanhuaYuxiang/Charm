@@ -16,7 +16,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-
+/**
+ * 
+ * @author 赵鑫     
+ * @description 自定义弹出框
+ * @email apologizetoher@Gmail.com / 491498408@qq.com
+ * @date 2015-10-26 下午7:17:50
+ */
 public class MyPopupWindow extends PopupWindow implements OnItemClickListener{
 	
 	private List<String> mItems;

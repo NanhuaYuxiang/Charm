@@ -1,19 +1,15 @@
 package com.science.strangertofriend.ui;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ocpsoft.prettytime.PrettyTime;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,12 +51,14 @@ import com.science.strangertofriend.AppContext;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.bean.LocationMenList;
 import com.science.strangertofriend.bean.Task;
-import com.science.strangertofriend.fragment.TaskFragment;
 import com.science.strangertofriend.game.puzzle.PuzzleActivity;
 import com.science.strangertofriend.listener.MyOrientationListener;
 import com.science.strangertofriend.utils.AVService;
+import com.science.strangertofriend.utils.TransformedToCircleBitmap;
 import com.science.strangertofriend.utils.Utils;
 import com.science.strangertofriend.widget.RevealLayout;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @description 地图显示附近的任务
@@ -103,8 +101,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	private float currentX;
 	private MyOrientationListener myOrientationListener;
 	private ImageView add_task;// 添加任务
-	private List<Task> taskNearBy=new ArrayList<Task>();//检索到的附近素有符合条件的任务
-
+	private List<Task> taskNearBy = new ArrayList<Task>();// 检索到的附近素有符合条件的任务
+	private CircleImageView circleImageView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -121,7 +119,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		initListener();
 		// 初始化定位
 		initLocation();
-		initMarker();
+//		initMarker();
 		setMarkerClickListener();
 	}
 
@@ -197,7 +195,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
 		option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
 		option.setOpenGps(true);
-		option.setScanSpan(1000);// 每隔1秒发一次定位请求
+		option.setScanSpan(1000*60);// 每隔1分钟发一次定位请求
 		mLocationClient.setLocOption(option);
 
 		// 给方向箭头添加方向传感器监听
@@ -223,11 +221,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 	}
 
-	private void initMarker() {
-
-		mMarkDescriptor = BitmapDescriptorFactory
-				.fromResource(R.drawable.maker);
-	}
+	
 
 	private class MyLocationListener implements BDLocationListener {
 
@@ -271,140 +265,210 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 						Toast.LENGTH_LONG).show();
 
 				// 查找附近1000米的人
-//				findMenNearby();
-//				findTaskNearBy();
+				// findMenNearby();
+				// findTaskNearBy();
 			}
 			findTaskNearBy();
 		}
 	}
-
+	
+	
+	public  void showAvaterOnMap(String username,String email){
+		initMarker();
+		AVQuery<AVObject> query=new AVQuery<>("Gender");
+		if(LoginActivity.isEmail(email)){
+			query.whereEqualTo("email", email);
+		}else {
+			query.whereEqualTo("username", username);
+		}
+		query.findInBackground(findGenderCallback(context, circleImageView));
+		
+	}
+	
+	
+	
 	/**
 	 * 查找附近的服务
 	 */
 	public void findTaskNearBy() {
+		
+//		initMarker();
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				AVQuery<AVObject> query = new AVQuery<>("Task");
 				// 查找附近10km内的任务
-				query.whereWithinKilometers("geoPoint", mMyPoint,10);
-				query.whereNotEqualTo("username", mUsername);
+				query.whereWithinKilometers("geoPoint", mMyPoint, 10);
+//				query.whereNotEqualTo("publisherName", mUsername);
 				try {
 					List<AVObject> taskList = query.find();
-					Task taskBean=null;
-					for(AVObject task:taskList){
-						taskBean=new Task();
-						taskBean.setPublisherName(task.getString("publisherName"));
+					Task taskBean = null;
+					for (AVObject task : taskList) {
+						taskBean = new Task();
+						taskBean.setPublisherName(task
+								.getString("publisherName"));
 						taskBean.setAccepted(false);
 						taskBean.setAccomplished(false);
 						taskBean.setEndTime(task.getString("endTime"));
 						taskBean.setPrice(task.getString("price"));
 						taskBean.setTheme(task.getString("theme"));
-						taskBean.setTaskDescription(task.getString("TaskDescription"));
+						taskBean.setTaskDescription(task
+								.getString("TaskDescription"));
 						taskBean.setType(task.getString("service_task"));
-						taskBean.setLatitude(task.getAVGeoPoint("geoPoint").getLatitude());
-						taskBean.setLongitude(task.getAVGeoPoint("geoPoint").getLongitude());
+						taskBean.setLatitude(task.getAVGeoPoint("geoPoint")
+								.getLatitude());
+						taskBean.setLongitude(task.getAVGeoPoint("geoPoint")
+								.getLongitude());
 						taskBean.setLocation(task.getString("location"));
 						taskBean.setType(task.getString("service_type"));
 						taskNearBy.add(taskBean);
 					}
+					mHandler.obtainMessage(1).sendToTarget();
+					Log.e("task", taskNearBy.size()+"");
 					Log.e("task", taskNearBy.toString());
 				} catch (AVException e) {
 					e.printStackTrace();
 				}
 			}
 		}).start();
+		
+		
 	}
 
-//	private void findMenNearby() {
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				try {
-//					AVQuery<AVObject> query = new AVQuery<>("MyLocation");
-//					// 查找附近1000米的人
-//					query.whereWithinKilometers("locationPoint", mMyPoint, 1);
-//					query.whereNotEqualTo("username", mUsername);
-//					List<AVObject> placeList = query.find();
-//
-//					for (AVObject avo : placeList) {
-//						mLocationMenList.add(new LocationMenList(avo
-//								.getString("userEmail"), avo
-//								.getString("username"),
-//								avo.getString("gender"), avo.getAVGeoPoint(
-//										"locationPoint").getLatitude(), avo
-//										.getAVGeoPoint("locationPoint")
-//										.getLongitude(), new PrettyTime()
-//										.format(avo.getUpdatedAt())));
-//					}
-//					mMenListHandler.obtainMessage(1).sendToTarget();
-//				} catch (AVException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}).start();
-//	}
-//
-//	@SuppressLint("HandlerLeak")
-//	private Handler mMenListHandler = new Handler() {
-//		public void handleMessage(Message msg) {
-//			switch (msg.what) {
-//			case 1:
-//				addOverLays(mLocationMenList);
-//				break;
-//			}
-//		}
-//	};
+	// private void findMenNearby() {
+	// new Thread(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// try {
+	// AVQuery<AVObject> query = new AVQuery<>("MyLocation");
+	// // 查找附近1000米的人
+	// query.whereWithinKilometers("locationPoint", mMyPoint, 1);
+	// query.whereNotEqualTo("username", mUsername);
+	// List<AVObject> placeList = query.find();
+	//
+	// for (AVObject avo : placeList) {
+	// mLocationMenList.add(new LocationMenList(avo
+	// .getString("userEmail"), avo
+	// .getString("username"),
+	// avo.getString("gender"), avo.getAVGeoPoint(
+	// "locationPoint").getLatitude(), avo
+	// .getAVGeoPoint("locationPoint")
+	// .getLongitude(), new PrettyTime()
+	// .format(avo.getUpdatedAt())));
+	// }
+	// mMenListHandler.obtainMessage(1).sendToTarget();
+	// } catch (AVException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }).start();
+	// }
+	//
+	// @SuppressLint("HandlerLeak")
+	// private Handler mMenListHandler = new Handler() {
+	// public void handleMessage(Message msg) {
+	// switch (msg.what) {
+	// case 1:
+	// addOverLays(mLocationMenList);
+	// break;
+	// }
+	// }
+	// };
+	private Handler mHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+				addTaskOnMap();
+				break;
 
-	// 添加覆盖物
-	private void addOverLays(List<LocationMenList> avObjects) {
+			default:
+				break;
+			}
+		};
+	};
+	private void initMarker() {
 
+		View view=LayoutInflater.from(context).inflate(R.layout.circleimage,null);
+		 circleImageView=(CircleImageView) view.findViewById(R.id.avatar);
+		mMarkDescriptor=BitmapDescriptorFactory.fromView(circleImageView);
+	}
+	
+	/**
+	 * 添加任务到地图上，以发布任务人的头像显示在地图上
+	 */
+	public void addTaskOnMap() {
 		mBaiduMap.clear();
 		LatLng latLng = null;
-		Marker marker = null;
-		OverlayOptions options;
+		 Marker marker = null;
+		 OverlayOptions options;
+			for (Task info : taskNearBy)
+			{
+				showAvaterOnMap(info.getPublisherName(), null);
+				// 经纬度
+				latLng = new LatLng(info.getLatitude(), info.getLongitude());
+				// 图标
+				options = new MarkerOptions().position(latLng).icon(mMarkDescriptor)
+						.zIndex(5);
+				marker = (Marker) mBaiduMap.addOverlay(options);
+				Bundle arg0 = new Bundle();
+				arg0.putSerializable("info", info);
+				marker.setExtraInfo(arg0);
+			}
 
-		for (final LocationMenList menList : avObjects) {
-
-			// 经纬度
-			latLng = new LatLng(menList.getLatitude(), menList.getLongtitude());
-			// 图标
-			options = new MarkerOptions().position(latLng)
-					.icon(mMarkDescriptor).zIndex(5);
-			marker = (Marker) mBaiduMap.addOverlay(options);
-
-			Bundle bundle = new Bundle();
-			bundle.putSerializable("menList", (Serializable) menList);
-			marker.setExtraInfo(bundle);
-
-			TextView textView = new TextView(context);
-			textView.setBackgroundResource(R.drawable.location_tips);
-			textView.setPadding(23, 20, 20, 40);
-			textView.setTextColor(Color.RED);
-			textView.setText(menList.getUsername());
-
-			InfoWindow infoWindow;
-			infoWindow = new InfoWindow(
-					BitmapDescriptorFactory.fromView(textView), latLng, -45,
-					new OnInfoWindowClickListener() {
-
-						@Override
-						public void onInfoWindowClick() {
-							// 解密游戏
-							decodeGame(menList.getUsername(),
-									menList.getLatitude(),
-									menList.getLongtitude(),
-									menList.getUserEmail(),
-									menList.getGender(),
-									menList.getLocationTime());
-						}
-					});
-			mBaiduMap.showInfoWindow(infoWindow);
-		}
-
+			MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
+			mBaiduMap.setMapStatus(msu);
+		 
 	}
+
+	// 添加覆盖物
+	// private void addOverLays(List<LocationMenList> avObjects) {
+	//
+	// mBaiduMap.clear();
+	// LatLng latLng = null;
+	// Marker marker = null;
+	// OverlayOptions options;
+	//
+	// for (final LocationMenList menList : avObjects) {
+	//
+	// // 经纬度
+	// latLng = new LatLng(menList.getLatitude(), menList.getLongtitude());
+	// // 图标
+	// options = new MarkerOptions().position(latLng)
+	// .icon(mMarkDescriptor).zIndex(5);
+	// marker = (Marker) mBaiduMap.addOverlay(options);
+	//
+	// Bundle bundle = new Bundle();
+	// bundle.putSerializable("menList", (Serializable) menList);
+	// marker.setExtraInfo(bundle);
+	//
+	// TextView textView = new TextView(context);
+	// textView.setBackgroundResource(R.drawable.location_tips);
+	// textView.setPadding(23, 20, 20, 40);
+	// textView.setTextColor(Color.RED);
+	// textView.setText(menList.getUsername());
+	//
+	// InfoWindow infoWindow;
+	// infoWindow = new InfoWindow(
+	// BitmapDescriptorFactory.fromView(textView), latLng, -45,
+	// new OnInfoWindowClickListener() {
+	//
+	// @Override
+	// public void onInfoWindowClick() {
+	// // 解密游戏
+	// decodeGame(menList.getUsername(),
+	// menList.getLatitude(),
+	// menList.getLongtitude(),
+	// menList.getUserEmail(),
+	// menList.getGender(),
+	// menList.getLocationTime());
+	// }
+	// });
+	// mBaiduMap.showInfoWindow(infoWindow);
+	// }
+	//
+	// }
 
 	private void setMarkerClickListener() {
 
@@ -412,36 +476,48 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
+//
+//				Bundle extraInfo = marker.getExtraInfo();
+//				final LocationMenList menList = (LocationMenList) extraInfo
+//						.getSerializable("menList");
+//
+//				InfoWindow infoWindow;
+//				final LatLng latLng = marker.getPosition();
+//				TextView textView = new TextView(context);
+//				textView.setBackgroundResource(R.drawable.location_tips);
+//				textView.setPadding(23, 20, 20, 40);
+//				textView.setTextColor(Color.WHITE);
+//				textView.setText(menList.getUsername());
+//
+//				infoWindow = new InfoWindow(BitmapDescriptorFactory
+//						.fromView(textView), latLng, -45,
+//						new OnInfoWindowClickListener() {
+//
+//							@Override
+//							public void onInfoWindowClick() {
+//								// 解密游戏
+//								decodeGame(menList.getUsername(),
+//										menList.getLatitude(),
+//										menList.getLongtitude(),
+//										menList.getUserEmail(),
+//										menList.getGender(),
+//										menList.getLocationTime());
+//							}
+//						});
+//				mBaiduMap.showInfoWindow(infoWindow);
 
-				Bundle extraInfo = marker.getExtraInfo();
-				final LocationMenList menList = (LocationMenList) extraInfo
-						.getSerializable("menList");
-
-				InfoWindow infoWindow;
-				final LatLng latLng = marker.getPosition();
-				TextView textView = new TextView(context);
-				textView.setBackgroundResource(R.drawable.location_tips);
-				textView.setPadding(23, 20, 20, 40);
-				textView.setTextColor(Color.WHITE);
-				textView.setText(menList.getUsername());
-
-				infoWindow = new InfoWindow(BitmapDescriptorFactory
-						.fromView(textView), latLng, -45,
-						new OnInfoWindowClickListener() {
-
-							@Override
-							public void onInfoWindowClick() {
-								// 解密游戏
-								decodeGame(menList.getUsername(),
-										menList.getLatitude(),
-										menList.getLongtitude(),
-										menList.getUserEmail(),
-										menList.getGender(),
-										menList.getLocationTime());
-							}
-						});
-				mBaiduMap.showInfoWindow(infoWindow);
-
+				
+//				InfoWindow infoWindow;
+//				final LatLng latLng=marker.getPosition();
+			
+//				infoWindow=new InfoWindow(BitmapDescriptorFactory.fromView(imageView), latLng, -30, new OnInfoWindowClickListener() {
+//					
+//					@Override
+//					public void onInfoWindowClick() {
+						Toast.makeText(context, "**********image********", Toast.LENGTH_SHORT).show();
+//					}
+//				});
+//				mBaiduMap.showInfoWindow(infoWindow);
 				return true;
 			}
 		});
@@ -568,6 +644,5 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	public static double getLongitude() {
 		return mLongtitude;
 	}
-	
-	
+
 }

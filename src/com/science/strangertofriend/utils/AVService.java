@@ -14,6 +14,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SignUpCallback;
+import com.science.strangertofriend.ui.LoginActivity;
 
 /**
  * @description avos云服务操作
@@ -39,7 +40,8 @@ public class AVService {
 		user.put("installationId", installationId);
 		user.signUpInBackground(signUpCallback);
 	}
-
+	
+	
 	// 消息列表
 	public static void messageList(String friend, String urlAvater,
 			String currentUser, String sendTime, String messsage) {

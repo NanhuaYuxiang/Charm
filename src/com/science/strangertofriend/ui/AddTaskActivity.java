@@ -5,40 +5,37 @@ import java.util.List;
 
 import android.annotation.TargetApi;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVGeoPoint;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
-import com.avoscloud.leanchatlib.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.TaskType;
 import com.science.strangertofriend.adapter.MySpinnerAdapter.onItemClickListener;
+import com.science.strangertofriend.bean.Task;
 import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.widget.RevealLayout;
 
 public class AddTaskActivity extends BaseActivity implements OnClickListener {
 	private RevealLayout mRevealLayout;
-	private RelativeLayout mLayout,mAdd_task_layout;
+	private RelativeLayout mLayout, mAdd_task_layout;
 	private ImageView mBackImg;// 返回按钮
 	private TextView mTitle;// 标题
 	private EditText theme, description, endTime, publishedLocation,
@@ -51,6 +48,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 	private RelativeLayout spinnner;// spinner的布局
 	private TextView mSpinnerTitle;
 	private List<String> task_types;
+	private String service_type;// 服务类型
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -225,7 +223,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 		AVGeoPoint geoPoint = new AVGeoPoint(latitude, longitude);
 		AVService.addNewTask(publisherName, themeString, descriptionString,
 				endTimeString, geoPoint, locationString, price,
-				TaskType.SERVICE_EXPRESS, new SaveCallback() {
+				service_type, new SaveCallback() {
 
 					@Override
 					public void done(AVException exception) {
@@ -301,7 +299,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 
 	private void initView() {
 		mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout);
-		mAdd_task_layout=(RelativeLayout) findViewById(R.id.add_task_layout);
+		mAdd_task_layout = (RelativeLayout) findViewById(R.id.add_task_layout);
 		mLayout = (RelativeLayout) findViewById(R.id.layout);
 		mLayout.setBackgroundColor(Color.WHITE);
 
@@ -344,7 +342,35 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 				mAdd_task_layout.setVisibility(View.VISIBLE);
 				bt_publish.setVisibility(View.VISIBLE);
 				mSpinnerTitle.setText(task_types.get(position));
-				Toast.makeText(AddTaskActivity.this, "你点击了第"+(position+1)+"项", Toast.LENGTH_SHORT).show();
+				// Toast.makeText(AddTaskActivity.this,
+				// "你点击了第"+(position+1)+"项", Toast.LENGTH_SHORT).show();
+				switch (position) {
+				case 0:
+					service_type = TaskType.SERVICE_HOUSEWORK;
+					break;
+				case 1:
+					service_type = TaskType.SERVICE_FIX;
+					break;
+				case 2:
+					service_type = TaskType.SERVICE_EXPRESS;
+
+					break;
+				case 3:
+					service_type = TaskType.SERVICE_EDUCATION;
+					break;
+				case 4:
+					service_type = TaskType.SERVICE_CATERING;
+					break;
+				case 5:
+					service_type = TaskType.SERVICE_INTERNET;
+					break;
+				case 6:
+					service_type = TaskType.SERVICE_OTHERS;
+					break;
+				default:
+
+					break;
+				}
 			}
 		});
 	}
