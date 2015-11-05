@@ -56,14 +56,6 @@ import com.yalantis.contextmenu.lib.MenuParams;
 import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
 import com.yalantis.contextmenu.lib.interfaces.OnMenuItemLongClickListener;
 
-/**
- * @description
- * 
- * @author 幸运Science·陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @date 2015-4-25
- */
 
 public class MainActivity extends ActionBarActivity implements
 		ViewAnimator.ViewAnimatorListener, OnMenuItemClickListener,
@@ -73,10 +65,10 @@ public class MainActivity extends ActionBarActivity implements
 
 	private DrawerLayout mDrawerLayout;
 	// private ActionBarDrawerToggle mActionBarDrawerToggle;
-	private DrawerArrowDrawable mDrawerArrowDrawable;
+	private DrawerArrowDrawable mDrawerArrowDrawable;//左侧下拉的图标，根据不同状态变化
 	private float offset;
 	private boolean flipped;
-	private ImageView imageView;
+	private ImageView imageView;//左侧下拉选项列表图标
 
 	private List<SlideMenuItem> mMenuList = new ArrayList<>();
 	private ShakeFragment mShakeFragment;
@@ -86,7 +78,7 @@ public class MainActivity extends ActionBarActivity implements
 	private TaskFragment mTaskFragment;
 	@SuppressWarnings("rawtypes")
 	private ViewAnimator mViewAnimator;
-	private LinearLayout mLinearLayout;
+	private LinearLayout mLinearLayout;//左侧drawerLayout
 	private TextView mTitleText;
 	// 定义一个变量，来标识是否退出
 	private static boolean isExit = false;
@@ -128,8 +120,9 @@ public class MainActivity extends ActionBarActivity implements
 		// 最后一个参数为ViewAnimator.ViewAnimatorListener
 		// 接口,其中一个方法便是addViewToContainer
 		// 在ViewAnimator 中创建view 并添加到 linearLayout 菜单中.
-		mViewAnimator = new ViewAnimator<>(this, mMenuList, mMessageFragment,
+		mViewAnimator = new ViewAnimator<>(this, mMenuList, mShakeFragment,
 				mDrawerLayout, this);
+		
 	}
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
@@ -155,10 +148,12 @@ public class MainActivity extends ActionBarActivity implements
 	private void initComponent() {
 
 		mTitleText = (TextView) findViewById(R.id.title);
-		mTitleText.setText("聊天");
-		mMessageFragment = new MessageFragment();
+		mTitleText.setText("摇一摇附近任务");
+//		mMessageFragment = new MessageFragment();
+//		mAddressListFragment=new AddressListFragment();
+		mShakeFragment=new ShakeFragment();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, mMessageFragment).commit();
+				.replace(R.id.content_frame, mShakeFragment).commit();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerLayout.setScrimColor(Color.TRANSPARENT);
 

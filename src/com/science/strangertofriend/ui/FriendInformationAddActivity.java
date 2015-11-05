@@ -298,7 +298,7 @@ public class FriendInformationAddActivity extends BaseActivity {
 								final SweetAlertDialog nAlertDialog = new SweetAlertDialog(
 										FriendInformationAddActivity.this,
 										SweetAlertDialog.PROGRESS_TYPE)
-										.setTitleText("邂逅相遇,适我愿兮");
+										.setTitleText("终于等到你");
 								nAlertDialog.show();
 								nAlertDialog.setCancelable(false);
 								new CountDownTimer(800 * 4, 800) {

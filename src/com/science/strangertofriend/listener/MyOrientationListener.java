@@ -5,10 +5,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
 /**
- * 方向传感器监听类，sensor 方向
- * @author zhao
- *
+ * 
+ * @author 赵鑫     
+ * @description   方向传感器监听类，sensor 方向
+ * @email apologizetoher@Gmail.com / 491498408@qq.com
+ * @date 2015-11-4 下午10:27:40
  */
 public class MyOrientationListener implements SensorEventListener
 {

@@ -28,15 +28,12 @@ import com.science.strangertofriend.R;
 import com.science.strangertofriend.widget.RevealLayout;
 
 /**
- * @description
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-8-18
- * 
+ * @author 赵鑫     
+ * @description 活动邀请
+ * @email apologizetoher@Gmail.com / 491498408@qq.com
+ * @date 2015-11-4 下午11:30:40
  */
-
 public class ContactActivity extends BaseActivity {
 
 	private RevealLayout mRevealLayout;

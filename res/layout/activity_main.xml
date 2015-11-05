@@ -31,10 +31,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:adjustViewBounds="true"
                 android:contentDescription="@null"
                 android:minHeight="?attr/actionBarSize"
                 android:minWidth="?attr/actionBarSize"
                 android:scaleType="centerInside" />
+
         </com.science.strangertofriend.widget.RippleView>
 
         <TextView
