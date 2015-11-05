@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <!-- 接收任务且完成的XML布局文件-->
+
+    <!--接收任务但还未完成的任务-->
+
+    <TextView
+        android:id="@+id/expandable_group_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_weight="9"
+        android:gravity="left|center_vertical"
+        android:textColor="#000"
+        android:textSize="30dp"
+        tools:ignore="Suspicious0dp" />
+
+</LinearLayout>
