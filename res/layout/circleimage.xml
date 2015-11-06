@@ -10,9 +10,10 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:border_color="#FF0000"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_launcher"
+        app:border_color="#0ff"
         app:border_width="2dp" />
 
 </LinearLayout>
