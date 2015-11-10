@@ -46,7 +46,6 @@ import com.science.materialmenu.DrawerArrowDrawable;
 import com.science.strangertofriend.fragment.AddressListFragment;
 import com.science.strangertofriend.fragment.MessageFragment;
 import com.science.strangertofriend.fragment.ShakeFragment;
-import com.science.strangertofriend.fragment.TaskFragment;
 import com.science.strangertofriend.fragment.UserFragment;
 import com.science.strangertofriend.ui.AlterActivity;
 import com.science.strangertofriend.ui.SettingActivity;
@@ -75,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements
 	private UserFragment mUserFragment;
 	private MessageFragment mMessageFragment;
 	private AddressListFragment mAddressListFragment;
-	private TaskFragment mTaskFragment;
+//	private TaskFragment mTaskFragment;
 	@SuppressWarnings("rawtypes")
 	private ViewAnimator mViewAnimator;
 	private LinearLayout mLinearLayout;//左侧drawerLayout
@@ -339,16 +338,16 @@ public class MainActivity extends ActionBarActivity implements
 	
 	
 	//任务列表切换动画实现
-	public ScreenShotable replaceTaskFragment(ScreenShotable screenShotable,
-			int topPosition){
-		CircularRevealAnima(screenShotable, topPosition);
-		mTitleText.setText("任务");
-		mTaskFragment = new TaskFragment();
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, mTaskFragment).commit();
-
-		return mTaskFragment;
-	}
+//	public ScreenShotable replaceTaskFragment(ScreenShotable screenShotable,
+//			int topPosition){
+//		CircularRevealAnima(screenShotable, topPosition);
+//		mTitleText.setText("任务");
+////		mTaskFragment = new TaskFragment();
+//		getSupportFragmentManager().beginTransaction()
+//				.replace(R.id.content_frame, mTaskFragment).commit();
+//
+//		return mTaskFragment;
+//	}
 	
 	// 通讯录视图切换动画实现
 	public ScreenShotable replaceAddressListFragment(
@@ -376,8 +375,7 @@ public class MainActivity extends ActionBarActivity implements
 			return replaceMessageFragment(screenShotable, topPosition);
 		case "Address":
 			return replaceAddressListFragment(screenShotable, topPosition);
-		case "Task":
-			return replaceTaskFragment(screenShotable, topPosition);
+//		case "Task":
 		default:
 			return screenShotable;
 		}
@@ -433,6 +431,8 @@ public class MainActivity extends ActionBarActivity implements
 
 		case 3:
 			quitApp();
+//			Intent intent=new Intent(this,TestCircleAvater.class);
+//			startActivity(intent);
 			break;
 
 		default:

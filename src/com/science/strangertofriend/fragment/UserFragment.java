@@ -18,6 +18,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -273,6 +274,7 @@ public class UserFragment extends Fragment implements ScreenShotable {
 				Message msg = new Message();
 				msg.what = 1;
 				msg.obj = imageFile.getUrl();
+//				Log.e("avaterURL", imageFile.getUrl());
 				mHandlerLoad.sendMessage(msg);
 			}
 

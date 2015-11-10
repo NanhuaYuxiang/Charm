@@ -102,6 +102,8 @@
         </activity>
         <activity android:name=".ui.AddTaskActivity" >
         </activity>
+        <activity android:name=".TestCircleAvater" >
+        </activity>
         <!-- 百度地图定位开始 -->
         <service
             android:name="com.baidu.location.f"

@@ -9,11 +9,12 @@
      >
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:background="#0f00"
         android:id="@+id/avatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_launcher"
         app:border_color="#0ff"
+        android:src="@drawable/default_user_img"
         app:border_width="2dp" />
-
+	
 </LinearLayout>
