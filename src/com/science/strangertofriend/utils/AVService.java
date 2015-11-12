@@ -42,7 +42,14 @@ public class AVService {
 	}
 	
 	
-	// 消息列表
+	/**
+	 * 消息列表
+	 * @param friend
+	 * @param urlAvater
+	 * @param currentUser
+	 * @param sendTime
+	 * @param messsage
+	 */
 	public static void messageList(String friend, String urlAvater,
 			String currentUser, String sendTime, String messsage) {
 		AVObject avObject = new AVObject("MessageList");
@@ -82,7 +89,15 @@ public class AVService {
 		}
 	}
 
-	// 好友通讯录列表
+	/**
+	 * 好友通讯录列表
+	 * @param friend  好友姓名	
+	 * @param currentUser  当前用户
+	 * @param avaterUrl 好友头像url
+	 * @param email 好友email
+	 * @param gender 好友性别
+	 * @param sendTime 发送时间
+	 */
 	public static void addressList(String friend, String currentUser,
 			String avaterUrl, String email, String gender, String sendTime) {
 		AVObject avObject = new AVObject("AddressList");

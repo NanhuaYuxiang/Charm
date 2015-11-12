@@ -119,8 +119,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	private ImageView add_task;// 添加任务
 	private List<Task> taskNearBy = new ArrayList<Task>();// 检索到的附近素有符合条件的任务
 	private CircleImageView circleImageView;
-	private ImageView imageView;//用imageview显示用户头像
-	
+	private ImageView imageView;// 用imageview显示用户头像
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -130,14 +130,13 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		SDKInitializer.initialize(getApplicationContext());
 
 		setContentView(R.layout.near_men_map);
-
 		this.context = this;
 
 		initComponent();
 		initListener();
 		// 初始化定位
 		initLocation();
-		 initMarker();
+		initMarker();
 		setMarkerClickListener();
 	}
 
@@ -289,7 +288,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	}
 
 	public void showAvaterOnMap(String username, String email) {
-//		initMarker();
+		// initMarker();
 		AVQuery<AVObject> query = new AVQuery<>("Gender");
 		if (LoginActivity.isEmail(email)) {
 			query.whereEqualTo("email", email);
@@ -297,8 +296,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			query.whereEqualTo("username", username);
 		}
 		query.findInBackground(showCircleAvaterByImageLoader());
-			
-			
+
 	}
 
 	/**
@@ -349,46 +347,6 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 	}
 
-	// private void findMenNearby() {
-	// new Thread(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// try {
-	// AVQuery<AVObject> query = new AVQuery<>("MyLocation");
-	// // 查找附近1000米的人
-	// query.whereWithinKilometers("locationPoint", mMyPoint, 1);
-	// query.whereNotEqualTo("username", mUsername);
-	// List<AVObject> placeList = query.find();
-	//
-	// for (AVObject avo : placeList) {
-	// mLocationMenList.add(new LocationMenList(avo
-	// .getString("userEmail"), avo
-	// .getString("username"),
-	// avo.getString("gender"), avo.getAVGeoPoint(
-	// "locationPoint").getLatitude(), avo
-	// .getAVGeoPoint("locationPoint")
-	// .getLongitude(), new PrettyTime()
-	// .format(avo.getUpdatedAt())));
-	// }
-	// mMenListHandler.obtainMessage(1).sendToTarget();
-	// } catch (AVException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// }).start();
-	// }
-	//
-	// @SuppressLint("HandlerLeak")
-	// private Handler mMenListHandler = new Handler() {
-	// public void handleMessage(Message msg) {
-	// switch (msg.what) {
-	// case 1:
-	// addOverLays(mLocationMenList);
-	// break;
-	// }
-	// }
-	// };
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
@@ -404,10 +362,11 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 	private void initMarker() {
 
-//		view = LayoutInflater.from(context).inflate(R.layout.circleimage, null);
-//		circleImageView = (CircleImageView) view.findViewById(R.id.avatar);
-		view =  LayoutInflater.from(context).inflate(R.layout.imageview, null); 
-		imageView=(ImageView) view.findViewById(R.id.imgeview111);
+		 view = LayoutInflater.from(context).inflate(R.layout.circleimage,
+		 null);
+		 circleImageView = (CircleImageView) view.findViewById(R.id.avatar);
+//		view = LayoutInflater.from(context).inflate(R.layout.imageview, null);
+//		imageView = (ImageView) view.findViewById(R.id.imgeview111);
 	}
 
 	/**
@@ -422,16 +381,18 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			// 经纬度
 			latLng = new LatLng(info.getLatitude(), info.getLongitude());
 			// 图标
-			if(mMarkDescriptor==null){
-				System.out.println("mMarkDescriptor为空");
-			}else {
-				
+			Log.e("mMarkDescriptor", mMarkDescriptor+"");
+			
+			if(mMarkDescriptor!=null){
+			
 				OverlayOptions options = new MarkerOptions().position(latLng)
 						.icon(mMarkDescriptor).zIndex(5);
-				 marker = (Marker) mBaiduMap.addOverlay(options);
-			Bundle arg0 = new Bundle();
-			arg0.putSerializable("info", info);
-			marker.setExtraInfo(arg0);
+				marker = (Marker) mBaiduMap.addOverlay(options);
+				Bundle arg0 = new Bundle();
+				arg0.putSerializable("info", info);
+				marker.setExtraInfo(arg0);
+			}else {
+				Log.e("mMarkDescriptor", "mMarkDescriptor为空");
 			}
 		}
 
@@ -682,7 +643,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				Message msg = new Message();
 				msg.what = 1;
 				msg.obj = imageFile.getUrl();
-//				Log.e("avaterURL", imageFile.getUrl());
+				// Log.e("avaterURL", imageFile.getUrl());
 				mHandler2.sendMessage(msg);
 			}
 
@@ -697,44 +658,47 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				DisplayImageOptions options = new DisplayImageOptions.Builder()
 						.showImageForEmptyUri(R.drawable.default_load)// 设置图片Uri为空或是错误的时候显示的图片
 						.showImageOnFail(R.drawable.default_load)// 设置图片加载或解码过程中发生错误显示的图片
-						.cacheOnDisc(true)
-//						.displayer(new RoundedBitmapDisplayer(30))// 设置成圆角图片  
+						// .displayer(new RoundedBitmapDisplayer(30))// 设置成圆角图片
 						.bitmapConfig(Bitmap.Config.RGB_565).build();
-//				ImageLoader
-//						.getInstance()
-//						.displayImage(
-//								avaterURL,
-//								imageView, options);
-				ImageLoader.getInstance().loadImage(avaterURL, options, new ImageLoadingListener() {
-					
-					@Override
-					public void onLoadingStarted(String arg0, View arg1) {
-						Log.e("ImageLoader", "onLoadingStarted");
-					}
-					
-					@Override
-					public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
-						Log.e("ImageLoader", "onLoadingFailed");
-					}
-					
-					@Override
-					public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
-						imageView.setImageBitmap(arg2);
-						if(!arg2.isRecycled()){
-							
-							mMarkDescriptor = BitmapDescriptorFactory.fromView(imageView);
-						}else {
-							Log.e("imageload", "imageview 被回收了");
-						}
-						
-						Log.e("ImageLoader", "onLoadingComplete");
-					}
-					
-					@Override
-					public void onLoadingCancelled(String arg0, View arg1) {
-						Log.e("ImageLoader", "onLoadingCancelled");
-					}
-				});
+				// ImageLoader
+				// .getInstance()
+				// .displayImage(
+				// avaterURL,
+				// imageView, options);
+				ImageLoader.getInstance().loadImage(avaterURL, options,
+						new ImageLoadingListener() {
+
+							@Override
+							public void onLoadingStarted(String arg0, View arg1) {
+								Log.e("ImageLoader", "onLoadingStarted");
+							}
+
+							@Override
+							public void onLoadingFailed(String arg0, View arg1,
+									FailReason arg2) {
+								Log.e("ImageLoader", "onLoadingFailed");
+							}
+
+							@Override
+							public void onLoadingComplete(String arg0,
+									View arg1, Bitmap arg2) {
+								// Log.e("mMarkDescriptor", mMarkDescriptor+"");
+								// imageView.setImageBitmap(arg2);
+								initMarker();
+								Log.e("arg2", arg2+"");
+								circleImageView.setImageBitmap(arg2);
+								mMarkDescriptor = BitmapDescriptorFactory
+										.fromView(circleImageView);
+
+								Log.e("ImageLoader", "onLoadingComplete");
+							}
+
+							@Override
+							public void onLoadingCancelled(String arg0,
+									View arg1) {
+								Log.e("ImageLoader", "onLoadingCancelled");
+							}
+						});
 				Log.e("showAvater", "ImagerLoader运行了");
 				break;
 
