@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -266,6 +267,8 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 					public void onClick(SweetAlertDialog sweetAlertDialog) {
 
 						AddTaskActivity.this.finish();
+						Intent intent=new Intent(AddTaskActivity.this,ShowNearMenMapActivity.class);
+						startActivity(intent);
 					}
 				});
 				break;

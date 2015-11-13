@@ -17,10 +17,6 @@ import com.science.strangertofriend.utils.PixelUtils;
 /**
  * @description 右侧的字母索引View
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-19
  * 
  */
 

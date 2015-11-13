@@ -1,18 +1,16 @@
 package com.science.strangertofriend.ui;
 
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,10 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
-import android.widget.AutoCompleteTextView.Validator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
@@ -34,8 +30,6 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.UrlDirectlyUploader;
-import com.avos.avoscloud.LogUtil.log;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -45,8 +39,6 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.InfoWindow;
-import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -60,8 +52,6 @@ import com.baidu.mapapi.model.LatLng;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.download.ImageDownloader.Scheme;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.science.strangertofriend.AppContext;
 import com.science.strangertofriend.R;
@@ -70,7 +60,6 @@ import com.science.strangertofriend.bean.Task;
 import com.science.strangertofriend.game.puzzle.PuzzleActivity;
 import com.science.strangertofriend.listener.MyOrientationListener;
 import com.science.strangertofriend.utils.AVService;
-import com.science.strangertofriend.utils.TransformedToCircleBitmap;
 import com.science.strangertofriend.utils.Utils;
 import com.science.strangertofriend.widget.RevealLayout;
 
@@ -119,8 +108,10 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	private ImageView add_task;// 添加任务
 	private List<Task> taskNearBy = new ArrayList<Task>();// 检索到的附近素有符合条件的任务
 	private CircleImageView circleImageView;
-	private ImageView imageView;// 用imageview显示用户头像
-
+	
+	//头像集合相关
+	HashMap<String, BitmapDescriptor> avaterMarkers=new HashMap<String, BitmapDescriptor>();
+	HashMap<String, Bitmap> bitMaps=new HashMap<>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -136,8 +127,9 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		initListener();
 		// 初始化定位
 		initLocation();
-		initMarker();
+//		initMarker();
 		setMarkerClickListener();
+		Log.e("ShowNearMenMapActivity", "onCreate被执行");
 	}
 
 	private void initListener() {
@@ -282,8 +274,9 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				// 查找附近1000米的人
 				// findMenNearby();
 				// findTaskNearBy();
+				Log.e("ShowNearMenMapActivity", "onReceiveLocation被执行");
+				findTaskNearBy();
 			}
-			findTaskNearBy();
 		}
 	}
 
@@ -336,7 +329,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 						taskBean.setType(task.getString("service_type"));
 						taskNearBy.add(taskBean);
 					}
-					mHandler.obtainMessage(1).sendToTarget();
+//					mHandler.obtainMessage(1).sendToTarget();
+					loadAllAvaters();
 					Log.e("task", taskNearBy.size() + "");
 					Log.e("task", taskNearBy.toString());
 				} catch (AVException e) {
@@ -344,9 +338,65 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				}
 			}
 		}).start();
+		Log.e("ShowNearMenMapActivity", "findTaskNearBy被执行");
 
 	}
-
+	/**
+	 * 异步加载所有的头像
+	 */
+	public void loadAllAvaters(){
+		for(int i=0;i<taskNearBy.size();i++){
+			AVService.getNearbyTaskAvaters(taskNearBy.get(i).getPublisherName());
+			
+			//主线程跑的太快，让他等子线程异步加载完头像信息，不然获取的头像都为空
+			//sb线程跑的太快了，等等imageloader
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			Bitmap bitmap= AVService.getBitmap();
+			if(bitmap!=null){
+				bitMaps.put(taskNearBy.get(i).getPublisherName(),
+						bitmap);
+			}
+		}
+		Log.e("avaterMarkers", avaterMarkers.size()+"\n"+avaterMarkers.toString());
+		Log.e("loadAllAvaters", "方法被执行");
+		
+		showAllMarkersOnMap();
+	}
+	/**
+	 * 将所有任务以发布人头像显示在地图上
+	 */
+	private void showAllMarkersOnMap(){
+		mBaiduMap.clear();
+		Marker marker = null;
+		LatLng latLng = null;
+		OverlayOptions options;
+		for(int i=0;i<taskNearBy.size();i++){
+			latLng = new LatLng(taskNearBy.get(i).getLatitude(), taskNearBy.get(i).getLongitude());
+//			options = new MarkerOptions().position(latLng)
+//					.icon(avaterMarkers.get(taskNearBy.get(i).getPublisherName())).zIndex(5);
+			initMarker();
+			Bitmap bitmap=Bitmap.createBitmap(bitMaps.get(taskNearBy.get(i).getPublisherName()));
+			circleImageView.setImageBitmap(bitmap);
+			circleImageView.setImageAlpha(0);
+			mMarkDescriptor = BitmapDescriptorFactory
+					.fromView(circleImageView);
+			options = new MarkerOptions().position(latLng)
+					.icon(mMarkDescriptor).zIndex(5);
+			marker = (Marker) mBaiduMap.addOverlay(options);
+			marker = (Marker) mBaiduMap.addOverlay(options);
+			Bundle arg0 = new Bundle();
+			arg0.putSerializable("info", taskNearBy.get(i));
+			marker.setExtraInfo(arg0);
+		}
+		
+		MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
+		mBaiduMap.setMapStatus(msu);
+	} 
+	
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
@@ -365,8 +415,6 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		 view = LayoutInflater.from(context).inflate(R.layout.circleimage,
 		 null);
 		 circleImageView = (CircleImageView) view.findViewById(R.id.avatar);
-//		view = LayoutInflater.from(context).inflate(R.layout.imageview, null);
-//		imageView = (ImageView) view.findViewById(R.id.imgeview111);
 	}
 
 	/**
@@ -381,7 +429,6 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			// 经纬度
 			latLng = new LatLng(info.getLatitude(), info.getLongitude());
 			// 图标
-			Log.e("mMarkDescriptor", mMarkDescriptor+"");
 			
 			if(mMarkDescriptor!=null){
 			

@@ -8,15 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * @description
- * 
- * @author ÐÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-27
- * 
- */
 
 public class ADPagerAdapter extends PagerAdapter {
 

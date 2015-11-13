@@ -6,10 +6,6 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 /**
  * @description Sweet-alert-dialog-library开源动画提示框
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-4-26
  * 
  */
 

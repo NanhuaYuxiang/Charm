@@ -19,11 +19,6 @@ import com.science.strangertofriend.guide.GuideActivity;
 /**
  * @description 欢迎界面
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-26
- * 
  */
 
 public class WelcomeActivity extends Activity {

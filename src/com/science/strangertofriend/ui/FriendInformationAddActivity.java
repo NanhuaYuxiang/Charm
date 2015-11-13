@@ -41,10 +41,6 @@ import com.science.strangertofriend.widget.RevealLayout;
 /**
  * @description 解密游戏后好友界面
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-7
  * 
  */
 

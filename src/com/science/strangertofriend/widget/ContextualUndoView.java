@@ -21,15 +21,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
 
-/**
- * @description
- * 
- * @author ÐÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-14
- * 
- */
 
 @SuppressLint("ViewConstructor")
 public class ContextualUndoView extends FrameLayout {

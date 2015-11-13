@@ -2,15 +2,6 @@ package com.science.strangertofriend.bean;
 
 import java.io.Serializable;
 
-/**
- * @description
- * 
- * @author ĞÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-3
- * 
- */
 
 public class LocationMenList implements Serializable {
 

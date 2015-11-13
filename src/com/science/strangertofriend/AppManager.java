@@ -8,10 +8,6 @@ import android.content.Context;
 /**
  * @description 应用程序Activity管理类：用于Activity管理和应用程序退出
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-6-3
  * 
  */
 

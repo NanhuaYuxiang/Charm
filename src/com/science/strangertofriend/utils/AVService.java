@@ -2,8 +2,15 @@ package com.science.strangertofriend.utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import android.R.bool;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.View;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
@@ -11,18 +18,21 @@ import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.RequestPasswordResetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SignUpCallback;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.science.strangertofriend.R;
 import com.science.strangertofriend.ui.LoginActivity;
 
 /**
  * @description avos云服务操作
- * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-4-26
  * 
  */
 
@@ -40,10 +50,10 @@ public class AVService {
 		user.put("installationId", installationId);
 		user.signUpInBackground(signUpCallback);
 	}
-	
-	
+
 	/**
 	 * 消息列表
+	 * 
 	 * @param friend
 	 * @param urlAvater
 	 * @param currentUser
@@ -91,12 +101,19 @@ public class AVService {
 
 	/**
 	 * 好友通讯录列表
-	 * @param friend  好友姓名	
-	 * @param currentUser  当前用户
-	 * @param avaterUrl 好友头像url
-	 * @param email 好友email
-	 * @param gender 好友性别
-	 * @param sendTime 发送时间
+	 * 
+	 * @param friend
+	 *            好友姓名
+	 * @param currentUser
+	 *            当前用户
+	 * @param avaterUrl
+	 *            好友头像url
+	 * @param email
+	 *            好友email
+	 * @param gender
+	 *            好友性别
+	 * @param sendTime
+	 *            发送时间
 	 */
 	public static void addressList(String friend, String currentUser,
 			String avaterUrl, String email, String gender, String sendTime) {
@@ -200,21 +217,32 @@ public class AVService {
 		userInformation.put("personalStatement", personalStatement);
 		userInformation.saveInBackground(saveCallback);
 	}
-	
+
 	/**
 	 * 
-	 * @param publisherName 发布任务人姓名 
-	 * @param endTime 任务截止时间
-	 * @param geoPoint 任务发布地点
-	 * @param price 任务香金数
-	 * @param des 任务描述
-	 * @param theme 任务主题
-	 * @param des 任务描述
-	 * @param service_type 任务类型
-	 * @param location 任务地点
+	 * @param publisherName
+	 *            发布任务人姓名
+	 * @param endTime
+	 *            任务截止时间
+	 * @param geoPoint
+	 *            任务发布地点
+	 * @param price
+	 *            任务香金数
+	 * @param des
+	 *            任务描述
+	 * @param theme
+	 *            任务主题
+	 * @param des
+	 *            任务描述
+	 * @param service_type
+	 *            任务类型
+	 * @param location
+	 *            任务地点
 	 */
-	public static void addNewTask(String publisherName,String theme,String des,String endTime,AVGeoPoint geoPoint,String location,String price,String service_type,SaveCallback saveCallback){
-		AVObject task=new AVObject("Task");
+	public static void addNewTask(String publisherName, String theme,
+			String des, String endTime, AVGeoPoint geoPoint, String location,
+			String price, String service_type, SaveCallback saveCallback) {
+		AVObject task = new AVObject("Task");
 		task.put("publisherName", publisherName);
 		task.put("theme", theme);
 		task.put("TaskDescription", des);
@@ -225,6 +253,7 @@ public class AVService {
 		task.put("service_type", service_type);
 		task.saveInBackground(saveCallback);
 	}
+
 	// APP每天签到
 	public static void dailySign(String username, int signTimes,
 			String signDate, String signPosition, SaveCallback saveCallback) {
@@ -239,5 +268,146 @@ public class AVService {
 	// 退出登录
 	public static void logout() {
 		AVUser.logOut();
+	}
+
+	static String avaterURL;
+	static BitmapDescriptor bitmapDescriptor;
+
+	/**
+	 * 
+	 * @param publisherName
+	 *            发布人姓名
+	 */
+	public static void getNearbyTaskAvaters(final String publisherName) {
+		AVQuery<AVObject> query = new AVQuery<AVObject>("Gender");
+
+		query.whereEqualTo("username", publisherName);
+		query.findInBackground(new FindCallback<AVObject>() {
+
+			@Override
+			public void done(List<AVObject> arg0, AVException arg1) {
+				Log.e("avaterURL", "共有" + arg0.size() + "个任务");
+				if (arg0 != null && arg0.size() != 0) {
+					AVObject publisher = arg0.get(arg0.size() - 1);
+					AVFile avaterFile = publisher.getAVFile("avater");
+					avaterURL = avaterFile.getUrl();
+					Message msg = Message.obtain();
+					Log.e("avaterURL", avaterURL + "");
+					msg.obj = avaterURL;
+					msg.what = 2;
+					handler.sendMessage(msg);
+					// bitmapDescriptor=load();
+					// Log.e("avaterURL", "load完了");
+				}
+			}
+		});
+
+	}
+
+	private static Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 1:
+				bitmapDescriptor = load();
+				break;
+			case 2:
+				bitmap= loadToBitmap();
+				break;
+			default:
+				break;
+			}
+		};
+	};
+
+	/**
+	 * 
+	 * @return 以BitmapDescriptor来返还请求的头像信息
+	 */
+	public static BitmapDescriptor load() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showImageForEmptyUri(R.drawable.default_load)// 设置图片Uri为空或是错误的时候显示的图片
+				.showImageOnFail(R.drawable.default_load)// 设置图片加载或解码过程中发生错误显示的图片
+				.bitmapConfig(Bitmap.Config.RGB_565).build();
+		ImageLoader.getInstance().loadImage(avaterURL, options,
+				new ImageLoadingListener() {
+
+					@Override
+					public void onLoadingStarted(String arg0, View arg1) {
+
+					}
+
+					@Override
+					public void onLoadingFailed(String arg0, View arg1,
+							FailReason arg2) {
+
+					}
+
+					@Override
+					public void onLoadingComplete(String arg0, View arg1,
+							Bitmap arg2) {
+
+						Log.e("arg2", arg2 + "");
+						BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory
+								.fromBitmap(arg2);
+						AVService.bitmapDescriptor = bitmapDescriptor;
+						Log.e("AVService.bitmapDescriptor",
+								AVService.bitmapDescriptor + "");
+					}
+
+					@Override
+					public void onLoadingCancelled(String arg0, View arg1) {
+
+					}
+				});
+
+		return bitmapDescriptor;
+	}
+
+	private static Bitmap bitmap;
+	/**
+	 * 
+	 * @return 以bitmap 来返回请求的头像信息
+	 */
+	public static Bitmap loadToBitmap() {
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.showImageForEmptyUri(R.drawable.default_load)// 设置图片Uri为空或是错误的时候显示的图片
+				.showImageOnFail(R.drawable.default_load)// 设置图片加载或解码过程中发生错误显示的图片
+				.bitmapConfig(Bitmap.Config.RGB_565).build();
+		ImageLoader.getInstance().loadImage(avaterURL, options,
+				new ImageLoadingListener() {
+
+					@Override
+					public void onLoadingStarted(String arg0, View arg1) {
+
+					}
+
+					@Override
+					public void onLoadingFailed(String arg0, View arg1,
+							FailReason arg2) {
+
+					}
+
+					@Override
+					public void onLoadingComplete(String arg0, View arg1,
+							Bitmap arg2) {
+						bitmap=arg2;
+						
+					}
+
+					@Override
+					public void onLoadingCancelled(String arg0, View arg1) {
+
+					}
+				});
+
+		return bitmap;
+	}
+	public static Bitmap getBitmap(){
+		return bitmap;
+	}
+	public static BitmapDescriptor getBitmapDescriper() {
+		Log.e("bitmapDescriptor", bitmapDescriptor + "");
+		return bitmapDescriptor;
+
 	}
 }

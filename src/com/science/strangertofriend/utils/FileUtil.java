@@ -13,15 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Environment;
 
-/**
- * @description
- * 
- * @author ÐÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-4-27
- * 
- */
 
 public class FileUtil {
 

@@ -32,10 +32,6 @@ import com.science.strangertofriend.widget.RevealLayout;
 /**
  * @description
  * 
- * @author ĞÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-8-19
  * 
  */
 

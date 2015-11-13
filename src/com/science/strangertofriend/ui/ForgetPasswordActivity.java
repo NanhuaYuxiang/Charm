@@ -17,11 +17,6 @@ import com.science.strangertofriend.widget.MyDialog;
 /**
  * @description ÕÒ»ØÃÜÂë
  * 
- * @author ĞÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-4-29
- * 
  */
 
 public class ForgetPasswordActivity extends BaseActivity {

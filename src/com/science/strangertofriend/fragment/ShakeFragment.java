@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,6 @@ import com.science.strangertofriend.ui.ShowNearMenMapActivity;
 /**
  * @description 摇一摇界面
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-4-25
  * 
  */
 
@@ -47,7 +44,7 @@ public class ShakeFragment extends Fragment implements ScreenShotable {
 	// 摇一摇
 	private RelativeLayout mImgUp;//摇动手机后向上的半个图片
 	private RelativeLayout mImgDn;//摇动手机后向下的半个图片
-	private Vibrator mVibrator;//振子
+	private Vibrator mVibrator;//振动器
 	private ShakeListener mShakeListener = null;
 	private ImageView shake_line_up;
 	private ImageView shake_line_down;

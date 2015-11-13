@@ -21,15 +21,6 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.widget.RevealLayout;
 
-/**
- * @description
- * 
- * @author ÐÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-8-18
- * 
- */
 
 public class ActivityInvitationActivity extends BaseActivity {
 

@@ -3,6 +3,7 @@ package com.science.strangertofriend;
 import java.util.List;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +19,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.science.strangertofriend.ui.BaseActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
+/**
+ *  测试圆形头像
+ * @author 赵鑫     
+ * @description 
+ * @email apologizetoher@Gmail.com / 491498408@qq.com
+ * @date 2015-11-12 下午9:48:31
+ */
 public class TestCircleAvater extends BaseActivity{
 	private CircleImageView circleImageView;
 	@Override
@@ -26,9 +33,12 @@ public class TestCircleAvater extends BaseActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.circleimage);
 		circleImageView=(CircleImageView) findViewById(R.id.avatar);
-		AVQuery<AVObject> query=new AVQuery<AVObject>("Gender");
-		query.whereEqualTo("username", "哈登");
-		query.findInBackground(showCircleAvaterByImageLoader());
+		Bitmap bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.default_user_img);
+		circleImageView.setImageBitmap(bitmap);
+		
+//		AVQuery<AVObject> query=new AVQuery<AVObject>("Gender");
+//		query.whereEqualTo("username", "哈登");
+//		query.findInBackground(showCircleAvaterByImageLoader());
 	}
 	/*
 	 * 后台加载头像并显示的回调接口
@@ -114,6 +124,7 @@ public class TestCircleAvater extends BaseActivity{
 						.bitmapConfig(Bitmap.Config.RGB_565).build();
 				ImageLoader.getInstance().displayImage("http://ac-x3o016bx.clouddn.com/86O7RAPx2BtTW5zgZTPGNwH9RZD5vNDtPm1YbIcu",
 						circleImageView, options);
+				
 				break;
 
 			default:

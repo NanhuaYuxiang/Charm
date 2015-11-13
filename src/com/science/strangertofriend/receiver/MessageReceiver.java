@@ -16,11 +16,6 @@ import com.science.strangertofriend.R;
 /**
  * @description
  * 
- * @author ĞÒÔËScience ³ÂÍÁŸö
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-5-26
- * 
  */
 
 public class MessageReceiver extends BroadcastReceiver {

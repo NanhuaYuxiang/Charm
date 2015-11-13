@@ -25,13 +25,7 @@ import com.science.strangertofriend.ui.ChatRoomActivity;
 /**
  * @description 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
  * 
- * @author 幸运Science 陈土燊
- * @school University of South China
- * @email chentushen.science@gmail.com,274240671@qq.com
- * @2015-4-26
- * 
  */
-
 public class AppContext extends Application {
 
 	public static boolean isThisLocation = true;
