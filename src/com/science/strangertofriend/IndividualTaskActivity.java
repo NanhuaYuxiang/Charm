@@ -134,7 +134,7 @@ public class IndividualTaskActivity extends Activity implements
 			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0:
-				return "接受任务";
+				return "  ";
 			case 1:
 				return "发布任务";
 			}

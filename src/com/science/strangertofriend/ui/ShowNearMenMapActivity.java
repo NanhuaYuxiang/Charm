@@ -282,7 +282,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			query.whereEqualTo("username", username);
 		}
 		query.findInBackground(findGenderCallback(context, circleImageView));
-		
+		mMarkDescriptor=BitmapDescriptorFactory.fromView(circleImageView);
 	}
 	
 	
@@ -392,7 +392,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 		View view=LayoutInflater.from(context).inflate(R.layout.circleimage,null);
 		 circleImageView=(CircleImageView) view.findViewById(R.id.avatar);
-		mMarkDescriptor=BitmapDescriptorFactory.fromView(circleImageView);
+		
 	}
 	
 	/**

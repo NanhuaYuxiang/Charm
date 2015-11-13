@@ -50,12 +50,13 @@ import com.science.strangertofriend.fragment.TaskFragment;
 import com.science.strangertofriend.fragment.UserFragment;
 import com.science.strangertofriend.ui.AlterActivity;
 import com.science.strangertofriend.ui.SettingActivity;
+import com.science.strangertofriend.ui.Task_List_Publish_Complete_ListView_Activity;
+import com.science.strangertofriend.utils.GetUserTaskLists;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
 import com.yalantis.contextmenu.lib.MenuParams;
 import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
 import com.yalantis.contextmenu.lib.interfaces.OnMenuItemLongClickListener;
-
 
 public class MainActivity extends ActionBarActivity implements
 		ViewAnimator.ViewAnimatorListener, OnMenuItemClickListener,
@@ -65,10 +66,10 @@ public class MainActivity extends ActionBarActivity implements
 
 	private DrawerLayout mDrawerLayout;
 	// private ActionBarDrawerToggle mActionBarDrawerToggle;
-	private DrawerArrowDrawable mDrawerArrowDrawable;//左侧下拉的图标，根据不同状态变化
+	private DrawerArrowDrawable mDrawerArrowDrawable;// 左侧下拉的图标，根据不同状态变化
 	private float offset;
 	private boolean flipped;
-	private ImageView imageView;//左侧下拉选项列表图标
+	private ImageView imageView;// 左侧下拉选项列表图标
 
 	private List<SlideMenuItem> mMenuList = new ArrayList<>();
 	private ShakeFragment mShakeFragment;
@@ -78,7 +79,7 @@ public class MainActivity extends ActionBarActivity implements
 	private TaskFragment mTaskFragment;
 	@SuppressWarnings("rawtypes")
 	private ViewAnimator mViewAnimator;
-	private LinearLayout mLinearLayout;//左侧drawerLayout
+	private LinearLayout mLinearLayout;// 左侧drawerLayout
 	private TextView mTitleText;
 	// 定义一个变量，来标识是否退出
 	private static boolean isExit = false;
@@ -122,7 +123,7 @@ public class MainActivity extends ActionBarActivity implements
 		// 在ViewAnimator 中创建view 并添加到 linearLayout 菜单中.
 		mViewAnimator = new ViewAnimator<>(this, mMenuList, mShakeFragment,
 				mDrawerLayout, this);
-		
+
 	}
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
@@ -149,9 +150,9 @@ public class MainActivity extends ActionBarActivity implements
 
 		mTitleText = (TextView) findViewById(R.id.title);
 		mTitleText.setText("摇一摇附近任务");
-//		mMessageFragment = new MessageFragment();
-//		mAddressListFragment=new AddressListFragment();
-		mShakeFragment=new ShakeFragment();
+		// mMessageFragment = new MessageFragment();
+		// mAddressListFragment=new AddressListFragment();
+		mShakeFragment = new ShakeFragment();
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.content_frame, mShakeFragment).commit();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -291,11 +292,12 @@ public class MainActivity extends ActionBarActivity implements
 		SlideMenuItem slideMenuItemUser = new SlideMenuItem("User",
 				R.drawable.d);
 		mMenuList.add(slideMenuItemUser);
-		
-		//任务
-		SlideMenuItem slideMenuItemTask=new SlideMenuItem("Task", R.drawable.a);
+
+		// 任务
+		SlideMenuItem slideMenuItemTask = new SlideMenuItem("Task",
+				R.drawable.a);
 		mMenuList.add(slideMenuItemTask);
-		
+
 	}
 
 	// 摇一摇视图切换动画实现
@@ -336,11 +338,10 @@ public class MainActivity extends ActionBarActivity implements
 
 		return mMessageFragment;
 	}
-	
-	
-	//任务列表切换动画实现
+
+	// 任务列表切换动画实现
 	public ScreenShotable replaceTaskFragment(ScreenShotable screenShotable,
-			int topPosition){
+			int topPosition) {
 		CircularRevealAnima(screenShotable, topPosition);
 		mTitleText.setText("任务");
 		mTaskFragment = new TaskFragment();
@@ -349,7 +350,7 @@ public class MainActivity extends ActionBarActivity implements
 
 		return mTaskFragment;
 	}
-	
+
 	// 通讯录视图切换动画实现
 	public ScreenShotable replaceAddressListFragment(
 			ScreenShotable screenShotable, int topPosition) {
@@ -377,7 +378,14 @@ public class MainActivity extends ActionBarActivity implements
 		case "Address":
 			return replaceAddressListFragment(screenShotable, topPosition);
 		case "Task":
-			return replaceTaskFragment(screenShotable, topPosition);
+			// 获取资源
+//			new GetUserTaskLists();
+			// 跳转任务清单
+			startActivity(new Intent(MainActivity.this,
+					Task_List_Publish_Complete_ListView_Activity.class));
+
+			// finish();
+			// return replaceTaskFragment(screenShotable, topPosition);
 		default:
 			return screenShotable;
 		}

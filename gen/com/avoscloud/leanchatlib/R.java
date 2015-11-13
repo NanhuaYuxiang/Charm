@@ -177,9 +177,9 @@ public final class R {
 		public static final int emoji_wink = 0x7f0200e3;
 		public static final int emoji_worried = 0x7f0200e4;
 		public static final int emoji_yum = 0x7f0200e5;
-		public static final int scanner_back_img = 0x7f020132;
-		public static final int title_bg = 0x7f020148;
-		public static final int title_more = 0x7f020149;
+		public static final int scanner_back_img = 0x7f020134;
+		public static final int title_bg = 0x7f02014a;
+		public static final int title_more = 0x7f02014b;
 	}
 	public static final class id {
 		public static final int addImageBtn = 0x7f0c00ac;

@@ -83,7 +83,10 @@
     <string name="completed_taskAddress">地点:</string>
     <string name="completed_taskGold">金币:</string>
     <string name="completed_topsy_turvy">状态:</string>
+    <string name="completed_hunter">猎人:</string>
     <string name="title_activity_individual_task">IndividualTaskActivity</string>
+   
+    
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
