@@ -88,6 +88,7 @@
         </activity>
         <activity android:name=".game.puzzle.PuzzleActivity" >
         </activity>
+        <activity android:name="com.science.strangertofriend.ui.DetailedTaskActivity"></activity>
         <activity android:name=".ui.SettingActivity" >
         </activity>
         <activity android:name=".ui.UserDealActivity" >
@@ -98,6 +99,7 @@
         </activity>
         <activity android:name=".ui.ContactActivity" >
         </activity>
+        <activity android:name="com.science.strangertofriend.ui.chatActivity"></activity>
         <activity android:name=".ui.RankingActivity" >
         </activity>
         <activity android:name=".ui.AddTaskActivity" >
