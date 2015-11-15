@@ -3833,10 +3833,10 @@ containing a value of this type.
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
  Base application theme. 
- Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
  Base application theme. 
  Customize your theme here. 
+ Application theme. 
+ All customizations that are NOT specific to a particular API-level can go here. 
  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
