@@ -88,6 +88,7 @@
         </activity>
         <activity android:name=".game.puzzle.PuzzleActivity" >
         </activity>
+        <activity android:name="com.science.strangertofriend.ui.DetailedTaskActivity"></activity>
         <activity android:name=".ui.SettingActivity" >
         </activity>
         <activity android:name=".ui.UserDealActivity" >
@@ -98,6 +99,7 @@
         </activity>
         <activity android:name=".ui.ContactActivity" >
         </activity>
+        <activity android:name="com.science.strangertofriend.ui.chatActivity"></activity>
         <activity android:name=".ui.RankingActivity" >
         </activity>
         <activity android:name=".ui.AddTaskActivity" >
@@ -143,6 +145,15 @@
         <activity
             android:name=".IndividualTaskActivity"
             android:label="@string/title_activity_individual_task" >
+        </activity>
+           <!-- 任务历史清单 -->
+        <activity android:name="com.science.strangertofriend.ui.Task_List_Publish_Complete_ListView_Activity" >
+        </activity>
+        <activity android:name="com.science.strangertofriend.ui.Task_List_Publish_UnComplete_ListView_Activity" >
+        </activity>
+        <activity android:name="com.science.strangertofriend.ui.Task_List_Accept_Complete_ListView_Activity" >
+        </activity>
+        <activity android:name="com.science.strangertofriend.ui.Task_List_Accept_UnComplete_ListView_Activity" >
         </activity>
     </application>
 

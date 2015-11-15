@@ -454,9 +454,21 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				//
+				//D改的 这个地方是传送一些信息到DetailTaskActivity
 				Bundle taskinfo = marker.getExtraInfo();
 				Task task = (Task) taskinfo.get("info");
+				Toast.makeText(ShowNearMenMapActivity.this, " "+task.toString(), 10).show();
+				Intent intent = new Intent(ShowNearMenMapActivity.this,DetailedTaskActivity.class);
+				bitMaps.get(task.getPublisherName());
+				intent.putExtra("bitmap", bitMaps.get(task.getPublisherName()));
+				intent.putExtra("theme", task.getTheme());
+				intent.putExtra("publisherName", task.getPublisherName());
+				intent.putExtra("type", task.getType());
+				intent.putExtra("taskDescription",task.getTaskDescription());
+				intent.putExtra("location", task.getLocation());
+				intent.putExtra("price",task.getPrice());
+				intent.putExtra("endtime", task.getEndTime());
+				startActivity(intent);
 				// final LocationMenList menList = (LocationMenList) extraInfo;
 				// .getSerializable("menList");
 				//
@@ -494,8 +506,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				//
 				// @Override
 				// public void onInfoWindowClick() {
-				Toast.makeText(context, task.getPublisherName(),
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, task.getPublisherName(),
+//						Toast.LENGTH_SHORT).show();
 				// }
 				// });
 				// mBaiduMap.showInfoWindow(infoWindow);

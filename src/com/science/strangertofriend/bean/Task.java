@@ -17,6 +17,7 @@ public class Task implements Serializable {
 	private String publisherName;
 	private String acceptedName;
 	private String theme;
+	private String objectId = "";
 	private String taskDescription;
 	private String endTime;// 任务截止时间
 	private AVGeoPoint geopoint;// 发布任务的地点
@@ -30,6 +31,14 @@ public class Task implements Serializable {
 
 	public Task() {
 		super();
+	}
+
+	public String getObjectId() {
+		return objectId;
+	}
+
+	public void setObjectId(String objectId) {
+		this.objectId = objectId;
 	}
 
 	public double getLatitude() {
