@@ -286,7 +286,6 @@ public class AVService {
 
 			@Override
 			public void done(List<AVObject> arg0, AVException arg1) {
-				Log.e("avaterURL", "共有" + arg0.size() + "个任务");
 				if (arg0 != null && arg0.size() != 0) {
 					AVObject publisher = arg0.get(arg0.size() - 1);
 					AVFile avaterFile = publisher.getAVFile("avater");

@@ -104,29 +104,14 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 						if (!endTime.getText().toString().isEmpty()) {
 
 							if (!publishedPrice.getText().toString().isEmpty()) {
-								progressDialogShow();
-								// publishTask();
-								// AVObject test = new AVObject("test");
-								// test.put("test1", "33333");
-								// test.put("test2", "444444");
-								//
-								// test.saveInBackground(new SaveCallback() {
-								//
-								// @Override
-								// public void done(AVException arg0) {
-								// if (arg0 == null) {
-								// Toast.makeText(
-								// AddTaskActivity.this, "OK",
-								// Toast.LENGTH_SHORT);
-								// } else {
-								//
-								// Toast.makeText(
-								// AddTaskActivity.this,
-								// "failed",
-								// Toast.LENGTH_SHORT);
-								// }
-								// }
-								// });
+								
+								if(!mSpinnerTitle.getText().equals("请选择服务类型")){
+									
+									progressDialogShow();
+								}else {
+									Toast.makeText(AddTaskActivity.this, "请选择任务类型", Toast.LENGTH_SHORT).show();
+								}
+								
 
 							} else {
 								Toast.makeText(AddTaskActivity.this,

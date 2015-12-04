@@ -23,7 +23,9 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.science.strangertofriend.AppContext;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.listener.ShakeListener;
 import com.science.strangertofriend.listener.ShakeListener.OnShakeListener;
@@ -36,7 +38,7 @@ import com.science.strangertofriend.ui.ShowNearMenMapActivity;
  */
 
 public class ShakeFragment extends Fragment implements ScreenShotable {
-
+	private AppContext mAppContext;
 	private View mContainerView;
 	private Bitmap mBitmap;
 	private View mRootView;
@@ -65,7 +67,7 @@ public class ShakeFragment extends Fragment implements ScreenShotable {
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 		mRootView = inflater.inflate(R.layout.shake_fragment, container, false);
-
+		mAppContext=(AppContext) getActivity().getApplication();
 		initSound();
 		initView();
 		initListener();
@@ -113,15 +115,20 @@ public class ShakeFragment extends Fragment implements ScreenShotable {
 
 							@Override
 							public void onFinish() {
-
-								Intent intent = new Intent(getActivity(),
-										ShowNearMenMapActivity.class);
-								startActivity(intent);
+								if(mAppContext.isNetworkConnected()){
+									Intent intent = new Intent(getActivity(),
+											ShowNearMenMapActivity.class);
+									startActivity(intent);
+								//	mShakeListener.stop();
+								}else {
+									Toast.makeText(mAppContext, "没有网络不能搜寻任务哦-.-", Toast.LENGTH_LONG).show();
+									mShakeListener.start();
+								}
 							}
 						}.start();
 						mVibrator.cancel();
 					}
-				}, 2000);
+				}, 1000);
 
 				// if (!Utils.isFastDoubleShake()) {
 				// mShakeListener.start();

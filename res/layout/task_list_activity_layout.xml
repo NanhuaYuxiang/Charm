@@ -8,7 +8,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:hint="你还没任务呢！\n快去接、发收任务吧！"
+        android:layout_marginTop="25dp"
+        android:hint="任务列表空空的呢-.-"
         android:textSize="25dp" />
 
     <ListView

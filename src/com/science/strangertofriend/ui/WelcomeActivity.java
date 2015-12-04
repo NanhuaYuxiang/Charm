@@ -58,7 +58,7 @@ public class WelcomeActivity extends Activity {
 
 				mWelcomeImg = (ImageView) findViewById(R.id.welcome);
 				AlphaAnimation aa = new AlphaAnimation(0f, 1f);
-				aa.setDuration(4000);
+				aa.setDuration(1000);
 				mWelcomeImg.startAnimation(aa);
 				aa.setAnimationListener(new AnimationListener() {
 

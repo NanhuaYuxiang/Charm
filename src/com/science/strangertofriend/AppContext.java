@@ -90,12 +90,13 @@ public class AppContext extends Application {
 	 * 
 	 * @return
 	 */
-	public boolean isNetworkConnected() {
+	public boolean  isNetworkConnected() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo ni = cm.getActiveNetworkInfo();
 		return ni != null && ni.isConnectedOrConnecting();
 	}
-
+	
+	
 	/** 初始化图片加载类配置信息 **/
 	@SuppressWarnings("deprecation")
 	public static void initImageLoader(Context context) {

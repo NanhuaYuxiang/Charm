@@ -5,6 +5,7 @@ import java.util.List;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
@@ -121,13 +122,15 @@ public class GetUserTaskLists {
 				taskBean.setObjectId(task.getString("objectId"));
 				taskBean.setPublisherName(task.getString("publisherName"));
 				taskBean.setAccepted(false);
+				//赵：任务还没有被接受的时候，获取的到的布尔变量可能为空，可能有问题这儿
 				boolean isAccomplished = task.getBoolean("isAccomplished");
+				
+				Log.i("GetUserTaskLists","isAccomplished="+ isAccomplished);
 				taskBean.setAccomplished(isAccomplished);
 				taskBean.setEndTime(task.getString("endTime"));
 				taskBean.setPrice(task.getString("price"));
 				taskBean.setTheme(task.getString("theme"));
 				taskBean.setTaskDescription(task.getString("TaskDescription"));
-				taskBean.setType(task.getString("service_task"));
 				taskBean.setLatitude(task.getAVGeoPoint("geoPoint")
 						.getLatitude());
 				taskBean.setLongitude(task.getAVGeoPoint("geoPoint")
@@ -155,6 +158,8 @@ public class GetUserTaskLists {
 	 */
 	public void getValuesAtBinOfAcce() {
 		AVQuery<AVObject> query = new AVQuery<>("Task");
+		
+		//赵：该字段在任务表中一开始没有，这儿可能会有问题
 		query.whereEqualTo("acceptedName", myUserName);
 		Task taskBean = null;
 		try {
@@ -167,12 +172,13 @@ public class GetUserTaskLists {
 				taskBean.setPublisherName(task.getString("publisherName"));
 				taskBean.setAccepted(false);
 				boolean isAccomplished = task.getBoolean("isAccomplished");
+				//这个字段也是
 				taskBean.setAccomplished(isAccomplished);
 				taskBean.setEndTime(task.getString("endTime"));
 				taskBean.setPrice(task.getString("price"));
 				taskBean.setTheme(task.getString("theme"));
 				taskBean.setTaskDescription(task.getString("TaskDescription"));
-				taskBean.setType(task.getString("service_task"));
+				//taskBean.setType(task.getString("service_task"));
 				taskBean.setLatitude(task.getAVGeoPoint("geoPoint")
 						.getLatitude());
 				taskBean.setLongitude(task.getAVGeoPoint("geoPoint")

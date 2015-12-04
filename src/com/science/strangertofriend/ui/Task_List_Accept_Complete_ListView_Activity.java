@@ -75,6 +75,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 	 */
 	private void initAnimations() {
 		DisplayMetrics displayMetrics = new DisplayMetrics();
+		//将当前窗口的一些信息放在DisplayMetrics类中
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		int height = displayMetrics.heightPixels;
 		ImageView imageView = null;
@@ -114,10 +115,10 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 			break;
 		case R.id.image_accept:
 			closeMenu();
-			startActivity(new Intent(
-					Task_List_Accept_Complete_ListView_Activity.this,
-					Task_Accept_Complete_Adapter.class));
-			finish();
+//			startActivity(new Intent(
+//					Task_List_Accept_Complete_ListView_Activity.this,
+//					Task_Accept_Complete_Adapter.class));
+//			finish();
 			break;
 		case R.id.image_unaccept:
 			// openMenu();

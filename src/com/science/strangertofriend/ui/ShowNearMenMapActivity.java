@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +47,8 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
+import com.baidu.mapapi.map.offline.MKOfflineMap;
+import com.baidu.mapapi.map.offline.MKOfflineMapListener;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
@@ -94,6 +97,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	private static double mLongtitude;
 	private ImageView mMapLocation;
 	private AVGeoPoint mMyPoint;
+	private MKOfflineMap mOfflineMap;
 
 	// 覆盖物相关
 	private BitmapDescriptor mMarkDescriptor;
@@ -108,6 +112,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	private ImageView add_task;// 添加任务
 	private List<Task> taskNearBy = new ArrayList<Task>();// 检索到的附近素有符合条件的任务
 	private CircleImageView circleImageView;
+	private String cityCode;
 	
 	//头像集合相关
 	HashMap<String, BitmapDescriptor> avaterMarkers=new HashMap<String, BitmapDescriptor>();
@@ -117,7 +122,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 
 		// 在使用SDK各组件之前初始化context信息，传入ApplicationContext
-		// 注意该方法要再setContentView方法之前实现
+		// 注法意该方法要再setContentView方之前实现
 		SDKInitializer.initialize(getApplicationContext());
 
 		setContentView(R.layout.near_men_map);
@@ -127,11 +132,45 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		initListener();
 		// 初始化定位
 		initLocation();
-//		initMarker();
+		
 		setMarkerClickListener();
-		Log.e("ShowNearMenMapActivity", "onCreate被执行");
+		//Log.e("ShowNearMenMapActivity", "onCreate被执行");
 	}
-
+	/**
+	 * 获取离线地图
+	 */
+	private void getOffLineMap() {
+		mOfflineMap=new MKOfflineMap( );
+		mOfflineMap.init(new MKOfflineMapListener() {
+			
+			@Override
+			public void onGetOfflineMapState(int type, int state) {
+				switch (type) {
+				case MKOfflineMap.TYPE_NEW_OFFLINE:
+					Log.i("offlineMap", "下载了"+state+"个新离线地图");
+					break;
+				case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
+					Log.i("offlineMap", "有离线地图可更新");
+					break;
+				case MKOfflineMap.TYPE_VER_UPDATE:
+					Log.i("offlineMap", "有新版本可更新");
+					break;
+				default:
+					break;
+				}
+			}
+		});
+		
+		
+	}
+	
+	public void downloadOfflineMap(int cityCode){
+		boolean flag= mOfflineMap.start(cityCode);
+		if(flag){
+			Log.i("offlineMap", "下载完成");
+		}
+	}
+	
 	private void initListener() {
 		mRevealLayout.setContentShown(false);
 		mRevealLayout.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -234,13 +273,17 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
-
 			MyLocationData data = new MyLocationData.Builder()
 					.direction(currentX).accuracy(location.getRadius())
 					.latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
 			mBaiduMap.setMyLocationData(data);
-
+			
+			//获取城市code
+			cityCode=location.getCityCode();
+			getOffLineMap();
+			downloadOfflineMap(Integer.parseInt(cityCode));
+			Log.i("cityCode", cityCode+location.getCity());
 			// 自定义方向箭头
 			mIconLocation = BitmapDescriptorFactory
 					.fromResource(R.drawable.navi_map_gps_locked);
@@ -345,13 +388,11 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	 * 异步加载所有的头像
 	 */
 	public void loadAllAvaters(){
+		long  time_start= System.currentTimeMillis();
 		for(int i=0;i<taskNearBy.size();i++){
 			AVService.getNearbyTaskAvaters(taskNearBy.get(i).getPublisherName());
-			
-			//主线程跑的太快，让他等子线程异步加载完头像信息，不然获取的头像都为空
-			//sb线程跑的太快了，等等imageloader
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(800);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -362,31 +403,35 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			}
 		}
 		Log.e("avaterMarkers", avaterMarkers.size()+"\n"+avaterMarkers.toString());
-		Log.e("loadAllAvaters", "方法被执行");
-		
+		Log.i("loadTime", "加载图片历时"+(System.currentTimeMillis()-time_start)/1000+"秒");
 		showAllMarkersOnMap();
 	}
 	/**
 	 * 将所有任务以发布人头像显示在地图上
 	 */
 	private void showAllMarkersOnMap(){
+		Log.i("loadTime", "共加载到"+bitMaps.size()+"个头像");
 		mBaiduMap.clear();
+		Bitmap bitmap=null;
 		Marker marker = null;
 		LatLng latLng = null;
 		OverlayOptions options;
 		for(int i=0;i<taskNearBy.size();i++){
-			latLng = new LatLng(taskNearBy.get(i).getLatitude(), taskNearBy.get(i).getLongitude());
-//			options = new MarkerOptions().position(latLng)
-//					.icon(avaterMarkers.get(taskNearBy.get(i).getPublisherName())).zIndex(5);
+			Log.i("loadTime", "共"+taskNearBy.size()+"个任务");
 			initMarker();
-			Bitmap bitmap=Bitmap.createBitmap(bitMaps.get(taskNearBy.get(i).getPublisherName()));
+			latLng = new LatLng(taskNearBy.get(i).getLatitude(), taskNearBy.get(i).getLongitude());
+			if(bitMaps.get(taskNearBy.get(i).getPublisherName())!=null){
+				
+				 bitmap=Bitmap.createBitmap(bitMaps.get(taskNearBy.get(i).getPublisherName()));
+			}else {
+				bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.default_user_img);
+			}
 			circleImageView.setImageBitmap(bitmap);
 			circleImageView.setImageAlpha(0);
 			mMarkDescriptor = BitmapDescriptorFactory
 					.fromView(circleImageView);
 			options = new MarkerOptions().position(latLng)
 					.icon(mMarkDescriptor).zIndex(5);
-			marker = (Marker) mBaiduMap.addOverlay(options);
 			marker = (Marker) mBaiduMap.addOverlay(options);
 			Bundle arg0 = new Bundle();
 			arg0.putSerializable("info", taskNearBy.get(i));
@@ -457,7 +502,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				//D改的 这个地方是传送一些信息到DetailTaskActivity
 				Bundle taskinfo = marker.getExtraInfo();
 				Task task = (Task) taskinfo.get("info");
-				Toast.makeText(ShowNearMenMapActivity.this, " "+task.toString(), 10).show();
+				//Toast.makeText(ShowNearMenMapActivity.this, " "+task.toString(), 10).show();
 				Intent intent = new Intent(ShowNearMenMapActivity.this,DetailedTaskActivity.class);
 				bitMaps.get(task.getPublisherName());
 				intent.putExtra("bitmap", bitMaps.get(task.getPublisherName()));
@@ -578,6 +623,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		super.onDestroy();
 		// 在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
 		mMapView.onDestroy();
+		mOfflineMap.destroy();
 	}
 
 	@Override

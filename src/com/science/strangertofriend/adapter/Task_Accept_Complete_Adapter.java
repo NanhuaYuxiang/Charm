@@ -34,7 +34,7 @@ public class Task_Accept_Complete_Adapter extends BaseAdapter {
 
 	/**
 	 * 获取适配器
-	 * @return 适配器的对像
+	 * @return 适配器的对象
 	 */
 	public static Task_Accept_Complete_Adapter initAdapter(){
 		if(adapter == null){
@@ -46,7 +46,7 @@ public class Task_Accept_Complete_Adapter extends BaseAdapter {
 	/**
 	 * 获取适配器
 	 * @param activity ListView的宿主activity
-	 * @return 适配器的对昂
+	 * @return 适配器的对象
 	 */
 	public static Task_Accept_Complete_Adapter initAdapter(Activity activity){
 		if(adapter == null){
