@@ -115,10 +115,10 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 			break;
 		case R.id.image_accept:
 			closeMenu();
-//			startActivity(new Intent(
-//					Task_List_Accept_Complete_ListView_Activity.this,
-//					Task_Accept_Complete_Adapter.class));
-//			finish();
+			startActivity(new Intent(
+					Task_List_Accept_Complete_ListView_Activity.this,
+					Task_List_Accept_Complete_ListView_Activity.class));
+			finish();
 			break;
 		case R.id.image_unaccept:
 			// openMenu();
@@ -213,7 +213,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		for (int i = 0; i < imageIds.length; i++) {
 			AnimatorSet animatorSet = new AnimatorSet();
 			ObjectAnimator animator1 = ObjectAnimator.ofFloat(
-					imageViews.get(i), "translationX", 100 * i, 0);
+					imageViews.get(i), "translationX", 150 *i, 0);
 			animatorSet.playTogether(animator1);
 			animatorSet.setDuration(500);
 			animatorSet.setInterpolator(new BounceInterpolator());
@@ -226,7 +226,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		for (int i = 0; i < imageIds.length; i++) {
 			AnimatorSet animatorSet = new AnimatorSet();
 			ObjectAnimator animator1 = ObjectAnimator.ofFloat(
-					imageViews.get(i), "translationX", 0, 100 * i);
+					imageViews.get(i), "translationX", 0, 150 * i);
 			animatorSet.playTogether(animator1);
 			animatorSet.setDuration(500);
 			animatorSet.setInterpolator(new BounceInterpolator());

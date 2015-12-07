@@ -129,6 +129,7 @@ public class Task_Accept_UnComplete_Adapter extends BaseAdapter {
 		viewHolder.publish_time.setText(vector.get(position).getEndTime());
 		viewHolder.publish_topsy_turvy.setText(vector.get(position)
 				.getTaskDescription());
+		viewHolder.publish_type.setText(vector.get(position).getType());
 
 	}
 

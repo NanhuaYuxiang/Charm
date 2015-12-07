@@ -125,7 +125,7 @@ public class Task_Accept_Complete_Adapter extends BaseAdapter {
 				.getTaskDescription());
 		viewHolder.publish_publisher.setText(vector.get(position)
 				.getPublisherName());
-
+		viewHolder.publish_type.setText(vector.get(position).getType());
 	}
 
 	static class ViewHolder {

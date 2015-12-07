@@ -28,6 +28,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,10 +41,13 @@ import android.widget.Toast;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
+import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.science.materialmenu.DrawerArrowDrawable;
-import com.science.strangertofriend.adapter.Task_Accept_Complete_Adapter;
 import com.science.strangertofriend.fragment.AddressListFragment;
 import com.science.strangertofriend.fragment.MessageFragment;
 import com.science.strangertofriend.fragment.ShakeFragment;
@@ -51,6 +55,7 @@ import com.science.strangertofriend.fragment.UserFragment;
 import com.science.strangertofriend.ui.AlterActivity;
 import com.science.strangertofriend.ui.SettingActivity;
 import com.science.strangertofriend.ui.Task_List_Accept_Complete_ListView_Activity;
+import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.utils.GetUserTaskLists;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
 import com.yalantis.contextmenu.lib.MenuObject;
@@ -61,7 +66,7 @@ import com.yalantis.contextmenu.lib.interfaces.OnMenuItemLongClickListener;
 public class MainActivity extends ActionBarActivity implements
 		ViewAnimator.ViewAnimatorListener, OnMenuItemClickListener,
 		OnMenuItemLongClickListener {
-
+	private AVUser currentUser;
 	private AppContext appContext;// 全局Context
 
 	private DrawerLayout mDrawerLayout;
@@ -94,7 +99,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		currentUser = AVUser.getCurrentUser();
+		Log.i("currentuSser", currentUser.getUsername() + "");
 		// avos用户反馈系统,在用户打开App时，通知用户新的反馈回复
 		FeedbackAgent agent = new FeedbackAgent(MainActivity.this);
 		agent.sync();
@@ -123,7 +129,13 @@ public class MainActivity extends ActionBarActivity implements
 		// 在ViewAnimator 中创建view 并添加到 linearLayout 菜单中.
 		mViewAnimator = new ViewAnimator<>(this, mMenuList, mShakeFragment,
 				mDrawerLayout, this);
+		if (null != currentUser) {
 
+			if (!AVService.isUserContainsAvater(currentUser)) {
+				 addAvaterToUser();
+				
+			}
+		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
@@ -576,5 +588,44 @@ public class MainActivity extends ActionBarActivity implements
 			isExit = false;
 		}
 	};
+
+	/**
+	 * 上传头像到user用户表
+	 * 
+	 * @return
+	 */
+	public void addAvaterToUser() {
+		AVService.getAvaterUrl(currentUser);
+		AVService
+				.setOnAvaterUrlListener(new com.science.strangertofriend.callback.onAvaterUrlGet() {
+
+					@Override
+					public void avaterUrlGet(String url) {
+
+						if (null != currentUser && null != url) {
+							Log.i("url", url);
+							String username = currentUser.getUsername();
+							AVService.upLoadAvater(currentUser, url, username,
+									new SignUpCallback() {
+										
+										@Override
+										public void done(AVException arg0) {
+											if (arg0 != null) {
+												Toast.makeText(appContext,
+														"保存失败",
+														Toast.LENGTH_LONG)
+														.show();
+												Log.i("Storestate", "filure");
+											}else {
+												Log.i("Storestate", "success");
+												Toast.makeText(appContext, "保存成功", Toast.LENGTH_LONG).show();
+											}
+										}
+									});
+						}
+					}
+				});
+
+	}
 
 }

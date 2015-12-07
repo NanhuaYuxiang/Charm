@@ -121,8 +121,8 @@ public class GetUserTaskLists {
 				taskBean = new Task();
 				taskBean.setObjectId(task.getString("objectId"));
 				taskBean.setPublisherName(task.getString("publisherName"));
-				taskBean.setAccepted(false);
-				//赵：任务还没有被接受的时候，获取的到的布尔变量可能为空，可能有问题这儿
+				taskBean.setAcceptedName(task.getString("acceptedName"));
+				taskBean.setAccepted(task.getBoolean("isAccepted"));
 				boolean isAccomplished = task.getBoolean("isAccomplished");
 				
 				Log.i("GetUserTaskLists","isAccomplished="+ isAccomplished);
@@ -159,7 +159,6 @@ public class GetUserTaskLists {
 	public void getValuesAtBinOfAcce() {
 		AVQuery<AVObject> query = new AVQuery<>("Task");
 		
-		//赵：该字段在任务表中一开始没有，这儿可能会有问题
 		query.whereEqualTo("acceptedName", myUserName);
 		Task taskBean = null;
 		try {
@@ -170,9 +169,9 @@ public class GetUserTaskLists {
 				taskBean = new Task();
 				taskBean.setObjectId(task.getString("objectId"));
 				taskBean.setPublisherName(task.getString("publisherName"));
-				taskBean.setAccepted(false);
+				taskBean.setAcceptedName(task.getString("acceptedName"));
+				taskBean.setAccepted(task.getBoolean("isAccepted"));
 				boolean isAccomplished = task.getBoolean("isAccomplished");
-				//这个字段也是
 				taskBean.setAccomplished(isAccomplished);
 				taskBean.setEndTime(task.getString("endTime"));
 				taskBean.setPrice(task.getString("price"));

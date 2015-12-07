@@ -10,6 +10,7 @@
         android:gravity="center"
         android:layout_marginTop="25dp"
         android:hint="任务列表空空的呢-.-"
+        android:visibility="invisible"
         android:textSize="25dp" />
 
     <ListView
@@ -24,34 +25,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/ic_remove_black_48dp" />
+        android:src="@drawable/pub_accep" />
 
     <ImageView
         android:id="@+id/image_unpublish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/ic_add_black_48dp" />
+        android:src="@drawable/pub_unaccom" />
 
     <ImageView
         android:id="@+id/image_accept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/ic_remove_black_48dp" />
+        android:src="@drawable/accep_accom" />
 
     <ImageView
         android:id="@+id/image_unaccept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/ic_add_black_48dp" />
+        android:src="@drawable/accep_unaccom" />
 
     <ImageView
         android:id="@+id/image_root"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/ic_add_black_48dp" />
+        android:src="@drawable/root" />
 
 </FrameLayout>

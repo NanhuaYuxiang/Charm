@@ -2,9 +2,13 @@ package com.science.strangertofriend.adapter;
 
 import java.util.Vector;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.R.color;
 import com.science.strangertofriend.bean.Task;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,12 +26,20 @@ import android.widget.TextView;
  * @blog www.gaosililn.iteye.com
  * @email gaosi0812@gamil.com
  * @school usc
- *
+ * 
  */
 public class Task_Publish_Complete_Adapter extends BaseAdapter {
 	public static Vector<Task> vector = new Vector<>();
 	private LayoutInflater layoutInflater = null;
 	private static Task_Publish_Complete_Adapter adapter = null;
+	private DisplayImageOptions options = new DisplayImageOptions.Builder()
+			.showStubImage(R.drawable.default_user_img) // 设置图片下载期间显示的图片
+			.showImageForEmptyUri(R.drawable.default_user_img) // 设置图片Uri为空或是错误的时候显示的图片
+			.showImageOnFail(R.drawable.default_user_img) // 设置图片加载或解码过程中发生错误显示的图片
+			.cacheInMemory(true) // 设置下载的图片是否缓存在内存中
+			.cacheOnDisc(true) // 设置下载的图片是否缓存在SD卡中
+			.displayer(new RoundedBitmapDisplayer(20)) // 设置成圆角图片
+			.build(); // 创建配置过得DisplayImageOption对象 ;
 
 	private Task_Publish_Complete_Adapter() {
 	}
@@ -84,7 +96,8 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 			viewHolder = new ViewHolder();
 			convertView = layoutInflater.inflate(
 					R.layout.task_pubulisg_complete_layout, null, false);
-
+			viewHolder.mCircleImageView = (CircleImageView) convertView
+					.findViewById(R.id.avatar);
 			viewHolder.publish_type = (TextView) convertView
 					.findViewById(R.id.publish_type);
 			viewHolder.publish_time = (TextView) convertView
@@ -120,6 +133,7 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 	 *            ListView的id
 	 */
 	private void initValues(ViewHolder viewHolder, int position) {
+
 		viewHolder.publish_address.setText(vector.get(position).getLocation());
 		viewHolder.publish_gold.setText(vector.get(position).getPrice() + "");
 		viewHolder.publish_time.setText(vector.get(position).getEndTime());
@@ -127,13 +141,13 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 				.getTaskDescription());
 		viewHolder.publish_hunter.setText(vector.get(position)
 				.getAcceptedName());
-
+		viewHolder.publish_type.setText(vector.get(position).getType());
 	}
 
 	static class ViewHolder {
 		private TextView publish_type, publish_time, publish_address,
 				publish_gold, publish_hunter, publish_topsy_turvy;
-
+		private CircleImageView mCircleImageView;
 	}
 
 	public static Vector<Task> getVector() {
