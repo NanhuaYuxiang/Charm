@@ -1,18 +1,33 @@
 package com.science.strangertofriend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.AVIMMessageHandler;
+import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avoscloud.leanchatlib.controller.ChatManager;
 import com.avoscloud.leanchatlib.controller.ChatManagerAdapter;
 import com.avoscloud.leanchatlib.model.UserInfo;
@@ -20,7 +35,10 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.science.strangertofriend.bean.ChatMessage;
+import com.science.strangertofriend.ui.ChatActivity;
 import com.science.strangertofriend.ui.ChatRoomActivity;
+import com.science.strangertofriend.ui.ReceiveMessageHandler;
 
 /**
  * @description 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -46,6 +64,7 @@ public class AppContext extends Application {
 		AVOSCloud.setDebugLogEnabled(true);
 		ChatManager.setDebugEnabled(true);// tag leanchatlib
 
+		AVIMMessageManager.registerMessageHandler(AVIMTypedMessage.class, new ReceiveMessageHandler(this));
 		final ChatManager chatManager = ChatManager.getInstance();
 		chatManager.init(this);
 		chatManager.setChatManagerAdapter(new ChatManagerAdapter() {
@@ -116,4 +135,5 @@ public class AppContext extends Application {
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
 	}
+	
 }

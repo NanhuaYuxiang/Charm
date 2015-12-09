@@ -28,34 +28,39 @@
         android:id="@+id/chatFreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9" >
+        android:layout_weight="1" >
 
         <ListView
             android:id="@+id/chatListView"
             android:layout_width="match_parent"
+            android:divider="@null"
             android:layout_height="match_parent" >
         </ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/chatEt"
             android:layout_width="0dp"
-            android:layout_weight="9"
+            android:layout_height="55dp"
+            android:layout_weight="1"
             android:background="#FFFFFF"
-            android:layout_height="match_parent" />
+            android:paddingBottom="5dp"
+            android:paddingLeft="18dp"
+            android:paddingTop="5dp" />
 
-        <ImageButton
-            android:id="@+id/chatImgBtn"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:background="@drawable/chatbtn_a" />
+        <Button
+            android:id="@+id/chatBtn"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/btn_send"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
     </LinearLayout>
 
 </LinearLayout>
