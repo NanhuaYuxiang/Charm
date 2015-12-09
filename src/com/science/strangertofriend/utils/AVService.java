@@ -2,10 +2,8 @@ package com.science.strangertofriend.utils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
-import android.R.bool;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -29,7 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.science.strangertofriend.R;
-import com.science.strangertofriend.ui.LoginActivity;
+import com.science.strangertofriend.callback.onAvaterUrlGet;
 
 /**
  * @description avos云服务操作
@@ -37,6 +35,7 @@ import com.science.strangertofriend.ui.LoginActivity;
  */
 
 public class AVService {
+	private static onAvaterUrlGet listener;
 
 	// 注册
 	public static void signUp(String username, String password, String email,
@@ -168,16 +167,61 @@ public class AVService {
 		po.put("avater", imageFile);
 		po.put("gender", gender);
 		po.saveInBackground();
-		// ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		// genderPhoto.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-		// byte[] data = stream.toByteArray();
-		// AVFile imageFile = new AVFile("gender", data);
-		// try {
-		// imageFile.save();
-		// } catch (AVException e) {
-		// e.printStackTrace();
-		// }
-		// Associate image with AVOS Cloud object
+
+	}
+
+	public static void getAvaterUrl(AVUser user) {
+
+		AVQuery<AVObject> query = new AVQuery<>("Gender");
+		query.whereEqualTo("email", user.getEmail());
+		query.findInBackground(new FindCallback<AVObject>() {
+
+			@Override
+			public void done(List<AVObject> arg0, AVException arg1) {
+				if (arg1 == null && arg0.size() > 0) {
+					String url = arg0.get(arg0.size() - 1).getAVFile("avater")
+							.getUrl();
+					listener.avaterUrlGet(url);
+				}
+			}
+		});
+
+	}
+
+	/**
+	 * 判断当前用户在用户表中是否含有userAvater头像信息
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public static boolean isUserContainsAvater(AVUser user) {
+		Object avater = user.get("userAvater");
+		if (null != avater) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 上传头像到_user表
+	 * 
+	 * @param user
+	 *            上传头像的用户
+	 * @param avaterUrl
+	 *            头像url
+	 * @param username
+	 *            当前user的username
+	 */
+	public static void upLoadAvater(AVUser user, String avaterUrl,
+			String username, SignUpCallback callback) {
+		AVFile avater = null;
+		avater = new AVFile(username + "_avater.jpg", avaterUrl, null);
+		if (null != user && null != avater) {
+			user.put("userAvater", avater);
+			// user.put("test", 1);
+			user.signUpInBackground(callback);
+		}
 	}
 
 	public static void myLocation(String userEmail, String username,
@@ -222,6 +266,8 @@ public class AVService {
 	 * 
 	 * @param publisherName
 	 *            发布任务人姓名
+	 * @param acceptedName
+	 *            任务接受人的姓名
 	 * @param endTime
 	 *            任务截止时间
 	 * @param geoPoint
@@ -238,12 +284,19 @@ public class AVService {
 	 *            任务类型
 	 * @param location
 	 *            任务地点
+	 * @param isAccepted
+	 *            是否已被接受
+	 * @param isAccomplished
+	 *            是否已被完成
 	 */
-	public static void addNewTask(String publisherName, String theme,
-			String des, String endTime, AVGeoPoint geoPoint, String location,
-			String price, String service_type, SaveCallback saveCallback) {
+	public static void addNewTask(String publisherName, String acceptedName,
+			String theme, String des, String endTime, AVGeoPoint geoPoint,
+			String location, String price, String service_type,
+			boolean isAccepted, boolean isAccomplished,
+			SaveCallback saveCallback) {
 		AVObject task = new AVObject("Task");
 		task.put("publisherName", publisherName);
+		task.put("acceptedName", acceptedName);
 		task.put("theme", theme);
 		task.put("TaskDescription", des);
 		task.put("endTime", endTime);
@@ -251,6 +304,8 @@ public class AVService {
 		task.put("location", location);
 		task.put("price", price);
 		task.put("service_type", service_type);
+		task.put("isAccepted", isAccepted);
+		task.put("isAccomplished", isAccomplished);
 		task.saveInBackground(saveCallback);
 	}
 
@@ -310,7 +365,9 @@ public class AVService {
 				bitmapDescriptor = load();
 				break;
 			case 2:
-				bitmap= loadToBitmap();
+				bitmap = loadToBitmap();
+				break;
+			case 3:
 				break;
 			default:
 				break;
@@ -363,6 +420,7 @@ public class AVService {
 	}
 
 	private static Bitmap bitmap;
+
 	/**
 	 * 
 	 * @return 以bitmap 来返回请求的头像信息
@@ -389,8 +447,8 @@ public class AVService {
 					@Override
 					public void onLoadingComplete(String arg0, View arg1,
 							Bitmap arg2) {
-						bitmap=arg2;
-						
+						bitmap = arg2;
+
 					}
 
 					@Override
@@ -401,12 +459,19 @@ public class AVService {
 
 		return bitmap;
 	}
-	public static Bitmap getBitmap(){
+
+	public static Bitmap getBitmap() {
 		return bitmap;
 	}
+
 	public static BitmapDescriptor getBitmapDescriper() {
 		Log.e("bitmapDescriptor", bitmapDescriptor + "");
 		return bitmapDescriptor;
 
 	}
+
+	public static void setOnAvaterUrlListener(onAvaterUrlGet listener) {
+		AVService.listener = listener;
+	}
+
 }

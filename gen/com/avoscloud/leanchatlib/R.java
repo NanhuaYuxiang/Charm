@@ -402,6 +402,7 @@ public final class R {
 		public static final int notification_subtext_size = 0x7f090026;
 	}
 	public static final class drawable {
+<<<<<<< HEAD
 		public static final int abc_ab_share_pack_mtrl_alpha = 0x7f020002;
 		public static final int abc_btn_borderless_material = 0x7f020003;
 		public static final int abc_btn_check_material = 0x7f020004;
@@ -461,6 +462,8 @@ public final class R {
 		public static final int abc_textfield_search_activated_mtrl_alpha = 0x7f02003a;
 		public static final int abc_textfield_search_default_mtrl_alpha = 0x7f02003b;
 		public static final int abc_textfield_search_material = 0x7f02003c;
+=======
+>>>>>>> 0f722f350459d0eef54113709640f177242d0887
 		public static final int chat_add_camera_normal = 0x7f020060;
 		public static final int chat_add_camera_press = 0x7f020061;
 		public static final int chat_add_location_normal = 0x7f020062;
@@ -587,10 +590,16 @@ public final class R {
 		public static final int emoji_wink = 0x7f0200e6;
 		public static final int emoji_worried = 0x7f0200e7;
 		public static final int emoji_yum = 0x7f0200e8;
+<<<<<<< HEAD
 		public static final int notification_template_icon_bg = 0x7f02015a;
 		public static final int scanner_back_img = 0x7f020138;
 		public static final int title_bg = 0x7f02014e;
 		public static final int title_more = 0x7f02014f;
+=======
+		public static final int scanner_back_img = 0x7f02013a;
+		public static final int title_bg = 0x7f020150;
+		public static final int title_more = 0x7f020151;
+>>>>>>> 0f722f350459d0eef54113709640f177242d0887
 	}
 	public static final class id {
 		public static final int action0 = 0x7f0c0151;

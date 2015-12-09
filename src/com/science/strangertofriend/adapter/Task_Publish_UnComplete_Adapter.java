@@ -127,7 +127,7 @@ public class Task_Publish_UnComplete_Adapter extends BaseAdapter {
 				.getTaskDescription());
 		viewHolder.publish_hunter.setText(vector.get(position)
 				.getAcceptedName());
-
+		viewHolder.publish_type.setText(vector.get(position).getType());
 	}
 
 	static class ViewHolder {

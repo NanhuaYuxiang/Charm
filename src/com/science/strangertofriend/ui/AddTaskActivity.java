@@ -207,9 +207,9 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 		double latitude = ShowNearMenMapActivity.getLatitude();
 		double longitude = ShowNearMenMapActivity.getLongitude();
 		AVGeoPoint geoPoint = new AVGeoPoint(latitude, longitude);
-		AVService.addNewTask(publisherName, themeString, descriptionString,
+		AVService.addNewTask(publisherName,"", themeString, descriptionString,
 				endTimeString, geoPoint, locationString, price,
-				service_type, new SaveCallback() {
+				service_type,false,false, new SaveCallback() {
 
 					@Override
 					public void done(AVException exception) {
@@ -235,16 +235,6 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 				dialog.show();
 				dialog.setCancelable(false);
 				Log.e("AddTaskActivity", "保存成功");
-				// new CountDownTimer(800 * 4, 800) {
-				// public void onTick(long millisUntilFinished) {
-				// colorProgress(dialog);
-				// }
-				//
-				// public void onFinish() {
-				// i = -1;
-				// dialog.dismiss();
-				// }
-				// }.start();
 
 				dialog.setConfirmText("确认");
 				dialog.setConfirmClickListener(new OnSweetClickListener() {
