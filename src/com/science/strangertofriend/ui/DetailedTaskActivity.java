@@ -11,6 +11,8 @@ import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.TaskType;
 import com.science.strangertofriend.bean.Task;
@@ -41,6 +43,8 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 	private CircleImageView mCircleImageView;
 	private Task task;//从地图传过来的task对象，可用于获取发布人的AVUser对象，其他的都通过intent传递过来了
 	private AVUser pub_user;//任务发布人的AVUser对象
+	private String selfId="";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,7 +64,8 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 				finish();
 				break;
 			case R.id.contactTaskPeopleBtn:
-				Intent chatIntent = new Intent(DetailedTaskActivity.this,chatActivity.class);
+				Intent chatIntent = new Intent(DetailedTaskActivity.this,ChatActivity.class);
+				chatIntent.putExtra("taskPubliName", intent.getStringExtra("publisherName"));
 				startActivity(chatIntent);
 				break;
 			case R.id.acceptTaskBtn:

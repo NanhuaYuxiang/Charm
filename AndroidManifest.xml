@@ -99,7 +99,7 @@
         </activity>
         <activity android:name=".ui.ContactActivity" >
         </activity>
-        <activity android:name="com.science.strangertofriend.ui.chatActivity"></activity>
+        <activity android:name="com.science.strangertofriend.ui.ChatActivity"></activity>
         <activity android:name=".ui.RankingActivity" >
         </activity>
         <activity android:name=".ui.AddTaskActivity" >
@@ -126,6 +126,8 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+        
+        <receiver android:name="com.science.strangertofriend.ui.NotificationBroadcastReceiver"></receiver>
 
         <service android:name="com.avos.avoscloud.PushService" />
 
