@@ -27,6 +27,7 @@ import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.Task_Accept_Complete_Adapter;
+import com.science.strangertofriend.adapter.Task_Publish_Complete_Adapter;
 import com.science.strangertofriend.bean.Task;
 
 /**
@@ -37,11 +38,12 @@ import com.science.strangertofriend.bean.Task;
  * @blog www.gaosililn.iteye.com
  * @email gaosi0812@gamil.com
  * @school usc
- *
+ * 
  */
 public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		implements OnClickListener {
 	private ArrayList<ImageView> imageViews;// IamgeView 的队列
+	private ImageView img_no_task;
 	// IamgeView 的Id数组
 	int[] imageIds = new int[] { R.id.image_root, R.id.image_publish,
 			R.id.image_unpublish, R.id.image_accept, R.id.image_unaccept };
@@ -54,17 +56,31 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		setContentView(R.layout.task_list_activity_layout);
 
 		initListView();
-
+		isShow_Img_NoTask();
 		initAnimations();// 初始化动画
 		// 设置上下文菜单
 		super.registerForContextMenu(listView);
 	}
 
 	/**
+	 * 判断当前页面是否有任务，没有则显示no_task图片
+	 * 
+	 * @return
+	 */
+	public void isShow_Img_NoTask() {
+		if (Task_Accept_Complete_Adapter.vector.size() > 0) {
+			img_no_task.setVisibility(View.INVISIBLE);
+		} else {
+			img_no_task.setVisibility(View.VISIBLE);
+			img_no_task.setImageResource(R.drawable.notask_accep_accom);
+		}
+	}
+
+	/**
 	 * 初始化ListView
 	 */
 	private void initListView() {
-
+		img_no_task = (ImageView) findViewById(R.id.img_no_task);
 		listView = (ListView) this.findViewById(R.id.task_publish_list);
 		adapter = Task_Accept_Complete_Adapter.initAdapter(this);
 		listView.setAdapter(adapter);
@@ -75,7 +91,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 	 */
 	private void initAnimations() {
 		DisplayMetrics displayMetrics = new DisplayMetrics();
-		//将当前窗口的一些信息放在DisplayMetrics类中
+		// 将当前窗口的一些信息放在DisplayMetrics类中
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		int height = displayMetrics.heightPixels;
 		ImageView imageView = null;
@@ -185,27 +201,26 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 	 *            任务的下标
 	 */
 	private void deleteTask(int position) {
-		//本地删除并更新
+		// 本地删除并更新
 		Task task = Task_Accept_Complete_Adapter.vector.remove(position);
 		adapter.notifyDataSetChanged();
-		//云删除
+		// 云删除
 		final AVQuery<AVObject> query = new AVQuery<AVObject>("Task");
 		query.whereEqualTo("objectId", task.getObjectId());
 		query.findInBackground(new FindCallback<AVObject>() {
-		    public void done(List<AVObject> avObjects, AVException e) {
-		        if (e == null) {
-		        	try {
+			public void done(List<AVObject> avObjects, AVException e) {
+				if (e == null) {
+					try {
 						query.deleteAll();
 					} catch (AVException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-		        } else {
-		            Log.d("失败", "查询错误: " + e.getMessage());
-		        }
-		    }
+				} else {
+					Log.d("失败", "查询错误: " + e.getMessage());
+				}
+			}
 		});
-		
 
 	}
 
@@ -213,7 +228,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		for (int i = 0; i < imageIds.length; i++) {
 			AnimatorSet animatorSet = new AnimatorSet();
 			ObjectAnimator animator1 = ObjectAnimator.ofFloat(
-					imageViews.get(i), "translationX", 150 *i, 0);
+					imageViews.get(i), "translationX", 150 * i, 0);
 			animatorSet.playTogether(animator1);
 			animatorSet.setDuration(500);
 			animatorSet.setInterpolator(new BounceInterpolator());

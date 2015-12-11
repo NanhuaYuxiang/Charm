@@ -18,14 +18,14 @@
             android:layout_marginLeft="30dp"
             android:layout_weight="1"
             android:text="@string/completed_publisher"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/publish_publisher"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
     </LinearLayout>
     <!-- 任务类型 -->
     <LinearLayout
@@ -39,14 +39,14 @@
             android:layout_marginLeft="30dp"
             android:layout_weight="1"
             android:text="@string/completed_taskType"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/publish_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
     </LinearLayout>
     <!-- 时间 -->
 
@@ -61,14 +61,14 @@
             android:layout_marginLeft="30dp"
             android:layout_weight="1"
             android:text="@string/completed_taskTime"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/publish_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
     </LinearLayout>
     <!-- 地点 -->
 
@@ -83,14 +83,14 @@
             android:layout_marginLeft="30dp"
             android:layout_weight="1"
             android:text="@string/completed_taskAddress"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/publish_address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
     </LinearLayout>
 
     <!-- 金币 -->
@@ -106,14 +106,14 @@
             android:layout_marginLeft="30dp"
             android:layout_weight="1"
             android:text="@string/completed_taskGold"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/publish_gold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
     </LinearLayout>
 
     <!-- 状态 -->
@@ -129,14 +129,14 @@
             android:layout_marginLeft="30dp"
             android:layout_weight="1"
             android:text="@string/completed_topsy_turvy"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/publish_topsy_turvy"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:textSize="25dp" />
+            android:textSize="15dp" />
     </LinearLayout>
 
 </LinearLayout>

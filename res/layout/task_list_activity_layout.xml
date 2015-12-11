@@ -4,19 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
+   <!--  <TextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:layout_marginTop="25dp"
         android:hint="任务列表空空的呢-.-"
         android:visibility="invisible"
-        android:textSize="25dp" />
+        android:textSize="25dp" /> -->
+        
+        <ImageView 
+            android:id="@+id/img_no_task"
+            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:visibility="invisible"
+            />
 
     <ListView
         android:id="@+id/task_publish_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:divider="#F0F"
+        android:dividerHeight="2px"
         android:layout_marginTop="50dp" >
     </ListView>
 
@@ -25,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/pub_accep" />
+        android:src="@drawable/pub_accom" />
 
     <ImageView
         android:id="@+id/image_unpublish"

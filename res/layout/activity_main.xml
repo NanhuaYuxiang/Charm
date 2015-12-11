@@ -36,6 +36,7 @@
                 android:contentDescription="@null"
                 android:minHeight="?attr/actionBarSize"
                 android:minWidth="?attr/actionBarSize"
+                
                 android:scaleType="centerInside" />
 
         </com.science.strangertofriend.widget.RippleView>

@@ -116,6 +116,7 @@ public class GetUserTaskLists {
 		try {
 			List<AVObject> tasks = query.find();
 			int len = tasks.size();
+			Log.i("GetUserTaskLists", len+"");
 			for (int i = 0; i < len; i++) {
 				AVObject task = tasks.get(i);
 				taskBean = new Task();
@@ -124,7 +125,7 @@ public class GetUserTaskLists {
 				taskBean.setAcceptedName(task.getString("acceptedName"));
 				taskBean.setAccepted(task.getBoolean("isAccepted"));
 				boolean isAccomplished = task.getBoolean("isAccomplished");
-				
+				Log.i("GetUserTaskLists", taskBean.isAccepted()+"");
 				Log.i("GetUserTaskLists","isAccomplished="+ isAccomplished);
 				taskBean.setAccomplished(isAccomplished);
 				taskBean.setEndTime(task.getString("endTime"));

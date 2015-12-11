@@ -3,6 +3,7 @@ package com.science.strangertofriend.bean;
 import java.io.Serializable;
 
 import com.avos.avoscloud.AVGeoPoint;
+import com.avos.avoscloud.AVUser;
 
 /**
  * 
@@ -28,9 +29,27 @@ public class Task implements Serializable {
 	private boolean isAccomplished;
 	private String price;
 	private String type;
-
+	private AVUser pub_user;
+	private AVUser acp_user;
+	
 	public Task() {
 		super();
+	}
+
+	public AVUser getPub_user() {
+		return pub_user;
+	}
+
+	public void setPub_user(AVUser pub_user) {
+		this.pub_user = pub_user;
+	}
+
+	public AVUser getAcp_user() {
+		return acp_user;
+	}
+
+	public void setAcp_user(AVUser acp_user) {
+		this.acp_user = acp_user;
 	}
 
 	public String getObjectId() {
