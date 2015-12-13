@@ -2,6 +2,7 @@ package com.science.strangertofriend.adapter;
 
 import java.util.List;
 
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.bean.ChatMessage;
 
@@ -23,6 +24,11 @@ public class ChatAdapter extends BaseAdapter{
 		this.context = context;
 		this.message = message;
 	}
+	
+	public void reFresh(List<ChatMessage> message){
+		this.message = message;
+		notifyDataSetChanged();
+	}
 	public ChatAdapter(){
 		
 	}
@@ -40,20 +46,28 @@ public class ChatAdapter extends BaseAdapter{
 	public long getItemId(int position) {
 		return position;
 	}
+	
+	public AVIMMessage getFirstMssage(){
+		if(null != message&&message.size()>0){
+			return message.get(0);
+		}else{
+			return null;
+		}
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if(message.get(position).getType()==0){
 			view = LayoutInflater.from(context).inflate(R.layout.message_list_left, null);
 			ImageView receiveimage=(ImageView) view.findViewById(R.id.receiveClientImg);
-//			receiveimage.setImageBitmap(message.get(0).getBitmap(0));
+			receiveimage.setImageBitmap(message.get(0).getBitmap(0));
 			TextView receiveText = (TextView) view.findViewById(R.id.receiveMessage);
 			receiveText.setText(message.get(position).getContent());
 			return view;
 		}else if(message.get(position).getType()==1){
 			view = LayoutInflater.from(context).inflate(R.layout.message_list_right, null);
 			ImageView receiveimage=(ImageView) view.findViewById(R.id.sendClientImg);
-//			receiveimage.setImageBitmap(message.get(position).getBitmap(1));
+			receiveimage.setImageBitmap(message.get(position).getBitmap(1));
 			TextView receiveText = (TextView) view.findViewById(R.id.sendMessage);
 			receiveText.setText(message.get(position).getContent());
 			return view;

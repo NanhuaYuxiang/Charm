@@ -8,7 +8,9 @@
     <ImageView
         android:id="@+id/receiveClientImg"
         android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:src="@drawable/app_logo"/>
     
     <TextView
             android:id="@+id/receiveMessage"
@@ -16,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/receiveClientImg"
             android:layout_marginRight="5dp"
-            android:text="你好你是谁" />
+            android:layout_marginTop="5dp"
+            />
 
 
 

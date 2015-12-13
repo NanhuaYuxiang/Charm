@@ -29,7 +29,6 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 	private TextView taskTheme,taskType,taskPrice,taskDescription,taskPubliName,taskLocation,taskEndTime;
 	private Button contactTaskPeopleBtn,acceptTaskBtn;
 	private Intent intent;
-	private String selfId="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +36,6 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 		setContentView(R.layout.activity_detailed_task);
 		intent = getIntent();
 		init();
-		
-		
 	}
 
 	@Override
@@ -100,8 +97,6 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 		taskEndTime.append(intent.getStringExtra("endtime"));
 		publisherAvaterImage.setImageBitmap((Bitmap)intent.getParcelableExtra("bitmap"));
 		
-		AVUser user = AVUser.getCurrentUser();
-		selfId = user.getString("username");
 
 	}
 }

@@ -99,7 +99,8 @@
         </activity>
         <activity android:name=".ui.ContactActivity" >
         </activity>
-        <activity android:name="com.science.strangertofriend.ui.ChatActivity"></activity>
+        <activity android:name="com.science.strangertofriend.ui.ChatActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity android:name=".ui.RankingActivity" >
         </activity>
         <activity android:name=".ui.AddTaskActivity" >
