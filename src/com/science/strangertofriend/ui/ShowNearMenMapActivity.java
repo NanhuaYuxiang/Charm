@@ -113,10 +113,12 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	private List<Task> taskNearBy = new ArrayList<Task>();// 检索到的附近素有符合条件的任务
 	private CircleImageView circleImageView;
 	private String cityCode;
-	
-	//头像集合相关
-	HashMap<String, BitmapDescriptor> avaterMarkers=new HashMap<String, BitmapDescriptor>();
-	HashMap<String, Bitmap> bitMaps=new HashMap<>();
+
+	// 头像集合相关
+	HashMap<String, String> hash_avaterUrls = new HashMap<>();
+	HashMap<String, BitmapDescriptor> avaterMarkers = new HashMap<String, BitmapDescriptor>();
+	HashMap<String, Bitmap> bitMaps = new HashMap<>();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -132,22 +134,23 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		initListener();
 		// 初始化定位
 		initLocation();
-		
+
 		setMarkerClickListener();
-		//Log.e("ShowNearMenMapActivity", "onCreate被执行");
+		// Log.e("ShowNearMenMapActivity", "onCreate被执行");
 	}
+
 	/**
 	 * 获取离线地图
 	 */
 	private void getOffLineMap() {
-		mOfflineMap=new MKOfflineMap( );
+		mOfflineMap = new MKOfflineMap();
 		mOfflineMap.init(new MKOfflineMapListener() {
-			
+
 			@Override
 			public void onGetOfflineMapState(int type, int state) {
 				switch (type) {
 				case MKOfflineMap.TYPE_NEW_OFFLINE:
-					Log.i("offlineMap", "下载了"+state+"个新离线地图");
+					Log.i("offlineMap", "下载了" + state + "个新离线地图");
 					break;
 				case MKOfflineMap.TYPE_DOWNLOAD_UPDATE:
 					Log.i("offlineMap", "有离线地图可更新");
@@ -160,17 +163,16 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				}
 			}
 		});
-		
-		
+
 	}
-	
-	public void downloadOfflineMap(int cityCode){
-		boolean flag= mOfflineMap.start(cityCode);
-		if(flag){
+
+	public void downloadOfflineMap(int cityCode) {
+		boolean flag = mOfflineMap.start(cityCode);
+		if (flag) {
 			Log.i("offlineMap", "下载完成");
 		}
 	}
-	
+
 	private void initListener() {
 		mRevealLayout.setContentShown(false);
 		mRevealLayout.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -278,12 +280,12 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 					.latitude(location.getLatitude())
 					.longitude(location.getLongitude()).build();
 			mBaiduMap.setMyLocationData(data);
-			
-			//获取城市code
-			cityCode=location.getCityCode();
+
+			// 获取城市code
+			cityCode = location.getCityCode();
 			getOffLineMap();
 			downloadOfflineMap(Integer.parseInt(cityCode));
-			Log.i("cityCode", cityCode+location.getCity());
+			Log.i("cityCode", cityCode + location.getCity());
 			// 自定义方向箭头
 			mIconLocation = BitmapDescriptorFactory
 					.fromResource(R.drawable.navi_map_gps_locked);
@@ -317,23 +319,12 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				// 查找附近1000米的人
 				// findMenNearby();
 				// findTaskNearBy();
-				Log.e("ShowNearMenMapActivity", "onReceiveLocation被执行");
 				findTaskNearBy();
 			}
 		}
 	}
 
-	public void showAvaterOnMap(String username, String email) {
-		// initMarker();
-		AVQuery<AVObject> query = new AVQuery<>("Gender");
-		if (LoginActivity.isEmail(email)) {
-			query.whereEqualTo("email", email);
-		} else {
-			query.whereEqualTo("username", username);
-		}
-		query.findInBackground(showCircleAvaterByImageLoader());
-
-	}
+	
 
 	/**
 	 * 查找附近的服务
@@ -347,6 +338,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			public void run() {
 				AVQuery<AVObject> query = new AVQuery<>("Task");
 				// 查找附近10km内的任务
+				query.include("pub_user.userAvater");
 				query.whereWithinKilometers("geoPoint", mMyPoint, 10);
 				// query.whereNotEqualTo("publisherName", mUsername);
 				try {
@@ -356,163 +348,161 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 						taskBean = new Task();
 						taskBean.setPublisherName(task
 								.getString("publisherName"));
-						taskBean.setAccepted(false);
-						taskBean.setAccomplished(false);
 						taskBean.setEndTime(task.getString("endTime"));
 						taskBean.setPrice(task.getString("price"));
 						taskBean.setTheme(task.getString("theme"));
 						taskBean.setTaskDescription(task
 								.getString("TaskDescription"));
-						taskBean.setType(task.getString("service_task"));
 						taskBean.setLatitude(task.getAVGeoPoint("geoPoint")
 								.getLatitude());
 						taskBean.setLongitude(task.getAVGeoPoint("geoPoint")
 								.getLongitude());
 						taskBean.setLocation(task.getString("location"));
 						taskBean.setType(task.getString("service_type"));
+						taskBean.setAccepted(task.getBoolean("isAccepted"));
+						taskBean.setAccomplished(task
+								.getBoolean("isAccomplished"));
+						taskBean.setPub_user(task.getAVUser("pub_user"));
 						taskNearBy.add(taskBean);
+						// 获取头像url
+						AVUser user = (AVUser) task.getAVUser("pub_user");
+						if (null != user&&null!=user.getAVFile("userAvater")) {
+							String avaterUrl = user.getAVFile("userAvater")
+									.getUrl();
+							hash_avaterUrls.put(taskBean.getPublisherName(),
+									avaterUrl);
+						}
 					}
-//					mHandler.obtainMessage(1).sendToTarget();
-					loadAllAvaters();
-					Log.e("task", taskNearBy.size() + "");
-					Log.e("task", taskNearBy.toString());
+					//showAllMarkersOnMap();
+					//loadAllAvaters();
 				} catch (AVException e) {
 					e.printStackTrace();
 				}
+				
+				Log.i("TAG", "taskNearBy大小为："+taskNearBy.size());
+				Log.i("TAG", "hash_avaterUrls大小为："+hash_avaterUrls.size());
+				for(int i=0;i<taskNearBy.size();i++){
+					String name=taskNearBy.get(i).getPublisherName();
+					downloadAvaterBitmaps(name, hash_avaterUrls.get(name));
+				}
+				
 			}
 		}).start();
-		Log.e("ShowNearMenMapActivity", "findTaskNearBy被执行");
-
+		
+		
 	}
+	
 	/**
-	 * 异步加载所有的头像
+	 * 
+	 * @param username  用户名
+	 * @param url   头像url
 	 */
-	public void loadAllAvaters(){
-		long  time_start= System.currentTimeMillis();
-		for(int i=0;i<taskNearBy.size();i++){
-			AVService.getNearbyTaskAvaters(taskNearBy.get(i).getPublisherName());
-			try {
-				Thread.sleep(800);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+	public void downloadAvaterBitmaps(final String username,final String url){
+		DisplayImageOptions option = new DisplayImageOptions.Builder()
+		.showImageForEmptyUri(R.drawable.default_load)// 设置图片Uri为空或是错误的时候显示的图片
+		.showImageOnFail(R.drawable.default_load)// 设置图片加载或解码过程中发生错误显示的图片
+		.bitmapConfig(Bitmap.Config.RGB_565).build();
+		//String urlString=hash_avaterUrls.get(taskNearBy.get(i).getPublisherName());
+		ImageLoader.getInstance().loadImage(url, option, new ImageLoadingListener() {
+			@Override
+			public void onLoadingStarted(String arg0, View arg1) {
 			}
-			Bitmap bitmap= AVService.getBitmap();
-			if(bitmap!=null){
-				bitMaps.put(taskNearBy.get(i).getPublisherName(),
-						bitmap);
+			@Override
+			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
 			}
-		}
-		Log.e("avaterMarkers", avaterMarkers.size()+"\n"+avaterMarkers.toString());
-		Log.i("loadTime", "加载图片历时"+(System.currentTimeMillis()-time_start)/1000+"秒");
-		showAllMarkersOnMap();
+			@Override
+			public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
+				bitMaps.put(username, arg2);
+				Log.i("TAG", "downloadAvaterBitmaps");
+				if(bitMaps.size()==hash_avaterUrls.size()){
+					showAllMarkersOnMap();
+					Log.i("TAG", "加载完成");
+				}
+			}
+			@Override
+			public void onLoadingCancelled(String arg0, View arg1) {
+				
+			}
+		});
 	}
+	
+	
 	/**
 	 * 将所有任务以发布人头像显示在地图上
 	 */
-	private void showAllMarkersOnMap(){
-		Log.i("loadTime", "共加载到"+bitMaps.size()+"个头像");
+	private void showAllMarkersOnMap() {
 		mBaiduMap.clear();
-		Bitmap bitmap=null;
-		Marker marker = null;
+		Bitmap bitmap = null;
+		 Marker marker = null;
 		LatLng latLng = null;
-		OverlayOptions options;
-		for(int i=0;i<taskNearBy.size();i++){
-			Log.i("loadTime", "共"+taskNearBy.size()+"个任务");
+		 OverlayOptions options;
+		for (int i = 0; i < taskNearBy.size(); i++) {
 			initMarker();
-			latLng = new LatLng(taskNearBy.get(i).getLatitude(), taskNearBy.get(i).getLongitude());
-			if(bitMaps.get(taskNearBy.get(i).getPublisherName())!=null){
-				
-				 bitmap=Bitmap.createBitmap(bitMaps.get(taskNearBy.get(i).getPublisherName()));
-			}else {
-				bitmap=BitmapFactory.decodeResource(getResources(), R.drawable.default_user_img);
+			latLng = new LatLng(taskNearBy.get(i).getLatitude(), taskNearBy
+					.get(i).getLongitude());
+			
+			if (bitMaps.get(taskNearBy.get(i).getPublisherName()) != null) {
+
+				bitmap = Bitmap.createBitmap(bitMaps.get(taskNearBy.get(i)
+						.getPublisherName()));
+			} else {
+				bitmap = BitmapFactory.decodeResource(getResources(),
+						R.drawable.default_user_img);
 			}
 			circleImageView.setImageBitmap(bitmap);
 			circleImageView.setImageAlpha(0);
-			mMarkDescriptor = BitmapDescriptorFactory
-					.fromView(circleImageView);
-			options = new MarkerOptions().position(latLng)
-					.icon(mMarkDescriptor).zIndex(5);
-			marker = (Marker) mBaiduMap.addOverlay(options);
+			mMarkDescriptor=BitmapDescriptorFactory.fromView(circleImageView);
+			if(mMarkDescriptor!=null){
+						options = new MarkerOptions().position(latLng)
+								.icon(mMarkDescriptor).zIndex(5);
+				marker = (Marker) mBaiduMap.addOverlay(options);
+			}else {
+				Log.i("TAG", "加载头像出错");
+			}
 			Bundle arg0 = new Bundle();
 			arg0.putSerializable("info", taskNearBy.get(i));
 			marker.setExtraInfo(arg0);
 		}
-		
+
 		MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
 		mBaiduMap.setMapStatus(msu);
-	} 
-	
-	private Handler mHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-			case 1:
-				addTaskOnMap();
-				break;
+	}
 
-			default:
-				break;
-			}
-		};
-	};
+	
 
 	private void initMarker() {
 
-		 view = LayoutInflater.from(context).inflate(R.layout.circleimage,
-		 null);
-		 circleImageView = (CircleImageView) view.findViewById(R.id.avatar);
+		view = LayoutInflater.from(context).inflate(R.layout.circleimage, null);
+		circleImageView = (CircleImageView) view.findViewById(R.id.avatar);
 	}
 
-	/**
-	 * 添加任务到地图上，以发布任务人的头像显示在地图上
-	 */
-	public void addTaskOnMap() {
-		mBaiduMap.clear();
-		Marker marker = null;
-		LatLng latLng = null;
-		for (Task info : taskNearBy) {
-			showAvaterOnMap(info.getPublisherName(), null);
-			// 经纬度
-			latLng = new LatLng(info.getLatitude(), info.getLongitude());
-			// 图标
-			
-			if(mMarkDescriptor!=null){
-			
-				OverlayOptions options = new MarkerOptions().position(latLng)
-						.icon(mMarkDescriptor).zIndex(5);
-				marker = (Marker) mBaiduMap.addOverlay(options);
-				Bundle arg0 = new Bundle();
-				arg0.putSerializable("info", info);
-				marker.setExtraInfo(arg0);
-			}else {
-				Log.e("mMarkDescriptor", "mMarkDescriptor为空");
-			}
-		}
-
-		MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(latLng);
-		mBaiduMap.setMapStatus(msu);
-
-	}
-
+	
 	private void setMarkerClickListener() {
 
 		mBaiduMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				//D改的 这个地方是传送一些信息到DetailTaskActivity
+				// D改的 这个地方是传送一些信息到DetailTaskActivity
 				Bundle taskinfo = marker.getExtraInfo();
 				Task task = (Task) taskinfo.get("info");
-				//Toast.makeText(ShowNearMenMapActivity.this, " "+task.toString(), 10).show();
-				Intent intent = new Intent(ShowNearMenMapActivity.this,DetailedTaskActivity.class);
+				Intent intent = new Intent(ShowNearMenMapActivity.this,
+						DetailedTaskActivity.class);
 				bitMaps.get(task.getPublisherName());
 				intent.putExtra("bitmap", bitMaps.get(task.getPublisherName()));
 				intent.putExtra("theme", task.getTheme());
 				intent.putExtra("publisherName", task.getPublisherName());
 				intent.putExtra("type", task.getType());
-				intent.putExtra("taskDescription",task.getTaskDescription());
+				intent.putExtra("taskDescription", task.getTaskDescription());
 				intent.putExtra("location", task.getLocation());
-				intent.putExtra("price",task.getPrice());
+				intent.putExtra("price", task.getPrice());
 				intent.putExtra("endtime", task.getEndTime());
+				intent.putExtra("isAccepted", task.isAccepted());
+				intent.putExtra("isAccomplished", task.isAccomplished());
+
+				// 将AVUser传递过去
+				intent.putExtra("pub_user", task.getPub_user().toString());
+
 				startActivity(intent);
 				// final LocationMenList menList = (LocationMenList) extraInfo;
 				// .getSerializable("menList");
@@ -551,8 +541,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				//
 				// @Override
 				// public void onInfoWindowClick() {
-//				Toast.makeText(context, task.getPublisherName(),
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(context, task.getPublisherName(),
+				// Toast.LENGTH_SHORT).show();
 				// }
 				// });
 				// mBaiduMap.showInfoWindow(infoWindow);
@@ -684,132 +674,4 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 		return mLongtitude;
 	}
 
-	/**
-	 * 后台加载头像并显示的回调接口
-	 * 
-	 * @return
-	 */
-	public FindCallback<AVObject> showCircleAvaterByImageLoader() {
-		FindCallback<AVObject> findCallback = new FindCallback<AVObject>() {
-
-			@Override
-			public void done(List<AVObject> arg0, AVException arg1) {
-				if (arg1 == null) {
-
-					Message msg = Message.obtain();
-					msg.what = 1;
-					msg.obj = arg0;
-					mUsernameHandler.sendMessage(msg);
-				} else {
-					// Toast.makeText(context, "任务加载失败，请检查网络",
-					// Toast.LENGTH_LONG);
-					Log.e("avaterURL", "检索到的avater为null");
-				}
-			}
-
-		};
-
-		return findCallback;
-	}
-
-	private Handler mUsernameHandler = new Handler() {
-		@SuppressWarnings("unchecked")
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				List<AVObject> responseList = (List<AVObject>) msg.obj;
-				if (responseList != null && responseList.size() != 0) {
-					String objectId = responseList.get(responseList.size() - 1)
-							.getObjectId();
-					byteToDrawable(objectId);
-				}
-				break;
-			}
-		}
-	};
-
-	public void byteToDrawable(final String objectId) {
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-
-				AVQuery<AVObject> query = new AVQuery<AVObject>("Gender");
-				AVObject gender = null;
-				try {
-					gender = query.get(objectId);
-				} catch (AVException e) {
-					e.printStackTrace();
-				}
-				// Retrieving the file
-				AVFile imageFile = (AVFile) gender.get("avater");
-
-				Message msg = new Message();
-				msg.what = 1;
-				msg.obj = imageFile.getUrl();
-				// Log.e("avaterURL", imageFile.getUrl());
-				mHandler2.sendMessage(msg);
-			}
-
-		}).start();
-	}
-
-	private Handler mHandler2 = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				String avaterURL = (String) msg.obj;
-				DisplayImageOptions options = new DisplayImageOptions.Builder()
-						.showImageForEmptyUri(R.drawable.default_load)// 设置图片Uri为空或是错误的时候显示的图片
-						.showImageOnFail(R.drawable.default_load)// 设置图片加载或解码过程中发生错误显示的图片
-						// .displayer(new RoundedBitmapDisplayer(30))// 设置成圆角图片
-						.bitmapConfig(Bitmap.Config.RGB_565).build();
-				// ImageLoader
-				// .getInstance()
-				// .displayImage(
-				// avaterURL,
-				// imageView, options);
-				ImageLoader.getInstance().loadImage(avaterURL, options,
-						new ImageLoadingListener() {
-
-							@Override
-							public void onLoadingStarted(String arg0, View arg1) {
-								Log.e("ImageLoader", "onLoadingStarted");
-							}
-
-							@Override
-							public void onLoadingFailed(String arg0, View arg1,
-									FailReason arg2) {
-								Log.e("ImageLoader", "onLoadingFailed");
-							}
-
-							@Override
-							public void onLoadingComplete(String arg0,
-									View arg1, Bitmap arg2) {
-								// Log.e("mMarkDescriptor", mMarkDescriptor+"");
-								// imageView.setImageBitmap(arg2);
-								initMarker();
-								Log.e("arg2", arg2+"");
-								circleImageView.setImageBitmap(arg2);
-								mMarkDescriptor = BitmapDescriptorFactory
-										.fromView(circleImageView);
-
-								Log.e("ImageLoader", "onLoadingComplete");
-							}
-
-							@Override
-							public void onLoadingCancelled(String arg0,
-									View arg1) {
-								Log.e("ImageLoader", "onLoadingCancelled");
-							}
-						});
-				Log.e("showAvater", "ImagerLoader运行了");
-				break;
-
-			default:
-				break;
-			}
-		};
-	};
 }

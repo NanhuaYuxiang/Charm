@@ -5,7 +5,9 @@ import java.util.Vector;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.science.strangertofriend.R;
+import com.science.strangertofriend.TaskType;
 import com.science.strangertofriend.R.color;
+import com.science.strangertofriend.adapter.Task_Accept_Complete_Adapter.ViewHolder;
 import com.science.strangertofriend.bean.Task;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -32,14 +34,7 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 	public static Vector<Task> vector = new Vector<>();
 	private LayoutInflater layoutInflater = null;
 	private static Task_Publish_Complete_Adapter adapter = null;
-	private DisplayImageOptions options = new DisplayImageOptions.Builder()
-			.showStubImage(R.drawable.default_user_img) // 设置图片下载期间显示的图片
-			.showImageForEmptyUri(R.drawable.default_user_img) // 设置图片Uri为空或是错误的时候显示的图片
-			.showImageOnFail(R.drawable.default_user_img) // 设置图片加载或解码过程中发生错误显示的图片
-			.cacheInMemory(true) // 设置下载的图片是否缓存在内存中
-			.cacheOnDisc(true) // 设置下载的图片是否缓存在SD卡中
-			.displayer(new RoundedBitmapDisplayer(20)) // 设置成圆角图片
-			.build(); // 创建配置过得DisplayImageOption对象 ;
+	
 
 	private Task_Publish_Complete_Adapter() {
 	}
@@ -112,10 +107,10 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 					.findViewById(R.id.publish_hunter);
 			convertView.setTag(viewHolder);
 			// 设置颜色
-			if (position % 2 == 0) {
-				convertView
-						.setBackgroundColor(color.background_floating_material_dark);
-			}
+//			if (position % 2 == 0) {
+//				convertView
+//						.setBackgroundColor(color.background_floating_material_dark);
+//			}
 		} else {// convertView 以缓冲
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
@@ -141,7 +136,8 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 				.getTaskDescription());
 		viewHolder.publish_hunter.setText(vector.get(position)
 				.getAcceptedName());
-		viewHolder.publish_type.setText(vector.get(position).getType());
+		//viewHolder.publish_type.setText(vector.get(position).getType());
+		showTaskType(viewHolder, position);
 	}
 
 	static class ViewHolder {
@@ -210,5 +206,35 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 	public static void removeAll() {
 		vector.removeAllElements();
 	}
-
+	/**
+	 * 设置任务类型
+	 */
+	public void showTaskType(ViewHolder viewHolder,int position){
+		String type=vector.get(position).getType();
+		switch (type) {
+		case TaskType.SERVICE_CATERING:
+			
+			break;
+		case TaskType.SERVICE_EDUCATION:
+			viewHolder.publish_type.setText("教育服务");
+			break;
+		case TaskType.SERVICE_EXPRESS:
+			viewHolder.publish_type.setText("物流服务");
+			break;
+		case TaskType.SERVICE_FIX:
+			viewHolder.publish_type.setText("维修服务");
+			break;
+		case TaskType.SERVICE_HOUSEWORK:
+			viewHolder.publish_type.setText("家政服务");
+			break;
+		case TaskType.SERVICE_INTERNET:
+			viewHolder.publish_type.setText("网络服务");
+			break;
+		case TaskType.SERVICE_OTHERS:
+			viewHolder.publish_type.setText("其他服务");
+			break;
+		default:
+			break;
+		}
+	}
 }

@@ -43,7 +43,6 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -307,7 +306,7 @@ public class MainActivity extends ActionBarActivity implements
 
 		// хннЯ
 		SlideMenuItem slideMenuItemTask = new SlideMenuItem("Task",
-				R.drawable.a);
+				R.drawable.e);
 		mMenuList.add(slideMenuItemTask);
 
 	}

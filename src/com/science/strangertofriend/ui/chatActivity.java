@@ -7,11 +7,9 @@ import java.util.List;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
@@ -22,6 +20,10 @@ import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.ChatAdapter;
 import com.science.strangertofriend.bean.ChatMessage;
@@ -29,7 +31,6 @@ import com.science.strangertofriend.bean.ChatMessage;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -57,14 +58,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private List<ChatMessage> messageList = new ArrayList<ChatMessage>();
 	private ChatMessage chatMessage = new ChatMessage();
 	private ChatAdapter chatAdapter;
-	private Bitmap currentClientBitmap, otherClientBitmap;
-	private AVIMClient currentClient, otherClient;
+	private AVIMClient currentClient;
 	private AVIMTextMessage message;
 	private String sendMessage;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
 		instance = this;
@@ -74,16 +72,17 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	public void init() {
 		intent = getIntent();
+		
 		AVUser user = AVUser.getCurrentUser();
 		AVFile file = (AVFile) user.get("userAvater");
-		
 		currentClientName = user.getUsername();
+		downloadAvaterBitmaps(currentClientName, file.getUrl());
 		currentClient = AVIMClient.getInstance(currentClientName);
-		chatMessageAddCurrentClientBitmap(file);
+//		chatMessageAddCurrentClientBitmap(file);
 		
 		otherClientName = intent.getStringExtra("taskPubliName");
-		otherClient = AVIMClient.getInstance(otherClientName);
 		chatMessageAddOtherClientBitmap(otherClientName);
+		
 		
 		chatBackImg = (ImageView) findViewById(R.id.chatback_img);
 		chatEt = (EditText) findViewById(R.id.chatEt);
@@ -94,7 +93,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onRefresh() {
-				// TODO Auto-generated method stub
 				AVIMMessage message = chatAdapter.getFirstMssage();
 				connecation.queryMessages(message.getMessageId(),
 						message.getTimestamp(), 20,
@@ -103,7 +101,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 							@Override
 							public void done(List<AVIMMessage> list,
 									AVException e) {
-								// TODO Auto-generated method stub
 								if (e == null) {
 									if (null != list && list.size() > 0) {
 										for (int i = 0; i < list.size(); i++) {
@@ -143,6 +140,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 		chatImgBtn = (Button) findViewById(R.id.chatBtn);
 
 		chatAdapter = new ChatAdapter(this, messageList);
+		chatAdapter.setChatMessage(chatMessage);
 		chatListView.setAdapter(chatAdapter);
 
 		chatBackImg.setOnClickListener(this);
@@ -152,7 +150,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void done(AVIMClient arg0, AVException e) {
-				// TODO Auto-generated method stub
 				if (e == null) {
 					getConversation(otherClientName);
 				}
@@ -167,20 +164,16 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void done(AVIMClient client, AVException e) {
-				// TODO Auto-generated method stub
 				if (e == null) {
 					sendMessage = chatEt.getText().toString().trim();
 					message = new AVIMTextMessage();
 					message.setText(sendMessage);
 					if (!TextUtils.isEmpty(sendMessage)) {
-						Toast.makeText(ChatActivity.this, sendMessage, 1)
-								.show();
 						connecation.sendMessage(message,
 								new AVIMConversationCallback() {
 
 									@Override
 									public void done(AVException e) {
-										// TODO Auto-generated method stub
 										if (e == null) {
 											Toast.makeText(ChatActivity.this,
 													"发送成功", Toast.LENGTH_SHORT)
@@ -205,7 +198,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		if (null != chatListView && null != chatAdapter) {
 			if (null != messageList && messageList.size() > 0) {
@@ -217,7 +209,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		if (null != chatListView && null != chatAdapter) {
 			if (null != messageList && messageList.size() > 0) {
@@ -229,7 +220,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.chatback_img:
 			finish();
@@ -266,7 +256,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void done(List<AVIMConversation> list, AVException e) {
-				// TODO Auto-generated method stub
 				if (e == null) {
 					if (list.size() > 0 && (null != list)) {
 						connecation = list.get(0);
@@ -283,7 +272,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 									public void done(
 											AVIMConversation conversation,
 											AVException e) {
-										// TODO Auto-generated method stub
 										if (e == null) {
 											connecation = conversation;
 											chatFreshLayout.setEnabled(true);
@@ -295,7 +283,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 					}
 					scrollToBottom();
 				} else {
-					Toast.makeText(ChatActivity.this, "获取conver出现异常", 1).show();
 				}
 			}
 		});
@@ -306,7 +293,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void done(List<AVIMMessage> list, AVException e) {
-				// TODO Auto-generated method stub
 				if (e == null) {
 					for (int i = 0; i < list.size(); i++) {
 						if (list.get(i).getFrom().equals(otherClientName)) {
@@ -326,56 +312,16 @@ public class ChatActivity extends Activity implements OnClickListener {
 		});
 	}
 
-	public void chatMessageAddCurrentClientBitmap(AVFile file) {
-		if (!file.equals(null)) {
-			file.getDataInBackground(new GetDataCallback() {
-
-				@Override
-				public void done(byte[] data, AVException e) {
-					// TODO Auto-generated method stub
-					if (e == null) {
-						currentClientBitmap = BitmapFactory.decodeByteArray(
-								data, 0, data.length);
-						chatMessage.setCurrentClientBitmap(currentClientBitmap);
-						chatAdapter = (ChatAdapter) chatListView.getAdapter();
-						chatAdapter.reFresh(messageList);
-						Toast.makeText(ChatActivity.this, "添加图片成功123", Toast.LENGTH_SHORT).show();
-					}
-				}
-			});
-		}
-	}
-
-	public void chatMessageAddOtherClientBitmap(String otherClientName) {
+	public void chatMessageAddOtherClientBitmap(final String otherClientName) {
 		AVQuery<AVUser> userQuery = AVUser.getQuery();
 		userQuery.whereEqualTo("username", otherClientName);
 		userQuery.findInBackground(new FindCallback<AVUser>() {
 			@Override
 			public void done(List<AVUser> list, AVException e) {
-				// TODO Auto-generated method stub
 				if (e == null) {
 					AVUser user = (AVUser) list.get(0);
 					AVFile file = (AVFile) user.get("userAvater");
-					if (!file.equals(null)) {
-
-						file.getDataInBackground(new GetDataCallback() {
-
-							@Override
-							public void done(byte[] data, AVException e) {
-								// TODO Auto-generated method stub
-								if (e == null) {
-									otherClientBitmap = BitmapFactory
-											.decodeByteArray(data, 0,
-													data.length);
-									chatMessage
-											.setOtherClientBitmap(otherClientBitmap);
-									Toast.makeText(ChatActivity.this, "添加图片成功", Toast.LENGTH_SHORT).show();
-								}else{
-									Toast.makeText(ChatActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-								}
-							}
-						});
-					}
+					downloadAvaterBitmaps(otherClientName, file.getUrl());
 
 				}else{
 					Toast.makeText(ChatActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -386,5 +332,35 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	public void scrollToBottom() {
 		chatListView.smoothScrollToPosition(messageList.size() - 1);
+	}
+	
+	public void downloadAvaterBitmaps(final String username,final String url){
+		DisplayImageOptions option = new DisplayImageOptions.Builder()
+		.showImageForEmptyUri(R.drawable.default_load)// 设置图片Uri为空或是错误的时候显示的图片
+		.showImageOnFail(R.drawable.default_load)// 设置图片加载或解码过程中发生错误显示的图片
+		.bitmapConfig(Bitmap.Config.RGB_565).build();
+		//String urlString=hash_avaterUrls.get(taskNearBy.get(i).getPublisherName());
+		ImageLoader.getInstance().loadImage(url, option, new ImageLoadingListener() {
+			@Override
+			public void onLoadingStarted(String arg0, View arg1) {
+			}
+			@Override
+			public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+			}
+			@Override
+			public void onLoadingComplete(String arg0, View arg1, Bitmap bitmap) {
+				if(username.equals(AVUser.getCurrentUser().getUsername())){
+					chatMessage.setCurrentClientBitmap(bitmap);
+					Toast.makeText(ChatActivity.this, "自己头像添加成功", Toast.LENGTH_SHORT).show();
+				}else{
+					chatMessage.setOtherClientBitmap(bitmap);
+					Toast.makeText(ChatActivity.this, "对话人头像添加成功", Toast.LENGTH_SHORT).show();
+				}
+			}
+			@Override
+			public void onLoadingCancelled(String arg0, View arg1) {
+				
+			}
+		});
 	}
 }

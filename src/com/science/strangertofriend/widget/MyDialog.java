@@ -2,6 +2,7 @@ package com.science.strangertofriend.widget;
 
 import android.content.Context;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
 /**
  * @description Sweet-alert-dialog-library开源动画提示框
@@ -28,4 +29,5 @@ public class MyDialog {
 		new SweetAlertDialog(mContext, SweetAlertDialog.ERROR_TYPE)
 				.setTitleText(title).setContentText(content).show();
 	}
+	
 }

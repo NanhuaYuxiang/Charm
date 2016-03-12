@@ -9,6 +9,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.science.strangertofriend.R;
+import com.science.strangertofriend.bean.ChatMessage;
 import com.science.strangertofriend.bean.OneConversationData;
 
 import android.content.Context;
@@ -32,6 +33,10 @@ public class ChatConversationAdapter extends BaseAdapter{
 		this.context = context;
 		this.convsDataList = convsDataList;
 	}
+	public void reFresh(List<OneConversationData> convsDataList){
+		this.convsDataList = convsDataList;
+		notifyDataSetChanged();
+	}
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
@@ -49,17 +54,18 @@ public class ChatConversationAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		return position;
 	}
+	
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		view = LayoutInflater.from(context).inflate(R.layout.conversation_adapter, null);
 		convsImg = (ImageView) view.findViewById(R.id.convsImg);
+		convsImg.setImageBitmap(convsDataList.get(position).getconvsClientBitmap());
 		convsNameTv = (TextView) view.findViewById(R.id.convsNameTv);
 		convsLastMessage = (TextView) view.findViewById(R.id.convsLastMessage);
 		convsNameTv.setText(convsDataList.get(position).getConvsClientName());
 		convsLastMessage.setText(convsDataList.get(position).getLastMessage());
-		Toast.makeText(context, "进入到了", Toast.LENGTH_SHORT).show();
 		return view;
 	}
 

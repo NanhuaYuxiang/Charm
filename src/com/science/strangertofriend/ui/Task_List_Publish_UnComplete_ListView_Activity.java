@@ -27,7 +27,6 @@ import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.science.strangertofriend.R;
-import com.science.strangertofriend.adapter.Task_Accept_Complete_Adapter;
 import com.science.strangertofriend.adapter.Task_Accept_UnComplete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_Complete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_UnComplete_Adapter;
@@ -46,6 +45,7 @@ import com.science.strangertofriend.bean.Task;
 public class Task_List_Publish_UnComplete_ListView_Activity extends
 		BaseActivity implements OnClickListener {
 	private ArrayList<ImageView> imageViews;// IamgeView 的队列
+	private ImageView img_no_task;
 	// IamgeView 的Id数组
 	int[] imageIds = new int[] { R.id.image_root, R.id.image_publish,
 			R.id.image_unpublish, R.id.image_accept, R.id.image_unaccept };
@@ -58,17 +58,29 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 		setContentView(R.layout.task_list_activity_layout);
 
 		initListView();
-
+		isShow_Img_NoTask();
 		initAnimations();// 初始化动画
 		// 设置上下文菜单
 		super.registerForContextMenu(listView);
 	}
-
+	/**
+	 * 判断当前页面是否有任务，没有则显示no_task图片
+	 * @return
+	 */
+	public void isShow_Img_NoTask(){
+		if(Task_Publish_UnComplete_Adapter.vector.size()>0){
+			img_no_task.setVisibility(View.INVISIBLE);
+		}else {
+			img_no_task.setVisibility(View.VISIBLE);
+			//img_no_task.setImageDrawable(getResources().getDrawable(R.drawable.notask_pub_unaccom));
+			img_no_task.setImageResource(R.drawable.notask_pub_unaccom);
+		}
+	}
 	/**
 	 * 初始化ListView
 	 */
 	private void initListView() {
-
+		img_no_task=(ImageView) findViewById(R.id.img_no_task);
 		listView = (ListView) this.findViewById(R.id.task_publish_list);
 		adapter = Task_Publish_UnComplete_Adapter.initAdapter(this);
 		listView.setAdapter(adapter);

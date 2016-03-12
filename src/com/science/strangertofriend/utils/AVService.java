@@ -47,6 +47,8 @@ public class AVService {
 		user.setEmail(email);
 		user.put("gender", gender);
 		user.put("installationId", installationId);
+		user.put("totalGolds", 100);//每个人注册时候获得100香金
+		user.put("credit", 100);
 		user.signUpInBackground(signUpCallback);
 	}
 
@@ -263,7 +265,8 @@ public class AVService {
 	}
 
 	/**
-	 * 
+	 * @param user
+	 * 				任务发布人
 	 * @param publisherName
 	 *            发布任务人姓名
 	 * @param acceptedName
@@ -289,12 +292,13 @@ public class AVService {
 	 * @param isAccomplished
 	 *            是否已被完成
 	 */
-	public static void addNewTask(String publisherName, String acceptedName,
+	public static void addNewTask(AVUser user, String publisherName, String acceptedName,
 			String theme, String des, String endTime, AVGeoPoint geoPoint,
 			String location, String price, String service_type,
 			boolean isAccepted, boolean isAccomplished,
 			SaveCallback saveCallback) {
 		AVObject task = new AVObject("Task");
+		task.put("pub_user", user);
 		task.put("publisherName", publisherName);
 		task.put("acceptedName", acceptedName);
 		task.put("theme", theme);

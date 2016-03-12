@@ -35,6 +35,7 @@ import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.widget.RevealLayout;
 
 public class AddTaskActivity extends BaseActivity implements OnClickListener {
+	private AVUser currentUser;
 	private RevealLayout mRevealLayout;
 	private RelativeLayout mLayout, mAdd_task_layout;
 	private ImageView mBackImg;// 返回按钮
@@ -55,6 +56,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_task);
+		currentUser=AVUser.getCurrentUser();
 		initView();
 		initListener();
 	}
@@ -133,42 +135,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 							Toast.LENGTH_SHORT).show();
 				}
 
-				// Log.e("AddTaskActivity", "bt is clicked");
-				// Log.e("AddTaskActivity", theme.getText().toString());
-				// Log.e("AddTaskActivity", endTime.getText().toString());
-				// Log.e("AddTaskActivity",
-				// publishedLocation.getText().toString());
-				// Log.e("AddTaskActivity",
-				// publishedPrice.getText().toString());
-				//
-				// if (!theme.getText().toString().isEmpty()
-				// && !description.getText().toString().isEmpty()
-				// && !endTime.getText().toString().isEmpty()
-				// && !publishedLocation.getText().toString().isEmpty()
-				// && !publishedPrice.getText().toString().isEmpty()) {
-				// AVObject test = new AVObject("test");
-				// test.put("test1", "555555555");
-				// test.put("test2", "666666666");
-				//
-				// test.saveInBackground(new SaveCallback() {
-				//
-				// @Override
-				// public void done(AVException arg0) {
-				// if (arg0 == null) {
-				// Toast.makeText(AddTaskActivity.this, "OK",
-				// Toast.LENGTH_SHORT);
-				// } else {
-				//
-				// Toast.makeText(AddTaskActivity.this, "failed",
-				// Toast.LENGTH_SHORT);
-				// }
-				// }
-				// });
-				// } else {
-				// Toast.makeText(AddTaskActivity.this, "请填写完整任务信息",
-				// Toast.LENGTH_SHORT).show();
-				// }
-				//
+				
 			}
 
 		});
@@ -207,7 +174,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 		double latitude = ShowNearMenMapActivity.getLatitude();
 		double longitude = ShowNearMenMapActivity.getLongitude();
 		AVGeoPoint geoPoint = new AVGeoPoint(latitude, longitude);
-		AVService.addNewTask(publisherName,"", themeString, descriptionString,
+		AVService.addNewTask(currentUser,publisherName,"", themeString, descriptionString,
 				endTimeString, geoPoint, locationString, price,
 				service_type,false,false, new SaveCallback() {
 

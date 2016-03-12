@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/android-support-v7-appcompat"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Circleimageview"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Context-Menu-lib"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/MaterialMenuLibrary"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Side-Menu.Android-library"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Strangertofriend-Leanchat-lib"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Sweet-alert-dialog-library"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Sweet-alert-dialog-materialish-progress"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SwipeMenuListView"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SystemBarTint-library"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

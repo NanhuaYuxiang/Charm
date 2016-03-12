@@ -7,7 +7,7 @@
         android:id="@+id/welcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/welcome"
+        android:background="@drawable/welcome2"
         android:contentDescription="@null" />
 
 </RelativeLayout>
