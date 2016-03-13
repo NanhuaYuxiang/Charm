@@ -69,6 +69,8 @@ import com.science.strangertofriend.bean.OneConversationData;
 import com.science.strangertofriend.ui.ChatRoomActivity;
 import com.science.strangertofriend.utils.AVService;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * @description 任务界面
  * 
@@ -92,6 +94,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	private String lastMessage = "";
 	private Bitmap clientBitmap;
 	private List<AVIMConversation> allConvsList = new ArrayList<AVIMConversation>();
+	private CircleImageView circleImageView;
 
 	@Override
 	@Nullable

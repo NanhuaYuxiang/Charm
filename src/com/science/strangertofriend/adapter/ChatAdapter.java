@@ -6,6 +6,8 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.bean.ChatMessage;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +22,8 @@ public class ChatAdapter extends BaseAdapter{
 	private List<ChatMessage> message;
 	private View view;
 	private ChatMessage chatMessage;
+	private CircleImageView receiveimage;
+	private CircleImageView sendimage;
 	public ChatAdapter(Context context,List<ChatMessage>message){
 		super();
 		this.context = context;
@@ -63,7 +67,7 @@ public class ChatAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if(message.get(position).getType()==0){
 			view = LayoutInflater.from(context).inflate(R.layout.message_list_left, null);
-			ImageView receiveimage=(ImageView) view.findViewById(R.id.receiveClientImg);
+			receiveimage=(CircleImageView) view.findViewById(R.id.receiveClientImg);
 			if(!(chatMessage.getBitmap(0).equals(null))){
 				receiveimage.setImageBitmap(chatMessage.getBitmap(0));
 			}
@@ -72,9 +76,9 @@ public class ChatAdapter extends BaseAdapter{
 			return view;
 		}else if(message.get(position).getType()==1){
 			view = LayoutInflater.from(context).inflate(R.layout.message_list_right, null);
-			ImageView receiveimage=(ImageView) view.findViewById(R.id.sendClientImg);
+			sendimage=(CircleImageView) view.findViewById(R.id.sendClientImg);
 			if(!chatMessage.getBitmap(1).equals(null)){
-				receiveimage.setImageBitmap(chatMessage.getBitmap(1));
+				sendimage.setImageBitmap(chatMessage.getBitmap(1));
 			}
 			TextView receiveText = (TextView) view.findViewById(R.id.sendMessage);
 			receiveText.setText(message.get(position).getContent());

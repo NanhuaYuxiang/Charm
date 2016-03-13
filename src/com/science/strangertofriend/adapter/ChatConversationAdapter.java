@@ -12,6 +12,8 @@ import com.science.strangertofriend.R;
 import com.science.strangertofriend.bean.ChatMessage;
 import com.science.strangertofriend.bean.OneConversationData;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +28,7 @@ public class ChatConversationAdapter extends BaseAdapter{
 	private View view;
 	private Context context ;
 	private List<OneConversationData> convsDataList;
-	private ImageView convsImg;
+	private CircleImageView convsImg;
 	private TextView  convsNameTv,convsLastMessage;
 	
 	public ChatConversationAdapter(Context context,List<OneConversationData> convsDataList){
@@ -60,7 +62,7 @@ public class ChatConversationAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		view = LayoutInflater.from(context).inflate(R.layout.conversation_adapter, null);
-		convsImg = (ImageView) view.findViewById(R.id.convsImg);
+		convsImg = (CircleImageView) view.findViewById(R.id.convsImg);
 		convsImg.setImageBitmap(convsDataList.get(position).getconvsClientBitmap());
 		convsNameTv = (TextView) view.findViewById(R.id.convsNameTv);
 		convsLastMessage = (TextView) view.findViewById(R.id.convsLastMessage);
