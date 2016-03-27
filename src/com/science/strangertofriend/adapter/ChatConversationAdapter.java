@@ -38,6 +38,7 @@ public class ChatConversationAdapter extends BaseAdapter{
 	public void reFresh(List<OneConversationData> convsDataList){
 		this.convsDataList = convsDataList;
 		notifyDataSetChanged();
+
 	}
 	@Override
 	public int getCount() {
@@ -63,7 +64,11 @@ public class ChatConversationAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		view = LayoutInflater.from(context).inflate(R.layout.conversation_adapter, null);
 		convsImg = (CircleImageView) view.findViewById(R.id.convsImg);
-		convsImg.setImageBitmap(convsDataList.get(position).getconvsClientBitmap());
+		if((convsDataList.get(position).getconvsClientBitmap())==null){
+			convsImg.setImageResource(R.drawable.app_logo);
+		}else{
+			convsImg.setImageBitmap(convsDataList.get(position).getconvsClientBitmap());
+		}
 		convsNameTv = (TextView) view.findViewById(R.id.convsNameTv);
 		convsLastMessage = (TextView) view.findViewById(R.id.convsLastMessage);
 		convsNameTv.setText(convsDataList.get(position).getConvsClientName());

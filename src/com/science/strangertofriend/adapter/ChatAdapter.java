@@ -9,6 +9,7 @@ import com.science.strangertofriend.bean.ChatMessage;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ChatAdapter extends BaseAdapter{
+public class ChatAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<ChatMessage> message;
@@ -24,20 +25,23 @@ public class ChatAdapter extends BaseAdapter{
 	private ChatMessage chatMessage;
 	private CircleImageView receiveimage;
 	private CircleImageView sendimage;
-	public ChatAdapter(Context context,List<ChatMessage>message){
+
+	public ChatAdapter(Context context, List<ChatMessage> message) {
 		super();
 		this.context = context;
 		this.message = message;
 	}
-	
-	public void reFresh(List<ChatMessage> message){
+
+	public void reFresh(List<ChatMessage> message) {
 		this.message = message;
-		notifyDataSetChanged();
+		// notifyDataSetChanged();
 	}
-	public ChatAdapter(){
-		
+
+	public ChatAdapter() {
+
 	}
-	public void setChatMessage(ChatMessage chatMessage){
+
+	public void addChatMessage(ChatMessage chatMessage) {
 		this.chatMessage = chatMessage;
 	}
 	@Override
@@ -54,37 +58,46 @@ public class ChatAdapter extends BaseAdapter{
 	public long getItemId(int position) {
 		return position;
 	}
-	
-	public AVIMMessage getFirstMssage(){
-		if(null != message&&message.size()>0){
+
+	public AVIMMessage getFirstMssage() {
+		if (null != message && message.size() > 0) {
 			return message.get(0);
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if(message.get(position).getType()==0){
-			view = LayoutInflater.from(context).inflate(R.layout.message_list_left, null);
-			receiveimage=(CircleImageView) view.findViewById(R.id.receiveClientImg);
-			if(!(chatMessage.getBitmap(0).equals(null))){
+		if (message.get(position).getType() == 0) {
+			view = LayoutInflater.from(context).inflate(
+					R.layout.message_list_left, null);
+			receiveimage = (CircleImageView) view
+					.findViewById(R.id.receiveClientImg);
+			if (chatMessage.getBitmap(0)!=null) {
 				receiveimage.setImageBitmap(chatMessage.getBitmap(0));
+			} else {
+				receiveimage.setImageResource(R.drawable.app_logo);
 			}
-			TextView receiveText = (TextView) view.findViewById(R.id.receiveMessage);
+			TextView receiveText = (TextView) view
+					.findViewById(R.id.receiveMessage);
 			receiveText.setText(message.get(position).getContent());
 			return view;
-		}else if(message.get(position).getType()==1){
-			view = LayoutInflater.from(context).inflate(R.layout.message_list_right, null);
-			sendimage=(CircleImageView) view.findViewById(R.id.sendClientImg);
-			if(!chatMessage.getBitmap(1).equals(null)){
+		} else if (message.get(position).getType() == 1) {
+			view = LayoutInflater.from(context).inflate(
+					R.layout.message_list_right, null);
+			sendimage = (CircleImageView) view.findViewById(R.id.sendClientImg);
+			if (chatMessage.getBitmap(1)!=null) {
 				sendimage.setImageBitmap(chatMessage.getBitmap(1));
+			} else {
+				receiveimage.setImageResource(R.drawable.app_logo);
 			}
-			TextView receiveText = (TextView) view.findViewById(R.id.sendMessage);
+			TextView receiveText = (TextView) view
+					.findViewById(R.id.sendMessage);
 			receiveText.setText(message.get(position).getContent());
 			return view;
 		}
-		
+
 		return view;
 	}
 

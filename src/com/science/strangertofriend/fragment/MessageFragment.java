@@ -32,6 +32,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
@@ -62,9 +63,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.science.strangertofriend.R;
+import com.science.strangertofriend.adapter.ChatAdapter;
 import com.science.strangertofriend.adapter.ChatConversationAdapter;
 import com.science.strangertofriend.adapter.MessageListAdapter;
 import com.science.strangertofriend.adapter.SwingBottomInAnimationAdapter;
+import com.science.strangertofriend.bean.ChatMessage;
 import com.science.strangertofriend.bean.OneConversationData;
 import com.science.strangertofriend.ui.ChatRoomActivity;
 import com.science.strangertofriend.utils.AVService;
@@ -92,9 +95,11 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	private ChatConversationAdapter chatConversationAdapter;
 	private String convsClientName = "";
 	private String lastMessage = "";
-	private Bitmap clientBitmap;
-	private List<AVIMConversation> allConvsList = new ArrayList<AVIMConversation>();
-	private CircleImageView circleImageView;
+
+	// private Bitmap clientBitmap;
+	// private List<AVIMConversation> allConvsList = new
+	// ArrayList<AVIMConversation>();
+	// private CircleImageView circleImageView;
 
 	@Override
 	@Nullable
@@ -109,9 +114,37 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	public void init() {
 		mFRefreshLayout = (SwipeRefreshLayout) mFView
 				.findViewById(R.id.messageFragmentRefreshLayout);
+		mFRefreshLayout.setColorSchemeResources(
+				android.R.color.holo_blue_light,
+				android.R.color.holo_red_light,
+				android.R.color.holo_orange_light,
+				android.R.color.holo_green_light);
+		mFRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				AVUser user = AVUser.getCurrentUser();
+				currentClient = AVIMClient.getInstance(user.getUsername());
+				currentClient.open(new AVIMClientCallback() {
+
+					@Override
+					public void done(AVIMClient arg0, AVException e) {
+						if (e == null) {
+							allConvsDataList = new ArrayList<OneConversationData>();
+							getclientAllConversation();
+						}
+					}
+				});
+				mFRefreshLayout.setRefreshing(false);
+			}
+
+		});
+
 		mFListView = (ListView) mFView
 				.findViewById(R.id.messageFragmentListView);
-		chatConversationAdapter = new ChatConversationAdapter(getContext(), allConvsDataList);
+
+		chatConversationAdapter = new ChatConversationAdapter(getContext(),
+				allConvsDataList);
 		mFListView.setAdapter(chatConversationAdapter);
 		AVUser user = AVUser.getCurrentUser();
 		currentClient = AVIMClient.getInstance(user.getUsername());
@@ -131,34 +164,54 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 					int position, long id) {
 				// TODO Auto-generated method stub
 				ListView listView = (ListView) parent;
-				OneConversationData oConvsData =(OneConversationData) listView.getItemAtPosition(position);
+				OneConversationData oConvsData = (OneConversationData) listView
+						.getItemAtPosition(position);
 				String clientName = oConvsData.getConvsClientName();
-				Intent intent = new Intent(getActivity(),com.science.strangertofriend.ui.ChatActivity.class);
+				Intent intent = new Intent(getActivity(),
+						com.science.strangertofriend.ui.ChatActivity.class);
+				Toast.makeText(getContext(), clientName, Toast.LENGTH_SHORT)
+						.show();
 				intent.putExtra("taskPubliName", clientName);
 				getActivity().startActivity(intent);
 			}
 		});
-		
-	}
-	
-	// 得到当前用户所有对话
-		public void getclientAllConversation() {
-			AVIMConversationQuery conversationQuery = currentClient.getQuery();
-			conversationQuery.whereEqualTo("conversationType", 1);
-			conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
 
-				@Override
-				public void done(List<AVIMConversation> list, AVException e) {
-					if (e == null) {
-						allConvsList.addAll(list);
-						for (int i = 0; i < list.size(); i++) {
-							getConvsClientName(list.get(i));
-						}
+	}
+
+	// 得到当前用户所有对话
+	public void getclientAllConversation() {
+		AVIMConversationQuery conversationQuery = currentClient.getQuery();
+		conversationQuery.limit(100);
+		 conversationQuery.whereEqualTo("conversationType", 1);
+
+		conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
+
+			@Override
+			public void done(List<AVIMConversation> list, AVException e) {
+				if (e == null && list.size() > 0 && null != list) {
+
+					for (int i = 0; i < list.size(); i++) {
+						// if ((boolean)
+						// list.get(i).getAttribute("requestState") == false
+						// && currentClient.equals(list.get(i)
+						// .getAttribute("request"))) {
+						//
+						// }
+						// if (list.get(i).getCreator()
+						// .equals(AVUser.getCurrentUser().getUsername())) {
+						// allConvsList.add(list.get(i));
+
+						Toast.makeText(getContext(), "" + list.size(),
+								Toast.LENGTH_SHORT).show();
+						getConvsClientName(list.get(i));
+
+						// }
 					}
 				}
-			});
+			}
+		});
 
-		}
+	}
 
 	@Override
 	public void onRefresh() {
@@ -175,59 +228,65 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 		return null;
 	}
 
-	public void getConvsClientName(AVIMConversation convs){
-		if(convs.getMembers().get(0).equals(AVUser.getCurrentUser().getUsername())){
+	public void getConvsClientName(AVIMConversation convs) {
+		if (convs.getMembers().get(0)
+				.equals(AVUser.getCurrentUser().getUsername())) {
 			convsClientName = convs.getMembers().get(1);
-			Toast.makeText(getContext(), convsClientName, Toast.LENGTH_SHORT).show();
-			getConvsLastMessage(convs,convsClientName);
+			getConvsLastMessage(convs, convsClientName);
 			getClientBitmapFile(convsClientName);
-			
-		}else{
+
+		} else {
 			convsClientName = convs.getMembers().get(0);
-			Toast.makeText(getContext(), convsClientName, Toast.LENGTH_SHORT).show();
-			getConvsLastMessage(convs,convsClientName);
+			getConvsLastMessage(convs, convsClientName);
 			getClientBitmapFile(convsClientName);
 		}
-		
+
 	}
-	
-	public void getConvsLastMessage(AVIMConversation convs,final String convsClientName){
+
+	public void getConvsLastMessage(AVIMConversation convs,
+			final String convsClientName) {
 		convs.queryMessages(new AVIMMessagesQueryCallback() {
-			
+
 			@Override
 			public void done(List<AVIMMessage> list, AVException e) {
 				// TODO Auto-generated method stub
-				if(e==null){
-					if(!list.equals(null)&&list.size()>0){
-						lastMessage = ((AVIMTextMessage) list.get(list.size()-1)).getText();
+				if (e == null) {
+					if (null != list && list.size() > 0) {
+						lastMessage = ((AVIMTextMessage) list.get(list.size() - 1))
+								.getText();
 						OneConversationData oConvsData = new OneConversationData();
 						oConvsData.setConvsClientName(convsClientName);
 						oConvsData.setLastMessage(lastMessage);
 						allConvsDataList.add(oConvsData);
-					}else{
-						OneConversationData oConvsData = new OneConversationData();
-						oConvsData.setConvsClientName(convsClientName);
-						oConvsData.setLastMessage(lastMessage);
-						allConvsDataList.add(oConvsData);
+						// getClientBitmapFile(convsClientName);
+					} else {
+						// OneConversationData oConvsData = new
+						// OneConversationData();
+						// oConvsData.setConvsClientName(convsClientName);
+						// oConvsData.setLastMessage(lastMessage);
+						// allConvsDataList.add(oConvsData);
 					}
-					chatConversationAdapter = (ChatConversationAdapter) mFListView.getAdapter();
+					chatConversationAdapter = (ChatConversationAdapter) mFListView
+							.getAdapter();
 					chatConversationAdapter.reFresh(allConvsDataList);
-					Toast.makeText(getContext(), lastMessage, Toast.LENGTH_SHORT).show();
-				}else{
-					Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+					chatConversationAdapter.notifyDataSetChanged();
+				} else {
+					Toast.makeText(getContext(), e.toString(),
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
 	}
-	public void getClientBitmapFile(final String username){
+
+	public void getClientBitmapFile(final String username) {
 		AVQuery<AVUser> userQuery = AVUser.getQuery();
 		userQuery.whereEqualTo("username", username);
 		userQuery.findInBackground(new FindCallback<AVUser>() {
-			
+
 			@Override
 			public void done(List<AVUser> list, AVException e) {
 				// TODO Auto-generated method stub
-				if(e==null){
+				if (e == null && list.size() > 0 && null != list) {
 					AVUser user = list.get(0);
 					AVFile file = user.getAVFile("userAvater");
 					downloadAvaterBitmaps(username, file.getUrl());
@@ -235,9 +294,6 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 			}
 		});
 	}
-	
-
-	
 
 	public void downloadAvaterBitmaps(final String username, final String url) {
 		DisplayImageOptions option = new DisplayImageOptions.Builder()
@@ -260,12 +316,18 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 					@Override
 					public void onLoadingComplete(String arg0, View arg1,
 							Bitmap bitmap) {
-						clientBitmap = bitmap;
+						// clientBitmap = bitmap;
 						for (int i = 0; i < allConvsDataList.size(); i++) {
-							if(allConvsDataList.get(i).getConvsClientName().equals(username)){
-								allConvsDataList.get(i).setConvsClientBitmap(bitmap);
-								chatConversationAdapter = (ChatConversationAdapter) mFListView.getAdapter();
-								chatConversationAdapter.reFresh(allConvsDataList);
+							if (allConvsDataList.get(i).getConvsClientName()
+									.equals(username)) {
+								allConvsDataList.get(i).setConvsClientBitmap(
+										bitmap);
+								chatConversationAdapter = (ChatConversationAdapter) mFListView
+										.getAdapter();
+								chatConversationAdapter
+										.reFresh(allConvsDataList);
+								chatConversationAdapter.notifyDataSetChanged();
+
 							}
 						}
 					}
@@ -276,11 +338,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 					}
 				});
 	}
-	
-	
-	
-	
-	
+
 	// private ImageView mChatNofriend;
 	// private View mContainerView;
 	// private Bitmap mBitmap;

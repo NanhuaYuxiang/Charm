@@ -63,8 +63,9 @@ public class ReceiveMessageHandler extends
 								ChatMessage.MESSAGE_FROM,
 								((AVIMTextMessage) receiveMessage).getText()));
 						chatAdapter.reFresh(messageList);
-						chatListView.smoothScrollToPosition(messageList.size()-1);
-						
+						// chatListView.smoothScrollToPosition(messageList.size()-1);
+						chatActivity.scrollToBottom();
+
 					}
 				}
 			});
@@ -74,47 +75,48 @@ public class ReceiveMessageHandler extends
 		// ChatMessage(ChatMessage.MESSAGE_FROM,((AVIMTextMessage)
 		// message).getText()));
 		// thread.start();
-		// sendNotification(message, conversation);
+		sendNotification(message, conversation);
 	}
 
-	// public void sendNotification(AVIMTypedMessage message,
-	// AVIMConversation conversation) {
-	// String notificationContent = message instanceof AVIMTextMessage ?
-	// ((AVIMTextMessage) message)
-	// .getText() : "暂不支持此消息类型";
-	// String sound = null;
-	// Intent intent = new Intent(context, NotificationBroadcastReceiver.class);
-	// intent.putExtra("conversation", conversation.getConversationId());
-	// intent.putExtra("otherClientId", message.getFrom());
-	// intent.setFlags(0);
-	// int notificationId = (new Random()).nextInt();
-	// PendingIntent contentIntent = PendingIntent.getBroadcast(context,
-	// notificationId, intent, 0);
-	// NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-	// context)
-	// .setSmallIcon(R.drawable.notification_icon)
-	// .setContentTitle("")
-	// .setAutoCancel(true)
-	// .setContentIntent(contentIntent)
-	// .setDefaults(
-	// Notification.DEFAULT_VIBRATE
-	// | Notification.DEFAULT_SOUND)
-	// .setContentText(notificationContent);
-	// NotificationManager manager = (NotificationManager)
-	// context.getSystemService(Context.NOTIFICATION_SERVICE);
-	// Notification notification = mBuilder.build();
-	// if(sound!=null && sound.trim().length()>0){
-	// notification.sound =
-	// Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE+"://"+sound);
-	// }
-	// manager.notify(notificationId,notification);
-	// }
-	// Thread thread = new Thread(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// // TODO Auto-generated method stub
-	// chatAdapter.notifyDataSetChanged();
-	// }
-	// });
+	public void sendNotification(AVIMTypedMessage message,
+			AVIMConversation conversation) {
+		String notificationContent = message instanceof AVIMTextMessage ? ((AVIMTextMessage) message)
+				.getText() : "暂不支持此消息类型";
+		String sound = null;
+		Intent intent = new Intent(context, NotificationBroadcastReceiver.class);
+		intent.putExtra("conversation", conversation.getConversationId());
+		intent.putExtra("otherClientId", message.getFrom());
+		intent.setFlags(0);
+		int notificationId = (new Random()).nextInt();
+		PendingIntent contentIntent = PendingIntent.getBroadcast(context,
+				notificationId, intent, 0);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context)
+				.setSmallIcon(R.drawable.notification_icon)
+				.setContentTitle("")
+				.setAutoCancel(true)
+				.setContentIntent(contentIntent)
+				.setDefaults(
+						Notification.DEFAULT_VIBRATE
+								| Notification.DEFAULT_SOUND)
+				.setContentText(notificationContent);
+		NotificationManager manager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = mBuilder.build();
+		if (sound != null && sound.trim().length() > 0) {
+			notification.sound = Uri
+					.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+							+ sound);
+		}
+		manager.notify(notificationId, notification);
+	}
+
+	Thread thread = new Thread(new Runnable() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			chatAdapter.notifyDataSetChanged();
+		}
+	});
 }

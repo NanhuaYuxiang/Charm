@@ -80,9 +80,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 					public void onClick(SweetAlertDialog sweetAlertDialog) {
 						if(!isTaskBelongToMyself()){
 							acceptTask();
-							//Toast.makeText(DetailedTaskActivity.this, "接受成功", Toast.LENGTH_LONG).show();
 						}else {
-							//Toast.makeText(DetailedTaskActivity.this, "不可以接受自己的任务哦", Toast.LENGTH_LONG).show();
 							new SweetAlertDialog(DetailedTaskActivity.this,SweetAlertDialog.ERROR_TYPE)
 							.setTitleText("Sorry")
 							.setContentText("不可以接收自己的任务哦")

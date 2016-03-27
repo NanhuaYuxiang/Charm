@@ -1,7 +1,7 @@
 package com.science.strangertofriend.bean;
 
+
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.science.strangertofriend.R;
 
 import android.graphics.Bitmap;
 
@@ -21,7 +21,6 @@ public class ChatMessage extends AVIMMessage{
 	}
 	
 	public ChatMessage(){
-		
 	}
 	
 	public void setCurrentClientBitmap(Bitmap bitmap){
@@ -42,9 +41,15 @@ public class ChatMessage extends AVIMMessage{
 	
 	public Bitmap getBitmap(int messageSendOrReceive){
 		if(messageSendOrReceive==MESSAGE_TO){
-			return currentClientBitmap;
+			if(!this.currentClientBitmap.equals(null)){
+				return this.currentClientBitmap;
+			}
 		}else{
-			return otherClientBitmap;
+			if(!this.otherClientBitmap.equals(null)){
+				return this.otherClientBitmap;
+			}
 		}
+		return null;
 	}
+	
 }
