@@ -74,6 +74,7 @@
     <string name="introduce">版本介绍</string>
     <string name="user_deal">用户协议</string>
     <string name="about_us">关于我们</string>
+    <string name="user_totalGolds">香金余额</string>
 
     <!-- gaosi -->
     <!-- XML textView value -->

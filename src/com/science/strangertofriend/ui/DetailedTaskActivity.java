@@ -54,7 +54,9 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 		
 		init();
 		
-		
+		if(isTaskAccepted()){
+			acceptTaskBtn.setText("任务已被接受了哦");
+		}
 	}
 
 	@Override

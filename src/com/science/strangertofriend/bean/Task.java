@@ -167,12 +167,15 @@ public class Task implements Serializable {
 	@Override
 	public String toString() {
 		return "Task [publisherName=" + publisherName + ", acceptedName="
-				+ acceptedName + ", theme=" + theme + ", taskDescription="
-				+ taskDescription + ", endTime=" + endTime + ", location="
-				+ location + ", latitude=" + latitude + ", longitude="
-				+ longitude + ", isAccepted=" + isAccepted
-				+ ", isAccomplished=" + isAccomplished + ", price=" + price
-				+ ", type=" + type + "]";
+				+ acceptedName + ", theme=" + theme + ", objectId=" + objectId
+				+ ", taskDescription=" + taskDescription + ", endTime="
+				+ endTime + ", geopoint=" + geopoint + ", location=" + location
+				+ ", latitude=" + latitude + ", longitude=" + longitude
+				+ ", isAccepted=" + isAccepted + ", isAccomplished="
+				+ isAccomplished + ", price=" + price + ", type=" + type
+				+ ", pub_user=" + pub_user + ", acp_user=" + acp_user + "]";
 	}
+
+	
 
 }

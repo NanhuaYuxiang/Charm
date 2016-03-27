@@ -25,6 +25,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.Task_Accept_UnComplete_Adapter;
@@ -40,7 +41,7 @@ import com.science.strangertofriend.bean.Task;
  * @blog www.gaosililn.iteye.com
  * @email gaosi0812@gamil.com
  * @school usc
- *
+ * 
  */
 public class Task_List_Publish_UnComplete_ListView_Activity extends
 		BaseActivity implements OnClickListener {
@@ -63,24 +64,27 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 		// 设置上下文菜单
 		super.registerForContextMenu(listView);
 	}
+
 	/**
 	 * 判断当前页面是否有任务，没有则显示no_task图片
+	 * 
 	 * @return
 	 */
-	public void isShow_Img_NoTask(){
-		if(Task_Publish_UnComplete_Adapter.vector.size()>0){
+	public void isShow_Img_NoTask() {
+		if (Task_Publish_UnComplete_Adapter.vector.size() > 0) {
 			img_no_task.setVisibility(View.INVISIBLE);
-		}else {
+		} else {
 			img_no_task.setVisibility(View.VISIBLE);
-			//img_no_task.setImageDrawable(getResources().getDrawable(R.drawable.notask_pub_unaccom));
+			// img_no_task.setImageDrawable(getResources().getDrawable(R.drawable.notask_pub_unaccom));
 			img_no_task.setImageResource(R.drawable.notask_pub_unaccom);
 		}
 	}
+
 	/**
 	 * 初始化ListView
 	 */
 	private void initListView() {
-		img_no_task=(ImageView) findViewById(R.id.img_no_task);
+		img_no_task = (ImageView) findViewById(R.id.img_no_task);
 		listView = (ListView) this.findViewById(R.id.task_publish_list);
 		adapter = Task_Publish_UnComplete_Adapter.initAdapter(this);
 		listView.setAdapter(adapter);
@@ -114,31 +118,35 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 			openMenu();
 			break;
 		case R.id.image_publish:
+			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Publish_Complete_ListView_Activity.class));
-			closeMenu();
 			break;
 		case R.id.image_unpublish:
+			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Publish_UnComplete_ListView_Activity.class));
 
-			closeMenu();
 			break;
 		case R.id.image_accept:
+			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Accept_Complete_ListView_Activity.class));
 
-			closeMenu();
 			break;
 		case R.id.image_unaccept:
+			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Accept_UnComplete_ListView_Activity.class));
 
-			openMenu();
 			break;
 
 		default:
@@ -226,6 +234,7 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 
 	}
 
+	AVObject post = null;
 	/**
 	 * 完成任务
 	 * 
@@ -240,25 +249,26 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 		Task_Publish_Complete_Adapter.vector.add(task);
 		Task_Publish_Complete_Adapter.initAdapter().notifyDataSetChanged();
 
-		String tableName = "Task";
-		AVObject post = new AVObject(tableName);
-		AVQuery<AVObject> query = new AVQuery<AVObject>(tableName);
+		Log.i("taskid", task.getObjectId() + "");
+		final AVQuery<AVObject> query = new AVQuery<AVObject>("Task");
 
-		try {
-			post = query.get(task.getObjectId());
-		} catch (AVException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		post.put("isAccepted", true);
-		post.saveInBackground(new SaveCallback() {
+		query.getInBackground(task.getObjectId(), new GetCallback<AVObject>() {
+
 			@Override
-			public void done(AVException e) {
-				if (e == null) {
-					Log.i("LeanCloud", "Save successfully.");
-				} else {
-					Log.e("LeanCloud", "Save failed.");
-				}
+			public void done(AVObject arg0, AVException arg1) {
+				post = arg0;
+				post.put("isAccomplished", true);
+				
+				post.saveInBackground(new SaveCallback() {
+					@Override
+					public void done(AVException e) {
+						if (e == null) {
+							Log.i("LeanCloud", "Save successfully.");
+						} else {
+							Log.e("LeanCloud", "Save failed.");
+						}
+					}
+				});
 			}
 		});
 

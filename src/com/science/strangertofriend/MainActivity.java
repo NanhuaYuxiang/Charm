@@ -390,9 +390,9 @@ public class MainActivity extends ActionBarActivity implements
 
 			return replaceAddressListFragment(screenShotable, topPosition);
 		case "Task":
-			new GetUserTaskLists();
-			startActivity(new Intent(MainActivity.this,
-					Task_List_Accept_Complete_ListView_Activity.class));
+			new GetUserTaskLists(this);
+//			startActivity(new Intent(MainActivity.this,
+//					Task_List_Accept_Complete_ListView_Activity.class));
 		default:
 			return screenShotable;
 		}

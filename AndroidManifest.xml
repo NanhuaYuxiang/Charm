@@ -45,7 +45,7 @@
     <application
         android:name=".AppContext"
         android:allowBackup="true"
-        android:icon="@drawable/app_logo"
+        android:icon="@drawable/logo3"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <meta-data
@@ -88,7 +88,8 @@
         </activity>
         <activity android:name=".game.puzzle.PuzzleActivity" >
         </activity>
-        <activity android:name="com.science.strangertofriend.ui.DetailedTaskActivity"></activity>
+        <activity android:name="com.science.strangertofriend.ui.DetailedTaskActivity" >
+        </activity>
         <activity android:name=".ui.SettingActivity" >
         </activity>
         <activity android:name=".ui.UserDealActivity" >
@@ -99,7 +100,8 @@
         </activity>
         <activity android:name=".ui.ContactActivity" >
         </activity>
-        <activity android:name="com.science.strangertofriend.ui.ChatActivity"></activity>
+        <activity android:name="com.science.strangertofriend.ui.ChatActivity" >
+        </activity>
         <activity android:name=".ui.RankingActivity" >
         </activity>
         <activity android:name=".ui.AddTaskActivity" >
@@ -126,8 +128,8 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        
-        <receiver android:name="com.science.strangertofriend.ui.NotificationBroadcastReceiver"></receiver>
+        <receiver android:name="com.science.strangertofriend.ui.NotificationBroadcastReceiver" >
+        </receiver>
 
         <service android:name="com.avos.avoscloud.PushService" />
 
@@ -148,7 +150,7 @@
             android:name=".IndividualTaskActivity"
             android:label="@string/title_activity_individual_task" >
         </activity>
-           <!-- 任务历史清单 -->
+        <!-- 任务历史清单 -->
         <activity android:name="com.science.strangertofriend.ui.Task_List_Publish_Complete_ListView_Activity" >
         </activity>
         <activity android:name="com.science.strangertofriend.ui.Task_List_Publish_UnComplete_ListView_Activity" >
@@ -157,6 +159,12 @@
         </activity>
         <activity android:name="com.science.strangertofriend.ui.Task_List_Accept_UnComplete_ListView_Activity" >
         </activity>
+
+        <receiver android:name="com.science.strangertofriend.widget.DataGetCompleteBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="com.science.strangertofriend.action" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

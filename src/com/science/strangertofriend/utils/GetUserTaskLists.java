@@ -2,6 +2,8 @@ package com.science.strangertofriend.utils;
 
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -16,6 +18,7 @@ import com.science.strangertofriend.adapter.Task_Accept_UnComplete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_Complete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_UnComplete_Adapter;
 import com.science.strangertofriend.bean.Task;
+import com.science.strangertofriend.widget.DataGetCompleteBroadcastReceiver;
 
 /**
  * 获取个人任务历史清单的工具类
@@ -29,12 +32,14 @@ import com.science.strangertofriend.bean.Task;
  */
 public class GetUserTaskLists {
 	private HandlerThread handlerThread;
+	private Context context;
 	/**
 	 * 当前用户名
 	 */
 	public static String myUserName = "";
 
-	public GetUserTaskLists() {
+	public GetUserTaskLists(Context context) {
+		this.context=context;
 		myUserName = getUserName();
 		// 获取当前用户
 		AVUser avUser = AVUser.getCurrentUser();
@@ -97,7 +102,7 @@ public class GetUserTaskLists {
 				getValuesAtBinOfPub();
 				getValuesAtBinOfAcce();
 				// 10分钟更新一次
-				Thread.sleep(60000);
+				Thread.sleep(600000);
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -120,7 +125,7 @@ public class GetUserTaskLists {
 			for (int i = 0; i < len; i++) {
 				AVObject task = tasks.get(i);
 				taskBean = new Task();
-				taskBean.setObjectId(task.getString("objectId"));
+				taskBean.setObjectId(task.getObjectId());
 				taskBean.setPublisherName(task.getString("publisherName"));
 				taskBean.setAcceptedName(task.getString("acceptedName"));
 				taskBean.setAccepted(task.getBoolean("isAccepted"));
@@ -146,6 +151,14 @@ public class GetUserTaskLists {
 					// 将任务添加到所需的任务队列当中
 					Task_Publish_UnComplete_Adapter.addVector(taskBean);
 				}
+				
+				if(i==len-1){
+					Intent intent=new Intent();
+					intent.setAction("com.science.strangertofriend.action");
+					intent.putExtra("isFinished", true);
+					context.sendBroadcast(intent);
+					Log.i("broadcast", "发送广播咯");
+				}
 
 			}
 
@@ -168,7 +181,7 @@ public class GetUserTaskLists {
 			for (int i = 0; i < len; i++) {
 				AVObject task = tasks.get(i);
 				taskBean = new Task();
-				taskBean.setObjectId(task.getString("objectId"));
+				taskBean.setObjectId(task.getObjectId());
 				taskBean.setPublisherName(task.getString("publisherName"));
 				taskBean.setAcceptedName(task.getString("acceptedName"));
 				taskBean.setAccepted(task.getBoolean("isAccepted"));
@@ -207,5 +220,5 @@ public class GetUserTaskLists {
 	public void getChangeValuesInPub() {
 
 	}
-
+	
 }

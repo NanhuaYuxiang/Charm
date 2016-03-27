@@ -25,6 +25,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.Task_Accept_Complete_Adapter;
@@ -118,31 +119,31 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 			break;
 		case R.id.image_publish:
 			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Accept_UnComplete_ListView_Activity.this,
 					Task_List_Publish_Complete_ListView_Activity.class));
-			finish();
 			break;
 		case R.id.image_unpublish:
 			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Accept_UnComplete_ListView_Activity.this,
 					Task_List_Publish_UnComplete_ListView_Activity.class));
-			finish();
 			break;
 		case R.id.image_accept:
 			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Accept_UnComplete_ListView_Activity.this,
 					Task_List_Accept_Complete_ListView_Activity.class));
-			finish();
 			break;
 		case R.id.image_unaccept:
 			closeMenu();
+			finish();
 			startActivity(new Intent(
 					Task_List_Accept_UnComplete_ListView_Activity.this,
 					Task_List_Accept_UnComplete_ListView_Activity.class));
-			finish();
 			break;
 
 		default:
@@ -230,6 +231,7 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 
 	}
 
+	AVObject post = null;
 	/**
 	 * 完成任务
 	 * 
@@ -245,26 +247,26 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 		Task_Accept_Complete_Adapter.initAdapter().notifyDataSetChanged();
 
 		String tableName = "Task";
-		AVObject post = new AVObject(tableName);
 		AVQuery<AVObject> query = new AVQuery<AVObject>(tableName);
 
 
-		try {
-			post = query.get(task.getObjectId());
-		} catch (AVException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		post.put("isAccepted",true);
-		post.saveInBackground(new SaveCallback() {
-		   @Override
-		   public void done(AVException e) {
-		        if (e == null) {
-		            Log.i("LeanCloud", "Save successfully.");
-		        } else {
-		            Log.e("LeanCloud", "Save failed.");
-		        }
-		    }
+		query.getInBackground(task.getObjectId(), new GetCallback<AVObject>() {
+			
+			@Override
+			public void done(AVObject arg0, AVException arg1) {
+				post=arg0;
+				post.put("isAccomplished",true);
+				post.saveInBackground(new SaveCallback() {
+					@Override
+					public void done(AVException e) {
+						if (e == null) {
+							Log.i("LeanCloud", "Save successfully.");
+						} else {
+							Log.e("LeanCloud", "Save failed.");
+						}
+					}
+				});
+			}
 		});
 		
 	}

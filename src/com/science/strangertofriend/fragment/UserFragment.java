@@ -83,6 +83,7 @@ public class UserFragment extends Fragment implements ScreenShotable {
 	private TextView mUserInlove;
 	private Button mLogout;
 	private ImageView mAlterPic;
+	private TextView user_totalGolds;// 用户香金余额
 
 	public int i = -1;
 
@@ -134,12 +135,36 @@ public class UserFragment extends Fragment implements ScreenShotable {
 				.findViewById(R.id.user_message_alter_pic);
 
 		mLogout = (Button) mRootView.findViewById(R.id.logout);
+		user_totalGolds = (TextView) mRootView.findViewById(R.id.user_golds);
 	}
 
 	private void initData() {
 
 		mUsername.setText(AVUser.getCurrentUser().getUsername().toString());
 		mUserAcount.setText(AVUser.getCurrentUser().getEmail().toString());
+
+		// 查询当前用户香金余额
+		int golds=AVUser.getCurrentUser().getInt("totalGolds");
+		Number golds2=AVUser.getCurrentUser().getNumber("totalGolds");
+		
+		
+		Log.i("golds",AVUser.getCurrentUser().getInt("credit")+ "");
+		//user_totalGolds.setText(golds);
+		
+		// AVQuery<AVObject> queryGolds=new AVQuery<AVObject>("_User");
+		// queryGolds.whereEqualTo("username",
+		// AVUser.getCurrentUser().getUsername().toString());
+		// queryGolds.findInBackground(new FindCallback<AVObject>() {
+		//
+		// @Override
+		// public void done(List<AVObject> list, AVException exception) {
+		// if(exception==null){
+		// AVUser user= (AVUser) list.get(list.size()-1);
+		// Log.i("golds", user.getString("totalGolds"));
+		// user_totalGolds.setText(user.getString("totalGolds"));
+		// }
+		// }
+		// });
 
 		AVQuery<AVObject> queryGender = new AVQuery<AVObject>("Gender");
 		queryGender.whereEqualTo("username", AVUser.getCurrentUser()
@@ -270,7 +295,7 @@ public class UserFragment extends Fragment implements ScreenShotable {
 				Message msg = new Message();
 				msg.what = 1;
 				msg.obj = imageFile.getUrl();
-//				Log.e("avaterURL", imageFile.getUrl());
+				// Log.e("avaterURL", imageFile.getUrl());
 				mHandlerLoad.sendMessage(msg);
 			}
 

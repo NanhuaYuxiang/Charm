@@ -414,7 +414,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
 				bitMaps.put(username, arg2);
 				Log.i("TAG", "downloadAvaterBitmaps");
-				if(bitMaps.size()==taskNearBy.size()){
+				if(bitMaps.size()==hash_avaterUrls.size()){
 					showAllMarkersOnMap();
 					Log.i("TAG", "º”‘ÿÕÍ≥…");
 				}

@@ -66,23 +66,23 @@ public class GuideActivity extends BaseActivity implements OnTouchListener {
 		View view = LayoutInflater.from(this).inflate(R.layout.view_splash_ad,
 				null);
 		ImageView iv_ad = (ImageView) view.findViewById(R.id.iv_ad);
-		iv_ad.setImageResource(R.drawable.guide_a);
+		iv_ad.setImageResource(R.drawable.guide_a2);
 		views.add(view);
 		View view1 = LayoutInflater.from(this).inflate(R.layout.view_splash_ad,
 				null);
 		ImageView iv_ad1 = (ImageView) view1.findViewById(R.id.iv_ad);
-		iv_ad1.setImageResource(R.drawable.guide_b);
+		iv_ad1.setImageResource(R.drawable.guide_b2);
 		views.add(view1);
 		View view2 = LayoutInflater.from(this).inflate(R.layout.view_splash_ad,
 				null);
 		ImageView iv_ad2 = (ImageView) view2.findViewById(R.id.iv_ad);
-		iv_ad2.setImageResource(R.drawable.guide_c);
+		iv_ad2.setImageResource(R.drawable.guide_c2);
 		views.add(view2);
-		View view3 = LayoutInflater.from(this).inflate(R.layout.view_splash_ad,
-				null);
-		ImageView iv_ad3 = (ImageView) view3.findViewById(R.id.iv_ad);
-		iv_ad3.setImageResource(R.drawable.guide_d);
-		views.add(view3);
+//		View view3 = LayoutInflater.from(this).inflate(R.layout.view_splash_ad,
+//				null);
+//		ImageView iv_ad3 = (ImageView) view3.findViewById(R.id.iv_ad);
+//		iv_ad3.setImageResource(R.drawable.guide_d);
+//		views.add(view3);
 
 		size = views.size();
 
