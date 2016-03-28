@@ -209,12 +209,12 @@ public class ChatActivity extends Activity implements OnClickListener {
 			if (isFastDoubleClick()) {
 				sendMessageToClient();
 				scrollToBottom();
+				break;
 			} else {
 				Toast.makeText(this, "消息发送不能相隔一秒", Toast.LENGTH_SHORT).show();
+				break;
 			}
 		case R.id.chatAdd_img:
-			// if ((boolean) connecation.getAttribute("requestState") ==
-			// false||connecation.getAttribute("requestState")==null) {
 			SweetAlertDialog addDialog = new SweetAlertDialog(this,
 					SweetAlertDialog.WARNING_TYPE);
 
@@ -224,41 +224,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 				@Override
 				public void onClick(final SweetAlertDialog sweetAlertDialog) {
 					// TODO Auto-generated method stub
-//					HashMap<String, Object> attr = new HashMap<String, Object>();
-//					attr.put("request", otherClientName);
-//					attr.put("requestState", false);
-//					connecation.setAttributes(attr);
-//					connecation.updateInfoInBackground(new AVIMConversationCallback() {
-//						
-//						@Override
-//						public void done(AVException e) {
-//							// TODO Auto-generated method stub
-//							if (e == null) {
-//								sweetAlertDialog
-//										.setTitleText("")
-//										.setContentText("添加成功")
-//										.setConfirmClickListener(null)
-//										.changeAlertType(
-//												SweetAlertDialog.SUCCESS_TYPE);
-//							}
-//						}
-//					});
-//					connecation
-//							.fetchInfoInBackground(new AVIMConversationCallback() {
-//
-//								@Override
-//								public void done(AVException e) {
-//									// TODO Auto-generated method stub
-//									if (e == null) {
-//										sweetAlertDialog
-//												.setTitleText("")
-//												.setContentText("添加成功")
-//												.setConfirmClickListener(null)
-//												.changeAlertType(
-//														SweetAlertDialog.SUCCESS_TYPE);
-//									}
-//								}
-//							});
 					sweetAlertDialog
 					.setTitleText("")
 					.setContentText("该功能还在完善中......")
@@ -269,11 +234,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 				}
 			}).show();
 			
-			// } else {
-			// new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-			// .setTitleText("").setContentText("该用户已经是你的好友了")
-			// .setConfirmClickListener(null).show();
-			// }
 
 			break;
 		}
@@ -383,8 +343,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 					downloadAvaterBitmaps(otherClientName, file.getUrl());
 
 				} else {
-					Toast.makeText(ChatActivity.this, e.toString(),
-							Toast.LENGTH_SHORT).show();
+					System.out.println(e.toString());
 				}
 			}
 		});
@@ -445,8 +404,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	public void searchPageSize(AVIMMessage oldMessage) {
 		if (!messageIsNull) {
-			Toast.makeText(ChatActivity.this, "" + 1, Toast.LENGTH_SHORT)
-					.show();
 			connecation.queryMessages(oldMessage.getMessageId(),
 					oldMessage.getTimestamp(), 20,
 					new AVIMMessagesQueryCallback() {
@@ -454,19 +411,12 @@ public class ChatActivity extends Activity implements OnClickListener {
 						@Override
 						public void done(List<AVIMMessage> list, AVException e) {
 							// TODO Auto-generated method
-							Toast.makeText(ChatActivity.this, "xiao1",
-									Toast.LENGTH_SHORT).show();
 							if (e == null && null != list && list.size() > 0
 									&& !list.isEmpty()) {
-								Toast.makeText(ChatActivity.this, "" + 2,
-										Toast.LENGTH_SHORT).show();
 								for (int j = 0; j < list.size(); j++) {
 									if (!list.get(j).equals(null)) {
 										AVIMMessage oldMessage = list.get(j);
 										messagePageList.add(oldMessage);
-										Toast.makeText(ChatActivity.this,
-												"" + 3, Toast.LENGTH_SHORT)
-												.show();
 										break;
 									}
 								}
@@ -487,9 +437,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 																((AVIMTextMessage) list
 																		.get(i))
 																		.getText()));
-										Toast.makeText(ChatActivity.this,
-												"" + 4, Toast.LENGTH_SHORT)
-												.show();
 										break;
 									} else {
 										messageList.add(
@@ -499,9 +446,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 														((AVIMTextMessage) list
 																.get(i))
 																.getText()));
-										Toast.makeText(ChatActivity.this,
-												"" + 5, Toast.LENGTH_SHORT)
-												.show();
 									}
 								}
 								chatAdapter = new ChatAdapter(
@@ -516,23 +460,16 @@ public class ChatActivity extends Activity implements OnClickListener {
 								// } else {
 								// chatListView.smoothScrollByOffset(19);
 								// }
-								Toast.makeText(ChatActivity.this, "" + 6,
-										Toast.LENGTH_SHORT).show();
 								chatAdapter.notifyDataSetChanged();
 								chatFreshLayout.setRefreshing(false);
 							} else if (null != list && list.size() > 0
 									&& !list.isEmpty()) {
 								Toast.makeText(ChatActivity.this, "没有历史消息了",
 										Toast.LENGTH_SHORT).show();
-								Toast.makeText(ChatActivity.this, "" + 7,
-										Toast.LENGTH_SHORT).show();
 								chatFreshLayout.setRefreshing(false);
 
 							} else if (e != null) {
-								Toast.makeText(ChatActivity.this, e.toString(),
-										Toast.LENGTH_SHORT).show();
-								Toast.makeText(ChatActivity.this, "" + 8,
-										Toast.LENGTH_SHORT).show();
+								System.out.println(e.toString());
 								chatFreshLayout.setRefreshing(false);
 
 							}
@@ -540,8 +477,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 					});
 		} else {
 			Toast.makeText(ChatActivity.this, "没有历史消息了", Toast.LENGTH_SHORT)
-					.show();
-			Toast.makeText(ChatActivity.this, "" + 9, Toast.LENGTH_SHORT)
 					.show();
 			chatFreshLayout.setRefreshing(false);
 		}
