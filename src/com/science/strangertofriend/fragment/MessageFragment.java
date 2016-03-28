@@ -169,8 +169,6 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 				String clientName = oConvsData.getConvsClientName();
 				Intent intent = new Intent(getActivity(),
 						com.science.strangertofriend.ui.ChatActivity.class);
-				Toast.makeText(getContext(), clientName, Toast.LENGTH_SHORT)
-						.show();
 				intent.putExtra("taskPubliName", clientName);
 				getActivity().startActivity(intent);
 			}
@@ -191,18 +189,8 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 				if (e == null && list.size() > 0 && null != list) {
 
 					for (int i = 0; i < list.size(); i++) {
-						// if ((boolean)
-						// list.get(i).getAttribute("requestState") == false
-						// && currentClient.equals(list.get(i)
-						// .getAttribute("request"))) {
-						//
-						// }
 						// if (list.get(i).getCreator()
 						// .equals(AVUser.getCurrentUser().getUsername())) {
-						// allConvsList.add(list.get(i));
-
-						Toast.makeText(getContext(), "" + list.size(),
-								Toast.LENGTH_SHORT).show();
 						getConvsClientName(list.get(i));
 
 						// }
@@ -271,8 +259,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 					chatConversationAdapter.reFresh(allConvsDataList);
 					chatConversationAdapter.notifyDataSetChanged();
 				} else {
-					Toast.makeText(getContext(), e.toString(),
-							Toast.LENGTH_SHORT).show();
+					System.out.println(e.toString());
 				}
 			}
 		});

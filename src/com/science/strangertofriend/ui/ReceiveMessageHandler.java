@@ -74,7 +74,7 @@ public class ReceiveMessageHandler extends
 		// messageList.add(new
 		// ChatMessage(ChatMessage.MESSAGE_FROM,((AVIMTextMessage)
 		// message).getText()));
-		// thread.start();
+		thread.start();
 		sendNotification(message, conversation);
 	}
 
