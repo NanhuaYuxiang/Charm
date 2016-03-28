@@ -22,6 +22,28 @@
             android:minHeight="55dp"
             android:minWidth="55dp"
             android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/convsClientNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textSize="18sp" />
+        
+        <ImageButton
+            android:id="@+id/chatAdd_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_detials"
+            android:contentDescription="@null"
+            android:minHeight="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:minWidth="30dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside" />
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -29,12 +51,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
-
-        <ListView
+        <ListView
             android:id="@+id/chatListView"
             android:layout_width="match_parent"
-            android:divider="@null"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:divider="#00000000"
+            android:dividerHeight="20dip"
+            android:transcriptMode="normal" >
         </ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
@@ -53,14 +76,15 @@
             android:paddingLeft="18dp"
             android:paddingTop="5dp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/chatBtn"
-            android:layout_width="55dp"
+            android:layout_width="wrap_content"
             android:layout_height="55dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/btn_send"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" />
+            android:background="@null"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:src="@drawable/btn_send" />
     </LinearLayout>
 
 </LinearLayout>

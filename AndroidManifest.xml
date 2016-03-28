@@ -29,6 +29,7 @@
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 个推SDK权限配置开始 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -63,6 +64,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".guide.GuideActivity" >
+        </activity>
+        <activity android:name="com.science.strangertofriend.ui.CallActivity" >
         </activity>
         <activity android:name=".MainActivity" >
         </activity>
@@ -100,7 +103,9 @@
         </activity>
         <activity android:name=".ui.ContactActivity" >
         </activity>
-        <activity android:name="com.science.strangertofriend.ui.ChatActivity" >
+        <activity
+            android:name="com.science.strangertofriend.ui.ChatActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity android:name=".ui.RankingActivity" >
         </activity>

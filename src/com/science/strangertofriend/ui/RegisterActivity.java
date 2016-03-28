@@ -196,7 +196,6 @@ public class RegisterActivity extends BaseActivity {
 					AVService.uploadImage(mUsernameString, mEmailString,
 							avaterUrl, gender);
 					
-					
 					Intent mainIntent = new Intent(RegisterActivity.this,
 							MainActivity.class);
 					mainIntent.putExtra("avater", mAvateritmap);

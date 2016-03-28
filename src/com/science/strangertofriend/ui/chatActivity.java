@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.GetDataCallback;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
@@ -22,6 +24,10 @@ import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.ChatAdapter;
 import com.science.strangertofriend.bean.ChatMessage;
@@ -29,16 +35,18 @@ import com.science.strangertofriend.bean.ChatMessage;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChatActivity extends Activity implements OnClickListener {
@@ -51,83 +59,118 @@ public class ChatActivity extends Activity implements OnClickListener {
 	private EditText chatEt;
 	private SwipeRefreshLayout chatFreshLayout;
 	private ListView chatListView;
-	private Button chatImgBtn;
+	private ImageButton chatImgBtn;
 	private AVIMConversation connecation;
 	private List<ChatMessage> messageList = new ArrayList<ChatMessage>();
 	private ChatMessage chatMessage = new ChatMessage();
 	private ChatAdapter chatAdapter;
-	private Bitmap currentClientBitmap, otherClientBitmap;
-	private AVIMClient currentClient, otherClient;
+	private AVIMClient currentClient;
 	private AVIMTextMessage message;
 	private String sendMessage;
+	private TextView convsClientNameTv;
+	private List<AVIMMessage> messagePageList = new ArrayList<AVIMMessage>();
+	private boolean messageIsNull = false;
+	private ImageButton chatAddBtn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
 		instance = this;
 		init();
-		// chatMessageAddOtherClientBitmap(otherClientName);
 
 	}
 
 	public void init() {
 		intent = getIntent();
+
 		AVUser user = AVUser.getCurrentUser();
 		AVFile file = (AVFile) user.get("userAvater");
+		currentClientName = user.getUsername();
+		downloadAvaterBitmaps(currentClientName, file.getUrl());
+		currentClient = AVIMClient.getInstance(currentClientName);
 
-		currentClientName = user.getString("username");
 		otherClientName = intent.getStringExtra("taskPubliName");
+		chatMessageAddOtherClientBitmap(otherClientName);
+		convsClientNameTv = (TextView) findViewById(R.id.convsClientNameTv);
+		convsClientNameTv.setText(otherClientName);
+
 		chatBackImg = (ImageView) findViewById(R.id.chatback_img);
+		chatAddBtn = (ImageButton) findViewById(R.id.chatAdd_img);
 		chatEt = (EditText) findViewById(R.id.chatEt);
-		// chatEt.setEnabled(false);
+
 		chatFreshLayout = (SwipeRefreshLayout) findViewById(R.id.chatFreshLayout);
-		chatFreshLayout.setEnabled(false);
+		chatFreshLayout.setColorSchemeResources(
+				android.R.color.holo_blue_light,
+				android.R.color.holo_red_light,
+				android.R.color.holo_orange_light,
+				android.R.color.holo_green_light);
+		chatFreshLayout.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				// AVIMMessage message = chatAdapter.getFirstMssage();
+				AVIMMessage oldMessage = messagePageList.get(messagePageList
+						.size() - 1);
+				searchPageSize(oldMessage);
+
+			}
+		});
 		chatListView = (ListView) findViewById(R.id.chatListView);
-		chatImgBtn = (Button) findViewById(R.id.chatBtn);
+		chatImgBtn = (ImageButton) findViewById(R.id.chatBtn);
+
+		chatAdapter = new ChatAdapter(this, messageList);
+		chatAdapter.addChatMessage(chatMessage);
+		chatListView.setAdapter(chatAdapter);
 
 		chatBackImg.setOnClickListener(this);
 		chatImgBtn.setOnClickListener(this);
+		chatAddBtn.setOnClickListener(this);
 
-		currentClient = AVIMClient.getInstance(currentClientName);
-		otherClient = AVIMClient.getInstance(otherClientName);
-		// chatMessageAddCurrentClientBitmap(file);
-		getConversation(otherClientName);
+		currentClient.open(new AVIMClientCallback() {
 
+			@Override
+			public void done(AVIMClient arg0, AVException e) {
+				if (e == null) {
+					getConversation(otherClientName);
+				}
+			}
+		});
 	}
 
 	public void sendMessageToClient() {
-		
+
 		currentClient.open(new AVIMClientCallback() {
-			
+
 			@Override
 			public void done(AVIMClient client, AVException e) {
-				// TODO Auto-generated method stub
-				if(e==null){
+				if (e == null) {
 					sendMessage = chatEt.getText().toString().trim();
 					message = new AVIMTextMessage();
 					message.setText(sendMessage);
 					if (!TextUtils.isEmpty(sendMessage)) {
-						Toast.makeText(ChatActivity.this, sendMessage, 1).show();
-						connecation.sendMessage(message, new AVIMConversationCallback() {
+						connecation.sendMessage(message,
+								new AVIMConversationCallback() {
 
-							@Override
-							public void done(AVException e) {
-								// TODO Auto-generated method stub
-								if (e == null) {
-									Toast.makeText(ChatActivity.this, "发送成功",
-											Toast.LENGTH_SHORT).show();
-									chatEt.setText("");
-									messageList.add(new ChatMessage(ChatMessage.MESSAGE_TO,
-											sendMessage));
-									chatAdapter.notifyDataSetChanged();
-								}
-							}
-						});
+									@Override
+									public void done(AVException e) {
+										if (e == null) {
+											chatEt.setText("");
+											messageList.add(new ChatMessage(
+													ChatMessage.MESSAGE_TO,
+													sendMessage));
+											chatAdapter.reFresh(messageList);
+											scrollToBottom();
+										} else {
+											Toast.makeText(ChatActivity.this,
+													"发送消息失败",
+													Toast.LENGTH_SHORT).show();
+										}
+									}
+								});
 					} else {
-						Toast.makeText(ChatActivity.this, "消息不能为空", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(ChatActivity.this, "消息不能为空",
+								Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
@@ -135,25 +178,106 @@ public class ChatActivity extends Activity implements OnClickListener {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		if (null != chatListView && null != chatAdapter) {
+			if (null != messageList && messageList.size() > 0) {
+				chatAdapter.reFresh(messageList);
+				scrollToBottom();
+			}
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (null != chatListView && null != chatAdapter) {
+			if (null != messageList && messageList.size() > 0) {
+				chatAdapter.reFresh(messageList);
+				scrollToBottom();
+			}
+		}
+	}
+
+	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.chatback_img:
 			finish();
 			break;
 		case R.id.chatBtn:
-			sendMessageToClient();
+			if (isFastDoubleClick()) {
+				sendMessageToClient();
+				scrollToBottom();
+			} else {
+				Toast.makeText(this, "消息发送不能相隔一秒", Toast.LENGTH_SHORT).show();
+			}
+		case R.id.chatAdd_img:
+			// if ((boolean) connecation.getAttribute("requestState") ==
+			// false||connecation.getAttribute("requestState")==null) {
+			SweetAlertDialog addDialog = new SweetAlertDialog(this,
+					SweetAlertDialog.WARNING_TYPE);
+
+			addDialog.setTitleText("").setContentText("是否添加对方为好友？");
+			addDialog.setConfirmClickListener(new OnSweetClickListener() {
+
+				@Override
+				public void onClick(final SweetAlertDialog sweetAlertDialog) {
+					// TODO Auto-generated method stub
+//					HashMap<String, Object> attr = new HashMap<String, Object>();
+//					attr.put("request", otherClientName);
+//					attr.put("requestState", false);
+//					connecation.setAttributes(attr);
+//					connecation.updateInfoInBackground(new AVIMConversationCallback() {
+//						
+//						@Override
+//						public void done(AVException e) {
+//							// TODO Auto-generated method stub
+//							if (e == null) {
+//								sweetAlertDialog
+//										.setTitleText("")
+//										.setContentText("添加成功")
+//										.setConfirmClickListener(null)
+//										.changeAlertType(
+//												SweetAlertDialog.SUCCESS_TYPE);
+//							}
+//						}
+//					});
+//					connecation
+//							.fetchInfoInBackground(new AVIMConversationCallback() {
+//
+//								@Override
+//								public void done(AVException e) {
+//									// TODO Auto-generated method stub
+//									if (e == null) {
+//										sweetAlertDialog
+//												.setTitleText("")
+//												.setContentText("添加成功")
+//												.setConfirmClickListener(null)
+//												.changeAlertType(
+//														SweetAlertDialog.SUCCESS_TYPE);
+//									}
+//								}
+//							});
+					sweetAlertDialog
+					.setTitleText("")
+					.setContentText("该功能还在完善中......")
+					.setConfirmClickListener(null)
+					.changeAlertType(
+							SweetAlertDialog.SUCCESS_TYPE);
+
+				}
+			}).show();
+			
+			// } else {
+			// new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+			// .setTitleText("").setContentText("该用户已经是你的好友了")
+			// .setConfirmClickListener(null).show();
+			// }
+
 			break;
 		}
 
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		chatAdapter = new ChatAdapter(this, messageList);
-		chatAdapter.notifyDataSetChanged();
 	}
 
 	public static ChatActivity getCurrentActivity() {
@@ -168,6 +292,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 		return messageList;
 	}
 
+	public ListView getListView() {
+		return chatListView;
+	}
+
+	// 查询当前对话
 	public void getConversation(final String otherClientName) {
 		AVIMConversationQuery conversationQuery = currentClient.getQuery();
 		conversationQuery.withMembers(Arrays.asList(otherClientName), true);
@@ -176,18 +305,11 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void done(List<AVIMConversation> list, AVException e) {
-				// TODO Auto-generated method stub
 				if (e == null) {
 					if (list.size() > 0 && (null != list)) {
 						connecation = list.get(0);
-						Toast.makeText(ChatActivity.this, "获取到原来的Conver", 1)
-								.show();
 						chatFreshLayout.setEnabled(true);
-						fetchMessages();
-						chatAdapter = new ChatAdapter(ChatActivity.this,
-								messageList);
-						chatListView.setAdapter(chatAdapter);
-						chatAdapter.notifyDataSetChanged();
+						fetchMessages(connecation);
 					} else {
 						HashMap<String, Object> attributes = new HashMap<String, Object>();
 						attributes.put("conversationType", 1);
@@ -199,103 +321,230 @@ public class ChatActivity extends Activity implements OnClickListener {
 									public void done(
 											AVIMConversation conversation,
 											AVException e) {
-										// TODO Auto-generated method stub
 										if (e == null) {
-											Toast.makeText(ChatActivity.this,
-													"得到Conver", 1).show();
 											connecation = conversation;
 											chatFreshLayout.setEnabled(true);
-											fetchMessages();
-											chatAdapter = new ChatAdapter(
-													ChatActivity.this,
-													messageList);
-											chatListView
-													.setAdapter(chatAdapter);
-											chatAdapter.notifyDataSetChanged();
 										}
 									}
 								});
 					}
+					// scrollToBottom();
 				} else {
-					Toast.makeText(ChatActivity.this, "获取conver出现异常", 1).show();
 				}
 			}
 		});
 	}
 
-	public void fetchMessages() {
-		connecation.queryMessages(new AVIMMessagesQueryCallback() {
+	// 查询对话的消息
+	public void fetchMessages(AVIMConversation connecation) {
+		final int limit = 15;
+		connecation.queryMessages(limit, new AVIMMessagesQueryCallback() {
 
 			@Override
 			public void done(List<AVIMMessage> list, AVException e) {
-				// TODO Auto-generated method stub
-				if (e == null) {
+				if (e == null && list.size() > 0 && null != list) {
+					if (list.size() < limit) {
+						messageIsNull = true;
+					}
+					for (int j = 0; j < list.size(); j++) {
+						if (!list.get(j).equals(null)) {
+							AVIMMessage oldMessage = list.get(j);
+							messagePageList.add(oldMessage);
+							break;
+						}
+					}
 					for (int i = 0; i < list.size(); i++) {
 						if (list.get(i).getFrom().equals(otherClientName)) {
 							messageList.add(new ChatMessage(
 									ChatMessage.MESSAGE_FROM,
 									((AVIMTextMessage) list.get(i)).getText()));
-							chatAdapter.notifyDataSetChanged();
 						} else {
 							messageList.add(new ChatMessage(
 									ChatMessage.MESSAGE_TO,
 									((AVIMTextMessage) list.get(i)).getText()));
-							chatAdapter.notifyDataSetChanged();
 						}
 					}
+					chatAdapter.reFresh(messageList);
+					scrollToBottom();
 				}
 			}
 		});
 	}
 
-	public void chatMessageAddCurrentClientBitmap(AVFile file) {
-		if (file.isDirty()) {
-			file.getDataInBackground(new GetDataCallback() {
+	public void chatMessageAddOtherClientBitmap(final String otherClientName) {
+		AVQuery<AVUser> userQuery = AVUser.getQuery();
+		userQuery.whereEqualTo("username", otherClientName);
+		userQuery.findInBackground(new FindCallback<AVUser>() {
+			@Override
+			public void done(List<AVUser> list, AVException e) {
+				if (e == null && list != null && list.size() > 0) {
+					AVUser user = (AVUser) list.get(0);
+					AVFile file = (AVFile) user.get("userAvater");
+					downloadAvaterBitmaps(otherClientName, file.getUrl());
 
-				@Override
-				public void done(byte[] data, AVException e) {
-					// TODO Auto-generated method stub
-					if (e == null) {
-						currentClientBitmap = BitmapFactory.decodeByteArray(
-								data, 0, data.length);
-						// chatMessage.setCurrentClientBitmap(currentClientBitmap);
-					}
+				} else {
+					Toast.makeText(ChatActivity.this, e.toString(),
+							Toast.LENGTH_SHORT).show();
 				}
-			});
+			}
+		});
+	}
+
+	public void scrollToBottom() {
+		chatListView.smoothScrollToPosition(messageList.size() - 1);
+		((BaseAdapter) chatListView.getAdapter()).notifyDataSetChanged();
+	}
+
+	public void downloadAvaterBitmaps(final String username, final String url) {
+		DisplayImageOptions option = new DisplayImageOptions.Builder()
+				.showImageForEmptyUri(R.drawable.default_load)// 设置图片Uri为空或是错误的时候显示的图片
+				.showImageOnFail(R.drawable.default_load)// 设置图片加载或解码过程中发生错误显示的图片
+				.bitmapConfig(Bitmap.Config.RGB_565).build();
+		// String
+		// urlString=hash_avaterUrls.get(taskNearBy.get(i).getPublisherName());
+		ImageLoader.getInstance().loadImage(url, option,
+				new ImageLoadingListener() {
+					@Override
+					public void onLoadingStarted(String arg0, View arg1) {
+					}
+
+					@Override
+					public void onLoadingFailed(String arg0, View arg1,
+							FailReason arg2) {
+					}
+
+					@Override
+					public void onLoadingComplete(String arg0, View arg1,
+							Bitmap bitmap) {
+						if (username.equals(AVUser.getCurrentUser()
+								.getUsername())) {
+							chatMessage.setCurrentClientBitmap(bitmap);
+						} else {
+							chatMessage.setOtherClientBitmap(bitmap);
+						}
+					}
+
+					@Override
+					public void onLoadingCancelled(String arg0, View arg1) {
+
+					}
+				});
+	}
+
+	private long lastClickTime;
+
+	public boolean isFastDoubleClick() {
+		long time = System.currentTimeMillis();
+		if (time - lastClickTime > 1000) {
+			return true;
+		} else {
+			lastClickTime = time;
+			return false;
 		}
 	}
 
-	public void chatMessageAddOtherClientBitmap(String otherClientName) {
-		AVQuery<AVObject> userQuery = new AVQuery<AVObject>("User");
-		userQuery.whereEqualTo("username", otherClientName);
-		userQuery.findInBackground(new FindCallback<AVObject>() {
+	public void searchPageSize(AVIMMessage oldMessage) {
+		if (!messageIsNull) {
+			Toast.makeText(ChatActivity.this, "" + 1, Toast.LENGTH_SHORT)
+					.show();
+			connecation.queryMessages(oldMessage.getMessageId(),
+					oldMessage.getTimestamp(), 20,
+					new AVIMMessagesQueryCallback() {
 
-			@Override
-			public void done(List<AVObject> list, AVException e) {
-				// TODO Auto-generated method stub
-				if (e != null) {
-					AVUser user = (AVUser) list.get(0);
-					AVFile file = (AVFile) user.get("userAvater");
-					if (file.isDirty()) {
-
-						file.getDataInBackground(new GetDataCallback() {
-
-							@Override
-							public void done(byte[] data, AVException e) {
-								// TODO Auto-generated method stub
-								if (e != null) {
-									otherClientBitmap = BitmapFactory
-											.decodeByteArray(data, 0,
-													data.length);
-									// chatMessage
-									// .setOtherClientBitmap(otherClientBitmap);
+						@Override
+						public void done(List<AVIMMessage> list, AVException e) {
+							// TODO Auto-generated method
+							Toast.makeText(ChatActivity.this, "xiao1",
+									Toast.LENGTH_SHORT).show();
+							if (e == null && null != list && list.size() > 0
+									&& !list.isEmpty()) {
+								Toast.makeText(ChatActivity.this, "" + 2,
+										Toast.LENGTH_SHORT).show();
+								for (int j = 0; j < list.size(); j++) {
+									if (!list.get(j).equals(null)) {
+										AVIMMessage oldMessage = list.get(j);
+										messagePageList.add(oldMessage);
+										Toast.makeText(ChatActivity.this,
+												"" + 3, Toast.LENGTH_SHORT)
+												.show();
+										break;
+									}
 								}
-							}
-						});
-					}
 
-				}
-			}
-		});
+								for (int i = 0; i < list.size(); i++) {
+									if (list.size() < 20) {
+										Toast.makeText(ChatActivity.this,
+												"没有历史消息了", Toast.LENGTH_SHORT)
+												.show();
+										messageIsNull = true;
+									}
+									if (list.get(i).getFrom()
+											.equals(otherClientName)) {
+										messageList
+												.add(0,
+														new ChatMessage(
+																ChatMessage.MESSAGE_FROM,
+																((AVIMTextMessage) list
+																		.get(i))
+																		.getText()));
+										Toast.makeText(ChatActivity.this,
+												"" + 4, Toast.LENGTH_SHORT)
+												.show();
+										break;
+									} else {
+										messageList.add(
+												0,
+												new ChatMessage(
+														ChatMessage.MESSAGE_TO,
+														((AVIMTextMessage) list
+																.get(i))
+																.getText()));
+										Toast.makeText(ChatActivity.this,
+												"" + 5, Toast.LENGTH_SHORT)
+												.show();
+									}
+								}
+								chatAdapter = new ChatAdapter(
+										ChatActivity.this, messageList);
+								chatAdapter.reFresh(messageList);
+								chatAdapter = (ChatAdapter) chatListView
+										.getAdapter();
+								// if (list.size() < 20) {
+								// chatListView.smoothScrollByOffset(list
+								// .size() - 1);
+								//
+								// } else {
+								// chatListView.smoothScrollByOffset(19);
+								// }
+								Toast.makeText(ChatActivity.this, "" + 6,
+										Toast.LENGTH_SHORT).show();
+								chatAdapter.notifyDataSetChanged();
+								chatFreshLayout.setRefreshing(false);
+							} else if (null != list && list.size() > 0
+									&& !list.isEmpty()) {
+								Toast.makeText(ChatActivity.this, "没有历史消息了",
+										Toast.LENGTH_SHORT).show();
+								Toast.makeText(ChatActivity.this, "" + 7,
+										Toast.LENGTH_SHORT).show();
+								chatFreshLayout.setRefreshing(false);
+
+							} else if (e != null) {
+								Toast.makeText(ChatActivity.this, e.toString(),
+										Toast.LENGTH_SHORT).show();
+								Toast.makeText(ChatActivity.this, "" + 8,
+										Toast.LENGTH_SHORT).show();
+								chatFreshLayout.setRefreshing(false);
+
+							}
+						}
+					});
+		} else {
+			Toast.makeText(ChatActivity.this, "没有历史消息了", Toast.LENGTH_SHORT)
+					.show();
+			Toast.makeText(ChatActivity.this, "" + 9, Toast.LENGTH_SHORT)
+					.show();
+			chatFreshLayout.setRefreshing(false);
+		}
+
 	}
 }

@@ -24,6 +24,8 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.science.strangertofriend.AppManager;
 import com.science.strangertofriend.MainActivity;
 import com.science.strangertofriend.R;
@@ -184,13 +186,24 @@ public class LoginActivity extends BaseActivity {
 						if (user != null) {
 
 							mMyDialog.successDialog("µÇÂ½³É¹¦!");
-							Intent mainIntent = new Intent(LoginActivity.this,
-									MainActivity.class);
+							AVIMClient currentClient = AVIMClient.getInstance(user.getString("username"));
+							currentClient.open(new AVIMClientCallback() {
+								
+								@Override
+								public void done(AVIMClient arg0, AVException e) {
+									// TODO Auto-generated method stub
+									if(e==null){
+										Intent mainIntent = new Intent(LoginActivity.this,
+												MainActivity.class);
+										startActivity(mainIntent);
+										LoginActivity.this.finish();
+									}
+								}
+							});
 							// mainIntent.putExtra("avater",
 							// ((BitmapDrawable) mCameraAvatar
 							// .getDrawable()).getBitmap());
-							startActivity(mainIntent);
-							LoginActivity.this.finish();
+							
 						} else {
 							mMyDialog
 									.errorDialog(

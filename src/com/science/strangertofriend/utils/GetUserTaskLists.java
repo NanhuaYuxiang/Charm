@@ -13,6 +13,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.LogUtil.log;
 import com.science.strangertofriend.adapter.Task_Accept_Complete_Adapter;
 import com.science.strangertofriend.adapter.Task_Accept_UnComplete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_Complete_Adapter;
@@ -91,6 +92,7 @@ public class GetUserTaskLists {
 	 * 获取数据
 	 */
 	private void getValues() {
+
 		while (true) {
 			try {
 				// 移除数据

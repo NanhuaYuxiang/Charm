@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/title_bg"
-        android:minHeight="?attr/actionBarSize"
-        android:orientation="horizontal" >
+        android:minHeight="?attr/actionBarSize" >
 
         <com.science.strangertofriend.widget.RippleView
             android:id="@+id/camera_avatar_rippleView"
@@ -30,16 +29,26 @@
                 android:id="@+id/drawer_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
                 android:layout_centerVertical="true"
+                android:layout_gravity="start"
                 android:adjustViewBounds="true"
                 android:contentDescription="@null"
                 android:minHeight="?attr/actionBarSize"
                 android:minWidth="?attr/actionBarSize"
-                
                 android:scaleType="centerInside" />
-
         </com.science.strangertofriend.widget.RippleView>
+
+        <Button
+            android:id="@+id/btnCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/camera_avatar_rippleView"
+            android:background="@drawable/title_bg"
+            android:minHeight="?attr/actionBarSize"
+            android:minWidth="?attr/actionBarSize"
+            android:text="拨号"
+            android:textColor="#fff"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/title"

@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,6 +53,7 @@ import com.science.strangertofriend.fragment.MessageFragment;
 import com.science.strangertofriend.fragment.ShakeFragment;
 import com.science.strangertofriend.fragment.UserFragment;
 import com.science.strangertofriend.ui.AlterActivity;
+import com.science.strangertofriend.ui.CallFragment;
 import com.science.strangertofriend.ui.SettingActivity;
 import com.science.strangertofriend.ui.Task_List_Accept_Complete_ListView_Activity;
 import com.science.strangertofriend.utils.AVService;
@@ -80,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements
 	private UserFragment mUserFragment;
 	private MessageFragment mMessageFragment;
 	private AddressListFragment mAddressListFragment;
+	private CallFragment callFragement;
 	// private TaskFragment mTaskFragment;
 	@SuppressWarnings("rawtypes")
 	private ViewAnimator mViewAnimator;
@@ -93,6 +96,7 @@ public class MainActivity extends ActionBarActivity implements
 	private DialogFragment mMenuDialogFragment;
 	private FragmentManager mFragmentManager;
 	private ImageView mTitleMore;
+	private Button btnCall;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +125,7 @@ public class MainActivity extends ActionBarActivity implements
 		initListener();
 		setActionBar();
 		createMenuList();
+		
 		// mMenuList 为菜单每个项的内容
 		// contentFragment 为主体显示继承自Fragment 并实现了ScreenShotable接口
 		// 最后一个参数为ViewAnimator.ViewAnimatorListener
@@ -187,6 +192,26 @@ public class MainActivity extends ActionBarActivity implements
 		// 上下文菜单
 		mTitleMore = (ImageView) findViewById(R.id.title_more);
 		mFragmentManager = getSupportFragmentManager();
+		btnCall = (Button) findViewById(R.id.btnCall);
+		btnCall.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				switch (v.getId()) {
+				case R.id.btnCall:
+					callFragement = new CallFragment();
+					getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, callFragement).commit();
+//					Intent intentCall = new Intent(MainActivity.this,CallActivity.class);
+//					startActivity(intentCall);
+					break;
+
+				default:
+					break;
+				}
+				
+			}
+		});
 		initMenuFragment();
 	}
 
@@ -207,6 +232,9 @@ public class MainActivity extends ActionBarActivity implements
 
 		MenuObject close = new MenuObject();
 		close.setResource(R.drawable.close_drawer);
+		
+//		MenuObject call = new MenuObject("拨号");
+//		call.setResource(R.drawable.close_drawer);
 
 		MenuObject set = new MenuObject("应用设置");
 		set.setResource(R.drawable.set);
@@ -217,7 +245,9 @@ public class MainActivity extends ActionBarActivity implements
 		MenuObject quit = new MenuObject("退出应用");
 		quit.setResource(R.drawable.quit);
 
+		
 		menuObjects.add(close);
+//		menuObjects.add(call);
 		menuObjects.add(set);
 		menuObjects.add(user);
 		menuObjects.add(quit);
@@ -391,8 +421,7 @@ public class MainActivity extends ActionBarActivity implements
 			return replaceAddressListFragment(screenShotable, topPosition);
 		case "Task":
 			new GetUserTaskLists(this);
-//			startActivity(new Intent(MainActivity.this,
-//					Task_List_Accept_Complete_ListView_Activity.class));
+
 		default:
 			return screenShotable;
 		}
@@ -436,11 +465,14 @@ public class MainActivity extends ActionBarActivity implements
 		case 0:
 			break;
 
+//		case 1:
+//			Intent intentCall = new Intent(this,CallActivity.class);
+//			startActivity(intentCall);
+//			break;
 		case 1:
 			Intent intentSet = new Intent(this, SettingActivity.class);
 			startActivity(intentSet);
 			break;
-
 		case 2:
 			Intent intentAlter = new Intent(this, AlterActivity.class);
 			startActivityForResult(intentAlter, 1);

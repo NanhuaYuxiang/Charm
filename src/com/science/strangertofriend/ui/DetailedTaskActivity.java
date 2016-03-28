@@ -40,6 +40,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 	private TextView taskTheme,taskType,taskPrice,taskDescription,taskPubliName,taskLocation,taskEndTime;
 	private Button contactTaskPeopleBtn,acceptTaskBtn;
 	private Intent intent;
+
 	private CircleImageView mCircleImageView;
 	private Task task;//从地图传过来的task对象，可用于获取发布人的AVUser对象，其他的都通过intent传递过来了
 	private AVUser pub_user;//任务发布人的AVUser对象
@@ -53,10 +54,12 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 		currentUser=AVUser.getCurrentUser();
 		
 		init();
+
 		
 		if(isTaskAccepted()){
 			acceptTaskBtn.setText("任务已被接受了哦");
 		}
+
 	}
 
 	@Override
@@ -83,9 +86,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 					public void onClick(SweetAlertDialog sweetAlertDialog) {
 						if(!isTaskBelongToMyself()){
 							acceptTask();
-							//Toast.makeText(DetailedTaskActivity.this, "接受成功", Toast.LENGTH_LONG).show();
 						}else {
-							//Toast.makeText(DetailedTaskActivity.this, "不可以接受自己的任务哦", Toast.LENGTH_LONG).show();
 							new SweetAlertDialog(DetailedTaskActivity.this,SweetAlertDialog.ERROR_TYPE)
 							.setTitleText("Sorry")
 							.setContentText("不可以接收自己的任务哦")
@@ -167,6 +168,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener{
 		});
 		acceptTaskBtn.setText("任务已接受");
 		
+
 		new SweetAlertDialog(DetailedTaskActivity.this, SweetAlertDialog.SUCCESS_TYPE)
 		.setTitleText("Good job!")
 		.setContentText("接收成功")
