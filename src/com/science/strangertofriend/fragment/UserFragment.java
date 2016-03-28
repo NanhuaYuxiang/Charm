@@ -147,8 +147,8 @@ public class UserFragment extends Fragment implements ScreenShotable {
 		int golds=AVUser.getCurrentUser().getInt("totalGolds");
 		Number golds2=AVUser.getCurrentUser().getNumber("totalGolds");
 		
-		
-		Log.i("golds",AVUser.getCurrentUser().getInt("credit")+ "");
+		user_totalGolds.setText(golds+"");
+		Log.i("golds",golds+ "");
 		//user_totalGolds.setText(golds);
 		
 		// AVQuery<AVObject> queryGolds=new AVQuery<AVObject>("_User");
