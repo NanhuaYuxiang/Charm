@@ -219,21 +219,49 @@ public class ChatActivity extends Activity implements OnClickListener {
 					SweetAlertDialog.WARNING_TYPE);
 
 			addDialog.setTitleText("").setContentText("是否添加对方为好友？");
-			addDialog.setConfirmClickListener(new OnSweetClickListener() {
+			addDialog.setCancelText("取消");
+			addDialog.setConfirmText("确定");
+			addDialog.showCancelButton(true);
+			addDialog.setCancelClickListener(new OnSweetClickListener() {
+
+				@Override
+				public void onClick(SweetAlertDialog sweetAlertDialog) {
+					// TODO Auto-generated method stub
+					sweetAlertDialog.dismiss();
+				}
+			}).setConfirmClickListener(new OnSweetClickListener() {
 
 				@Override
 				public void onClick(final SweetAlertDialog sweetAlertDialog) {
 					// TODO Auto-generated method stub
-					sweetAlertDialog
-					.setTitleText("")
-					.setContentText("该功能还在完善中......")
-					.setConfirmClickListener(null)
-					.changeAlertType(
-							SweetAlertDialog.SUCCESS_TYPE);
+					Boolean friendState = (Boolean) connecation.getAttribute("friendstate");
+					if(friendState){
+						sweetAlertDialog.setTitleText("")
+						.setContentText("已经是你的好友了")
+						.setConfirmClickListener(null)
+						.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+					}else{
+						connecation.setAttribute("conversationType", 1);
+						connecation.setAttribute("friendstate", false);
+						connecation.setAttribute("friendsender", currentClientName);
+						connecation.setAttribute("friendrequester", otherClientName);
+						connecation.updateInfoInBackground(new AVIMConversationCallback() {
+							
+							@Override
+							public void done(AVException e) {
+								// TODO Auto-generated method stub
+								if(e==null){
+									sweetAlertDialog.setTitleText("")
+									.setContentText("已经发送请求给对方")
+									.setConfirmClickListener(null)
+									.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+								}
+							}
+						});
+					}
 
 				}
 			}).show();
-			
 
 			break;
 		}
@@ -273,6 +301,9 @@ public class ChatActivity extends Activity implements OnClickListener {
 					} else {
 						HashMap<String, Object> attributes = new HashMap<String, Object>();
 						attributes.put("conversationType", 1);
+						attributes.put("friendsender", "");
+						attributes.put("friendrequester", "");
+						attributes.put("friendstate", false);
 						currentClient.createConversation(
 								Arrays.asList(otherClientName), attributes,
 								new AVIMConversationCreatedCallback() {

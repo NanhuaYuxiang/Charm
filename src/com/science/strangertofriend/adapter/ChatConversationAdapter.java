@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class ChatConversationAdapter extends BaseAdapter{
 	private List<OneConversationData> convsDataList;
 	private CircleImageView convsImg;
 	private TextView  convsNameTv,convsLastMessage;
+	private Button convsBtn;
 	
 	public ChatConversationAdapter(Context context,List<OneConversationData> convsDataList){
 		this.context = context;
@@ -63,17 +65,30 @@ public class ChatConversationAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		view = LayoutInflater.from(context).inflate(R.layout.conversation_adapter, null);
-		convsImg = (CircleImageView) view.findViewById(R.id.convsImg);
-		if((convsDataList.get(position).getconvsClientBitmap())==null){
+		if(convsDataList.get(position).getfriendConvState()){
+			convsImg = (CircleImageView) view.findViewById(R.id.convsImg);
 			convsImg.setImageResource(R.drawable.app_logo);
+			convsNameTv = (TextView) view.findViewById(R.id.convsNameTv);
+			convsLastMessage = (TextView) view.findViewById(R.id.convsLastMessage);
+			convsNameTv.setText(convsDataList.get(position).getConvsClientName());
+			convsLastMessage.setText(convsDataList.get(position).getLastMessage());
+			convsBtn = (Button) view.findViewById(R.id.convsBtn);
+			convsBtn.setVisibility(View.VISIBLE);
 		}else{
-			convsImg.setImageBitmap(convsDataList.get(position).getconvsClientBitmap());
+			convsImg = (CircleImageView) view.findViewById(R.id.convsImg);
+			if((convsDataList.get(position).getconvsClientBitmap())==null){
+				convsImg.setImageResource(R.drawable.app_logo);
+			}else{
+				convsImg.setImageBitmap(convsDataList.get(position).getconvsClientBitmap());
+			}
+			convsNameTv = (TextView) view.findViewById(R.id.convsNameTv);
+			convsLastMessage = (TextView) view.findViewById(R.id.convsLastMessage);
+			convsNameTv.setText(convsDataList.get(position).getConvsClientName());
+			convsLastMessage.setText(convsDataList.get(position).getLastMessage());
+			return view;
 		}
-		convsNameTv = (TextView) view.findViewById(R.id.convsNameTv);
-		convsLastMessage = (TextView) view.findViewById(R.id.convsLastMessage);
-		convsNameTv.setText(convsDataList.get(position).getConvsClientName());
-		convsLastMessage.setText(convsDataList.get(position).getLastMessage());
 		return view;
+		
 	}
 
 }

@@ -13,6 +13,7 @@ public class OneConversationData {
 	private String lastMessage = "";
 	private Bitmap convsClientBitmap;
 	private Context con;
+	private Boolean friendConvState =false;
 	public OneConversationData(String convsClientName,String lastMessage,Bitmap convsClientBitmap){
 		this.convsClientName = convsClientName;
 		this.lastMessage = lastMessage;
@@ -45,6 +46,14 @@ public class OneConversationData {
 	
 	public Bitmap getconvsClientBitmap(){
 		return convsClientBitmap;
+	}
+	
+	public void setfriendConvState(Boolean friendConvState){
+		this.friendConvState = friendConvState;
+	}
+	
+	public Boolean getfriendConvState(){
+		return friendConvState;
 	}
 	
 }

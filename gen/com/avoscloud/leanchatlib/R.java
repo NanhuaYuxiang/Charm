@@ -593,7 +593,7 @@ public final class R {
 		public static final int title_more = 0x7f02015f;
 	}
 	public static final class id {
-		public static final int action0 = 0x7f0c0157;
+		public static final int action0 = 0x7f0c0158;
 		public static final int action_bar = 0x7f0c004d;
 		public static final int action_bar_activity_content = 0x7f0c0003;
 		public static final int action_bar_container = 0x7f0c004c;
@@ -602,7 +602,7 @@ public final class R {
 		public static final int action_bar_subtitle = 0x7f0c0031;
 		public static final int action_bar_title = 0x7f0c0030;
 		public static final int action_context_bar = 0x7f0c004e;
-		public static final int action_divider = 0x7f0c015b;
+		public static final int action_divider = 0x7f0c015c;
 		public static final int action_menu_divider = 0x7f0c0005;
 		public static final int action_menu_presenter = 0x7f0c0006;
 		public static final int action_mode_bar = 0x7f0c004a;
@@ -621,7 +621,7 @@ public final class R {
 		public static final int bmapView = 0x7f0c00e7;
 		public static final int bottomLayout = 0x7f0c00e2;
 		public static final int buttonPanel = 0x7f0c0043;
-		public static final int cancel_action = 0x7f0c0158;
+		public static final int cancel_action = 0x7f0c0159;
 		public static final int chatAddLayout = 0x7f0c00bf;
 		public static final int chatBottomLeftLayout = 0x7f0c00e4;
 		public static final int chatBottomRightLayout = 0x7f0c00ca;
@@ -633,7 +633,7 @@ public final class R {
 		public static final int chat_rectangle = 0x7f0c0027;
 		public static final int chat_simpleRipple = 0x7f0c0028;
 		public static final int checkbox = 0x7f0c0045;
-		public static final int chronometer = 0x7f0c015d;
+		public static final int chronometer = 0x7f0c015e;
 		public static final int collapseActionView = 0x7f0c001d;
 		public static final int contentLayout = 0x7f0c00d8;
 		public static final int contentPanel = 0x7f0c003e;
@@ -648,7 +648,7 @@ public final class R {
 		public static final int emotionImageView = 0x7f0c00d5;
 		public static final int emotionPager = 0x7f0c00c4;
 		public static final int end = 0x7f0c0024;
-		public static final int end_padder = 0x7f0c0162;
+		public static final int end_padder = 0x7f0c0163;
 		public static final int expand_activities_button = 0x7f0c0034;
 		public static final int expanded_menu = 0x7f0c0044;
 		public static final int gridview = 0x7f0c00d4;
@@ -661,15 +661,15 @@ public final class R {
 		public static final int image = 0x7f0c0035;
 		public static final int imageBtn = 0x7f0c00d3;
 		public static final int imageView = 0x7f0c00d6;
-		public static final int info = 0x7f0c0161;
+		public static final int info = 0x7f0c0162;
 		public static final int layout = 0x7f0c0073;
 		public static final int leftContainer = 0x7f0c00ce;
-		public static final int line1 = 0x7f0c015c;
-		public static final int line3 = 0x7f0c015f;
+		public static final int line1 = 0x7f0c015d;
+		public static final int line3 = 0x7f0c0160;
 		public static final int listMode = 0x7f0c000d;
 		public static final int list_item = 0x7f0c0037;
 		public static final int locationView = 0x7f0c00df;
-		public static final int media_actions = 0x7f0c015a;
+		public static final int media_actions = 0x7f0c015b;
 		public static final int messageListView = 0x7f0c00e3;
 		public static final int middle = 0x7f0c0025;
 		public static final int multiply = 0x7f0c0017;
@@ -712,21 +712,21 @@ public final class R {
 		public static final int src_in = 0x7f0c001a;
 		public static final int src_over = 0x7f0c001b;
 		public static final int statusLayout = 0x7f0c00da;
-		public static final int status_bar_latest_event_content = 0x7f0c0159;
+		public static final int status_bar_latest_event_content = 0x7f0c015a;
 		public static final int status_send_failed = 0x7f0c00dd;
 		public static final int status_send_start = 0x7f0c00db;
 		public static final int status_send_succeed = 0x7f0c00dc;
 		public static final int submit_area = 0x7f0c0058;
 		public static final int swipe_message = 0x7f0c00e1;
 		public static final int tabMode = 0x7f0c000f;
-		public static final int text = 0x7f0c0160;
-		public static final int text2 = 0x7f0c015e;
+		public static final int text = 0x7f0c0161;
+		public static final int text2 = 0x7f0c015f;
 		public static final int textBtn = 0x7f0c00d2;
 		public static final int textContent = 0x7f0c00e0;
 		public static final int textEdit = 0x7f0c00c9;
 		public static final int textSpacerNoButtons = 0x7f0c0040;
 		public static final int textView = 0x7f0c00ed;
-		public static final int time = 0x7f0c013d;
+		public static final int time = 0x7f0c013e;
 		public static final int tips = 0x7f0c00ec;
 		public static final int title = 0x7f0c0039;
 		public static final int titleView = 0x7f0c00d0;
