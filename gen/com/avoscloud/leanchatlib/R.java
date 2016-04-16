@@ -587,10 +587,10 @@ public final class R {
 		public static final int emoji_wink = 0x7f0200eb;
 		public static final int emoji_worried = 0x7f0200ec;
 		public static final int emoji_yum = 0x7f0200ed;
-		public static final int notification_template_icon_bg = 0x7f02016b;
-		public static final int scanner_back_img = 0x7f020148;
-		public static final int title_bg = 0x7f02015e;
-		public static final int title_more = 0x7f02015f;
+		public static final int notification_template_icon_bg = 0x7f02016c;
+		public static final int scanner_back_img = 0x7f020149;
+		public static final int title_bg = 0x7f02015f;
+		public static final int title_more = 0x7f020160;
 	}
 	public static final class id {
 		public static final int action0 = 0x7f0c0158;

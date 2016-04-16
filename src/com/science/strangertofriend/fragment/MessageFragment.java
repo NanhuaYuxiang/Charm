@@ -220,6 +220,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	public Bitmap getBitmap() {
 		return null;
 	}
+	
 
 	public void getConvsClientName(AVIMConversation convs) {
 		if (convs.getMembers().get(0)
