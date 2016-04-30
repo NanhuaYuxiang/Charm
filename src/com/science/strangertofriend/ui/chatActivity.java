@@ -18,6 +18,7 @@ import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
@@ -31,6 +32,10 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.ChatAdapter;
 import com.science.strangertofriend.bean.ChatMessage;
+import com.science.strangetofriend.eventbus.AcceptEventBus;
+
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.ThreadMode;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -76,7 +81,8 @@ public class ChatActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-		instance = this;
+		instance = getCurrentActivity();
+		EventBus.getDefault().register(this);
 		init();
 
 	}
@@ -146,6 +152,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 			public void done(AVIMClient client, AVException e) {
 				if (e == null) {
 					sendMessage = chatEt.getText().toString().trim();
+					chatEt.setText("");
 					message = new AVIMTextMessage();
 					message.setText(sendMessage);
 					if (!TextUtils.isEmpty(sendMessage)) {
@@ -155,7 +162,6 @@ public class ChatActivity extends Activity implements OnClickListener {
 									@Override
 									public void done(AVException e) {
 										if (e == null) {
-											chatEt.setText("");
 											messageList.add(new ChatMessage(
 													ChatMessage.MESSAGE_TO,
 													sendMessage));
@@ -200,6 +206,13 @@ public class ChatActivity extends Activity implements OnClickListener {
 	}
 
 	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		EventBus.getDefault().unregister(this);
+	}
+
+	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.chatback_img:
@@ -219,21 +232,56 @@ public class ChatActivity extends Activity implements OnClickListener {
 					SweetAlertDialog.WARNING_TYPE);
 
 			addDialog.setTitleText("").setContentText("是否添加对方为好友？");
-			addDialog.setConfirmClickListener(new OnSweetClickListener() {
+			addDialog.setCancelText("取消");
+			addDialog.setConfirmText("确定");
+			addDialog.showCancelButton(true);
+			addDialog.setCancelClickListener(new OnSweetClickListener() {
+
+				@Override
+				public void onClick(SweetAlertDialog sweetAlertDialog) {
+					// TODO Auto-generated method stub
+					sweetAlertDialog.dismiss();
+				}
+			}).setConfirmClickListener(new OnSweetClickListener() {
 
 				@Override
 				public void onClick(final SweetAlertDialog sweetAlertDialog) {
 					// TODO Auto-generated method stub
-					sweetAlertDialog
-					.setTitleText("")
-					.setContentText("该功能还在完善中......")
-					.setConfirmClickListener(null)
-					.changeAlertType(
-							SweetAlertDialog.SUCCESS_TYPE);
+					Boolean friendState = (Boolean) connecation
+							.getAttribute("friendstate");
+					if (friendState) {
+						sweetAlertDialog.setTitleText("")
+								.setContentText("已经是你的好友了")
+								.setConfirmClickListener(null)
+								.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+					} else {
+						connecation.setAttribute("conversationType", 1);
+						connecation.setAttribute("friendstate", false);
+						connecation.setAttribute("friendsender",
+								currentClientName);
+						connecation.setAttribute("friendrequester",
+								otherClientName);
+						connecation
+								.updateInfoInBackground(new AVIMConversationCallback() {
+
+									@Override
+									public void done(AVException e) {
+										// TODO Auto-generated method stub
+										if (e == null) {
+											sweetAlertDialog
+													.setTitleText("")
+													.setContentText("已经发送请求给对方")
+													.setConfirmClickListener(
+															null)
+													.changeAlertType(
+															SweetAlertDialog.SUCCESS_TYPE);
+										}
+									}
+								});
+					}
 
 				}
 			}).show();
-			
 
 			break;
 		}
@@ -273,6 +321,9 @@ public class ChatActivity extends Activity implements OnClickListener {
 					} else {
 						HashMap<String, Object> attributes = new HashMap<String, Object>();
 						attributes.put("conversationType", 1);
+						attributes.put("friendsender", "");
+						attributes.put("friendrequester", "");
+						attributes.put("friendstate", false);
 						currentClient.createConversation(
 								Arrays.asList(otherClientName), attributes,
 								new AVIMConversationCreatedCallback() {
@@ -481,5 +532,12 @@ public class ChatActivity extends Activity implements OnClickListener {
 			chatFreshLayout.setRefreshing(false);
 		}
 
+	}
+
+	public void onEventMainThread(AcceptEventBus eventBus) {
+		AVIMTypedMessage acceptMessage=eventBus.getMessage();
+		messageList.add(new ChatMessage(ChatMessage.MESSAGE_FROM, ((AVIMTextMessage) acceptMessage).getText()));
+		chatAdapter.reFresh(messageList);
+		scrollToBottom();
 	}
 }

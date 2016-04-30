@@ -3,36 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:orientation="horizontal" >
-    
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/convsImg"
-        android:layout_height="50dp"
         android:layout_width="50dp"
-        android:src="@drawable/app_logo"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        />
-    <LinearLayout 
+        android:layout_marginRight="10dp"
+        android:src="@drawable/app_logo" />
+
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="60dp"
-        android:orientation="vertical"
-        >
-        <TextView android:id="@+id/convsNameTv"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/convsNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textSize="20sp"
-            />
-        <TextView android:id="@+id/convsLastMessage"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/convsLastMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textSize="15sp"
-            android:textColor="#B0B0B0"/>
+            android:textColor="#B0B0B0"
+            android:textSize="15sp" />
     </LinearLayout>
-    
-    
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginEnd="10dp" >
+
+        <Button
+            android:id="@+id/convsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="同意"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </LinearLayout>

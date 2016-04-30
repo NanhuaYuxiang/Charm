@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
@@ -24,6 +25,9 @@ import com.avos.avospush.notification.NotificationCompat;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.ChatAdapter;
 import com.science.strangertofriend.bean.ChatMessage;
+import com.science.strangetofriend.eventbus.AcceptEventBus;
+
+import de.greenrobot.event.EventBus;
 
 public class ReceiveMessageHandler extends
 		AVIMTypedMessageHandler<AVIMTypedMessage> {
@@ -34,6 +38,10 @@ public class ReceiveMessageHandler extends
 	private Context context;
 	private AVIMTypedMessage receiveMessage;
 	private ListView chatListView;
+	private String message;
+	private String clientId = "";
+	private AVIMClient currentClient;
+	private AVIMTypedMessage acceptMessage;
 
 	public ReceiveMessageHandler(Context context) {
 		this.context = context;
@@ -44,38 +52,50 @@ public class ReceiveMessageHandler extends
 			AVIMConversation conversation, AVIMClient client) {
 		// TODO Auto-generated method stub
 		super.onMessage(message, conversation, client);
-		chatActivity = ChatActivity.getCurrentActivity();
-		messageList = chatActivity.getMessageList();
-		chatListView = chatActivity.getListView();
-		chatAdapter = (ChatAdapter) chatListView.getAdapter();
-		receiveMessage = message;
-		AVUser user = AVUser.getCurrentUser();
-		if (!(user.equals(null))) {
-			AVIMClient currentClient = AVIMClient.getInstance(user
-					.getString("username"));
-			currentClient.open(new AVIMClientCallback() {
-
-				@Override
-				public void done(AVIMClient arg0, AVException e) {
-					// TODO Auto-generated method stub
-					if (e == null) {
-						messageList.add(new ChatMessage(
-								ChatMessage.MESSAGE_FROM,
-								((AVIMTextMessage) receiveMessage).getText()));
-						chatAdapter.reFresh(messageList);
-						// chatListView.smoothScrollToPosition(messageList.size()-1);
-						chatActivity.scrollToBottom();
-
-					}
-				}
-			});
-		}
+		// chatActivity = ChatActivity.getCurrentActivity();
+		// messageList = chatActivity.getMessageList();
+		// chatListView = chatActivity.getListView();
+		// chatAdapter = (ChatAdapter) chatListView.getAdapter();
+		// receiveMessage=message;
+		// this.message = ((AVIMTextMessage)message).getText();
+		// System.out.println("发送的消息为："+this.message);
+		// EventBus.getDefault().post(new AcceptEventBus(this.message));
+		// acceptMessage = message;
+		getMessage(message);
+		// AVUser user = AVUser.getCurrentUser();
+		// if (!(user.equals(null))) {
+		// AVIMClient currentClient = AVIMClient.getInstance(user
+		// .getString("username"));
+		// currentClient.open(new AVIMClientCallback() {
+		//
+		// @Override
+		// public void done(AVIMClient arg0, AVException e) {
+		// // TODO Auto-generated method stub
+		// if (e == null) {
+		// messageList.add(new ChatMessage(
+		// ChatMessage.MESSAGE_FROM,
+		// ((AVIMTextMessage) receiveMessage).getText()));
+		// chatAdapter.reFresh(messageList);
+		// chatAdapter.notifyDataSetChanged();
+		// chatListView.smoothScrollToPosition(messageList.size()-1);
+		// chatActivity.scrollToBottom();
+		// System.out.println("有消息发送过来了");
+		// EventBus.getDefault().post(new AcceptEventBus(((AVIMTextMessage)
+		// receiveMessage).getText()));
+		//
+		//
+		// }else{
+		// System.out.println("异常是："+e.toString());
+		// }
+		// }
+		// });
+		// }
 
 		// messageList.add(new
 		// ChatMessage(ChatMessage.MESSAGE_FROM,((AVIMTextMessage)
 		// message).getText()));
-		thread.start();
-		sendNotification(message, conversation);
+		// thread.start();
+		// sendNotification(message, conversation);
 	}
 
 	public void sendNotification(AVIMTypedMessage message,
@@ -111,12 +131,16 @@ public class ReceiveMessageHandler extends
 		manager.notify(notificationId, notification);
 	}
 
-	Thread thread = new Thread(new Runnable() {
+	// Thread thread = new Thread(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// // TODO Auto-generated method stub
+	// chatAdapter.notifyDataSetChanged();
+	// }
+	// });
 
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			chatAdapter.notifyDataSetChanged();
-		}
-	});
+	public void getMessage(AVIMTypedMessage message) {
+		EventBus.getDefault().post(new AcceptEventBus(message));
+	}
 }

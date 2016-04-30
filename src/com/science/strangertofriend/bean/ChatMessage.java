@@ -12,8 +12,8 @@ public class ChatMessage extends AVIMMessage{
 	public static final int MESSAGE_DATE=2;
 	private int type;
 	private String content;
-	private Bitmap currentClientBitmap;
-	private Bitmap otherClientBitmap;
+	private Bitmap currentClientBitmap =null;
+	private Bitmap otherClientBitmap =null;
 	
 	public ChatMessage(int type,String content){
 		this.type=type;
@@ -41,11 +41,11 @@ public class ChatMessage extends AVIMMessage{
 	
 	public Bitmap getBitmap(int messageSendOrReceive){
 		if(messageSendOrReceive==MESSAGE_TO){
-			if(!this.currentClientBitmap.equals(null)){
+			if(!(this.currentClientBitmap==null)){
 				return this.currentClientBitmap;
 			}
-		}else{
-			if(!this.otherClientBitmap.equals(null)){
+		}else if(messageSendOrReceive==MESSAGE_FROM){
+			if(!(this.otherClientBitmap==null)){
 				return this.otherClientBitmap;
 			}
 		}

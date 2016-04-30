@@ -74,16 +74,6 @@ import com.science.strangertofriend.utils.AVService;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * @description 任务界面
- * 
- * @author 赵鑫
- * @school University of South China
- * @email apologizetoher@Gmail.com
- * @2015-10-21
- * 
- */
-
 public class MessageFragment extends Fragment implements ScreenShotable,
 		OnRefreshListener {
 
@@ -180,7 +170,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	public void getclientAllConversation() {
 		AVIMConversationQuery conversationQuery = currentClient.getQuery();
 		conversationQuery.limit(100);
-		 conversationQuery.whereEqualTo("conversationType", 1);
+		conversationQuery.whereEqualTo("conversationType", 1);
 
 		conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
 
@@ -189,6 +179,21 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 				if (e == null && list.size() > 0 && null != list) {
 
 					for (int i = 0; i < list.size(); i++) {
+//						String friendRequester = (String) list.get(i)
+//								.getAttribute("friendrequester");
+//						Boolean friendState = (Boolean) list.get(i)
+//								.getAttribute("friendstate");
+//						if (!friendRequester.equals("")
+//								&& friendRequester.equals(AVUser
+//										.getCurrentUser().getUsername())
+//								&& friendState == false) {
+//							
+//							OneConversationData oConvsData = new OneConversationData();
+//							oConvsData.setConvsClientName((String)list.get(i).getAttribute("friendsender"));
+//							oConvsData.setfriendConvState(true);
+//							oConvsData.setLastMessage("请求加为好友");
+//							allConvsDataList.add(oConvsData);	
+//						}
 						// if (list.get(i).getCreator()
 						// .equals(AVUser.getCurrentUser().getUsername())) {
 						getConvsClientName(list.get(i));
@@ -215,6 +220,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 	public Bitmap getBitmap() {
 		return null;
 	}
+	
 
 	public void getConvsClientName(AVIMConversation convs) {
 		if (convs.getMembers().get(0)
