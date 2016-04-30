@@ -43,7 +43,10 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -133,12 +136,24 @@ public class MainActivity extends ActionBarActivity implements
 		// 在ViewAnimator 中创建view 并添加到 linearLayout 菜单中.
 		mViewAnimator = new ViewAnimator<>(this, mMenuList, mShakeFragment,
 				mDrawerLayout, this);
+		//以下所做均为数据库被改动而做的数据同步操作
 		if (null != currentUser) {
-
+			
 			if (!AVService.isUserContainsAvater(currentUser)) {
 				 addAvaterToUser();
-				
 			}
+			AVQuery<AVObject> query=new AVQuery<AVObject>("userAccount");
+			query.whereEqualTo("username", AVUser.getCurrentUser().getUsername());
+			query.findInBackground(new FindCallback<AVObject>() {
+				
+				@Override
+				public void done(List<AVObject> arg0, AVException arg1) {
+						if(arg0.size()==0){
+							AVService.initaccount(AVUser.getCurrentUser().getUsername());
+						}
+				}
+			});
+			
 		}
 	}
 
@@ -421,7 +436,7 @@ public class MainActivity extends ActionBarActivity implements
 			return replaceAddressListFragment(screenShotable, topPosition);
 		case "Task":
 			new GetUserTaskLists(this);
-
+			
 		default:
 			return screenShotable;
 		}

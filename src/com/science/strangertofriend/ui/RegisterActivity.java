@@ -193,6 +193,7 @@ public class RegisterActivity extends BaseActivity {
 			public void done(AVException e) {
 				if (e == null) {
 					mMyDialog.successDialog("注册成功!");
+					
 					AVService.uploadImage(mUsernameString, mEmailString,
 							avaterUrl, gender);
 					
@@ -237,6 +238,7 @@ public class RegisterActivity extends BaseActivity {
 							AVService.signUp(mUsernameString, mPasswordString,
 									mEmailString, gender, installationId,
 									signUpCallback);
+							AVService.initaccount(mUsernameString);
 						} else {
 							// 保存失败，输出错误信息
 						}

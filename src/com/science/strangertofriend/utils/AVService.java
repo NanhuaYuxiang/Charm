@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import org.w3c.dom.UserDataHandler;
+
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -47,11 +49,42 @@ public class AVService {
 		user.setEmail(email);
 		user.put("gender", gender);
 		user.put("installationId", installationId);
-		user.put("totalGolds", 100);//每个人注册时候获得100香金
-		user.put("credit", 100);
+		//user.put("totalGolds", 100);//每个人注册时候获得100香金
+		//user.put("credit", 100);
 		user.signUpInBackground(signUpCallback);
+		
 	}
-
+	/**
+	 * 新建一个userAccount表，存放用户的香金数，个人积分
+	 */
+	public static void initaccount(String username){
+		AVObject useraccount=new AVObject("userAccount");
+		useraccount.put("totalGolds", 100);
+		useraccount.put("credit", 100);
+		useraccount.put("username", username);
+		useraccount.saveInBackground();
+	}
+	/**
+	 * 更新userAccount表的个人香金数
+	 * @param username
+	 * @param golds
+	 */
+	public static void updateGolds(String username,final int golds){
+		AVQuery<AVObject> query=new AVQuery<AVObject>("userAccount");
+		query.whereEqualTo("username", username);
+		query.findInBackground(new FindCallback<AVObject>() {
+			
+			@Override
+			public void done(List<AVObject> arg0, AVException arg1) {
+				if(arg1==null){
+					AVObject account=arg0.get(arg0.size()-1);
+					account.put("totalGolds", golds);
+					account.saveInBackground();
+				}
+			}
+		});
+	}
+	
 	/**
 	 * 消息列表
 	 * 

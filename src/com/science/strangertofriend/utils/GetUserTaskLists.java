@@ -124,6 +124,16 @@ public class GetUserTaskLists {
 			List<AVObject> tasks = query.find();
 			int len = tasks.size();
 			Log.i("GetUserTaskLists", len+"");
+			
+			if(len==0){
+				Intent intent=new Intent();
+				intent.setAction("com.science.strangertofriend.action");
+				intent.putExtra("isFinished", true);
+				context.sendBroadcast(intent);
+				Log.i("broadcast", "·¢ËÍ¹ã²¥¿©");
+				return;
+			}
+			
 			for (int i = 0; i < len; i++) {
 				AVObject task = tasks.get(i);
 				taskBean = new Task();
@@ -132,8 +142,6 @@ public class GetUserTaskLists {
 				taskBean.setAcceptedName(task.getString("acceptedName"));
 				taskBean.setAccepted(task.getBoolean("isAccepted"));
 				boolean isAccomplished = task.getBoolean("isAccomplished");
-				Log.i("GetUserTaskLists", taskBean.isAccepted()+"");
-				Log.i("GetUserTaskLists","isAccomplished="+ isAccomplished);
 				taskBean.setAccomplished(isAccomplished);
 				taskBean.setEndTime(task.getString("endTime"));
 				taskBean.setPrice(task.getString("price"));

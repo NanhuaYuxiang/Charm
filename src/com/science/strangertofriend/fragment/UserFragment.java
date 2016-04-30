@@ -139,32 +139,21 @@ public class UserFragment extends Fragment implements ScreenShotable {
 	}
 
 	private void initData() {
-
+//		 int golds = 0;
 		mUsername.setText(AVUser.getCurrentUser().getUsername().toString());
 		mUserAcount.setText(AVUser.getCurrentUser().getEmail().toString());
-
 		// 查询当前用户香金余额
-		int golds=AVUser.getCurrentUser().getInt("totalGolds");
-		Number golds2=AVUser.getCurrentUser().getNumber("totalGolds");
-		
-		user_totalGolds.setText(golds+"");
-		Log.i("golds",golds+ "");
-		//user_totalGolds.setText(golds);
-		
-		// AVQuery<AVObject> queryGolds=new AVQuery<AVObject>("_User");
-		// queryGolds.whereEqualTo("username",
-		// AVUser.getCurrentUser().getUsername().toString());
-		// queryGolds.findInBackground(new FindCallback<AVObject>() {
-		//
-		// @Override
-		// public void done(List<AVObject> list, AVException exception) {
-		// if(exception==null){
-		// AVUser user= (AVUser) list.get(list.size()-1);
-		// Log.i("golds", user.getString("totalGolds"));
-		// user_totalGolds.setText(user.getString("totalGolds"));
-		// }
-		// }
-		// });
+		AVQuery<AVObject> query2=new AVQuery<AVObject>("userAccount");
+		query2.whereEqualTo("username", AVUser.getCurrentUser().getUsername());
+		query2.findInBackground(new FindCallback<AVObject>() {
+			
+			@Override
+			public void done(List<AVObject> arg0, AVException arg1) {
+					AVObject userAccount=arg0.get(arg0.size()-1);
+				    int golds=userAccount.getInt("totalGolds");
+				    user_totalGolds.setText(golds+"");
+			}
+		});
 
 		AVQuery<AVObject> queryGender = new AVQuery<AVObject>("Gender");
 		queryGender.whereEqualTo("username", AVUser.getCurrentUser()
