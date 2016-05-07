@@ -34,12 +34,13 @@ import com.science.strangertofriend.widget.MyDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
+ * @param <AVIMException>
  * @description 登陆界面
  * 
  * 
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity<AVIMException> extends BaseActivity {
 
 	private CircleImageView mCameraAvatar;
 	private EditText mUser, mPassword;
@@ -182,28 +183,36 @@ public class LoginActivity extends BaseActivity {
 		// 登陆查询
 		AVUser.logInInBackground(mUsernameString, mPasswordString,
 				new LogInCallback() {
+					@Override
 					public void done(AVUser user, AVException e) {
 						if (user != null) {
 
 							mMyDialog.successDialog("登陆成功!");
-							AVIMClient currentClient = AVIMClient.getInstance(user.getString("username"));
+							AVIMClient currentClient = AVIMClient
+									.getInstance(user.getString("username"));
 							currentClient.open(new AVIMClientCallback() {
-								
 								@Override
 								public void done(AVIMClient arg0, AVException e) {
 									// TODO Auto-generated method stub
-									if(e==null){
-										Intent mainIntent = new Intent(LoginActivity.this,
+									if (e == null) {
+										Intent mainIntent = new Intent(
+												LoginActivity.this,
 												MainActivity.class);
 										startActivity(mainIntent);
 										LoginActivity.this.finish();
 									}
 								}
+
+								public void done(AVIMClient arg0,
+										AVIMException arg1) {
+									// TODO Auto-generated method stub
+
+								}
 							});
 							// mainIntent.putExtra("avater",
 							// ((BitmapDrawable) mCameraAvatar
 							// .getDrawable()).getBitmap());
-							
+
 						} else {
 							mMyDialog
 									.errorDialog(

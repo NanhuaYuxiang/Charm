@@ -54,9 +54,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ChatActivity extends Activity implements OnClickListener {
+public class chatActivity extends Activity implements OnClickListener {
 
-	private static ChatActivity instance;
+	private static chatActivity instance;
 	private Intent intent;
 	private String currentClientName = "";
 	private String otherClientName = "";
@@ -168,14 +168,14 @@ public class ChatActivity extends Activity implements OnClickListener {
 											chatAdapter.reFresh(messageList);
 											scrollToBottom();
 										} else {
-											Toast.makeText(ChatActivity.this,
+											Toast.makeText(chatActivity.this,
 													"发送消息失败",
 													Toast.LENGTH_SHORT).show();
 										}
 									}
 								});
 					} else {
-						Toast.makeText(ChatActivity.this, "消息不能为空",
+						Toast.makeText(chatActivity.this, "消息不能为空",
 								Toast.LENGTH_SHORT).show();
 					}
 				}
@@ -214,20 +214,17 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.chatback_img:
+		int id = v.getId();
+		if(id==R.id.chatback_img){
 			finish();
-			break;
-		case R.id.chatBtn:
+		}else if(id==R.id.chatBtn){
 			if (isFastDoubleClick()) {
 				sendMessageToClient();
 				scrollToBottom();
-				break;
 			} else {
 				Toast.makeText(this, "消息发送不能相隔一秒", Toast.LENGTH_SHORT).show();
-				break;
 			}
-		case R.id.chatAdd_img:
+		}else if(id==R.id.chatAdd_img){
 			SweetAlertDialog addDialog = new SweetAlertDialog(this,
 					SweetAlertDialog.WARNING_TYPE);
 
@@ -283,12 +280,82 @@ public class ChatActivity extends Activity implements OnClickListener {
 				}
 			}).show();
 
-			break;
 		}
+		// switch (v.getId()) {
+		// case R.id.chatback_img:
+		// finish();
+		// break;
+		// case R.id.chatBtn:
+		// if (isFastDoubleClick()) {
+		// sendMessageToClient();
+		// scrollToBottom();
+		// break;
+		// } else {
+		// Toast.makeText(this, "消息发送不能相隔一秒", Toast.LENGTH_SHORT).show();
+		// break;
+		// }
+		// case R.id.chatAdd_img:
+		// SweetAlertDialog addDialog = new SweetAlertDialog(this,
+		// SweetAlertDialog.WARNING_TYPE);
+		//
+		// addDialog.setTitleText("").setContentText("是否添加对方为好友？");
+		// addDialog.setCancelText("取消");
+		// addDialog.setConfirmText("确定");
+		// addDialog.showCancelButton(true);
+		// addDialog.setCancelClickListener(new OnSweetClickListener() {
+		//
+		// @Override
+		// public void onClick(SweetAlertDialog sweetAlertDialog) {
+		// // TODO Auto-generated method stub
+		// sweetAlertDialog.dismiss();
+		// }
+		// }).setConfirmClickListener(new OnSweetClickListener() {
+		//
+		// @Override
+		// public void onClick(final SweetAlertDialog sweetAlertDialog) {
+		// // TODO Auto-generated method stub
+		// Boolean friendState = (Boolean) connecation
+		// .getAttribute("friendstate");
+		// if (friendState) {
+		// sweetAlertDialog.setTitleText("")
+		// .setContentText("已经是你的好友了")
+		// .setConfirmClickListener(null)
+		// .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+		// } else {
+		// connecation.setAttribute("conversationType", 1);
+		// connecation.setAttribute("friendstate", false);
+		// connecation.setAttribute("friendsender",
+		// currentClientName);
+		// connecation.setAttribute("friendrequester",
+		// otherClientName);
+		// connecation
+		// .updateInfoInBackground(new AVIMConversationCallback() {
+		//
+		// @Override
+		// public void done(AVException e) {
+		// // TODO Auto-generated method stub
+		// if (e == null) {
+		// sweetAlertDialog
+		// .setTitleText("")
+		// .setContentText("已经发送请求给对方")
+		// .setConfirmClickListener(
+		// null)
+		// .changeAlertType(
+		// SweetAlertDialog.SUCCESS_TYPE);
+		// }
+		// }
+		// });
+		// }
+		//
+		// }
+		// }).show();
+		//
+		// break;
+		// }
 
 	}
 
-	public static ChatActivity getCurrentActivity() {
+	public static chatActivity getCurrentActivity() {
 		return instance;
 	}
 
@@ -474,7 +541,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 
 								for (int i = 0; i < list.size(); i++) {
 									if (list.size() < 20) {
-										Toast.makeText(ChatActivity.this,
+										Toast.makeText(chatActivity.this,
 												"没有历史消息了", Toast.LENGTH_SHORT)
 												.show();
 										messageIsNull = true;
@@ -500,7 +567,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 									}
 								}
 								chatAdapter = new ChatAdapter(
-										ChatActivity.this, messageList);
+										chatActivity.this, messageList);
 								chatAdapter.reFresh(messageList);
 								chatAdapter = (ChatAdapter) chatListView
 										.getAdapter();
@@ -515,7 +582,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 								chatFreshLayout.setRefreshing(false);
 							} else if (null != list && list.size() > 0
 									&& !list.isEmpty()) {
-								Toast.makeText(ChatActivity.this, "没有历史消息了",
+								Toast.makeText(chatActivity.this, "没有历史消息了",
 										Toast.LENGTH_SHORT).show();
 								chatFreshLayout.setRefreshing(false);
 
@@ -527,7 +594,7 @@ public class ChatActivity extends Activity implements OnClickListener {
 						}
 					});
 		} else {
-			Toast.makeText(ChatActivity.this, "没有历史消息了", Toast.LENGTH_SHORT)
+			Toast.makeText(chatActivity.this, "没有历史消息了", Toast.LENGTH_SHORT)
 					.show();
 			chatFreshLayout.setRefreshing(false);
 		}
@@ -535,8 +602,9 @@ public class ChatActivity extends Activity implements OnClickListener {
 	}
 
 	public void onEventMainThread(AcceptEventBus eventBus) {
-		AVIMTypedMessage acceptMessage=eventBus.getMessage();
-		messageList.add(new ChatMessage(ChatMessage.MESSAGE_FROM, ((AVIMTextMessage) acceptMessage).getText()));
+		AVIMTypedMessage acceptMessage = eventBus.getMessage();
+		messageList.add(new ChatMessage(ChatMessage.MESSAGE_FROM,
+				((AVIMTextMessage) acceptMessage).getText()));
 		chatAdapter.reFresh(messageList);
 		scrollToBottom();
 	}

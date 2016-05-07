@@ -220,47 +220,75 @@ public class Task_List_Publish_Complete_ListView_Activity extends BaseActivity
 	@Override
 	public void onClick(View v) {
 		Log.e("info", "id:" + v.getId());
-		switch (v.getId()) {
-		case R.id.image_root:
+		int id = v.getId();
+		if(id ==  R.id.image_root){
 			openMenu();
-			break;
-		case R.id.image_publish:
+		}else if(id ==R.id.image_publish){
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_Complete_ListView_Activity.this,
 					Task_List_Publish_Complete_ListView_Activity.class));
-			break;
-		case R.id.image_unpublish:
-
+		}else if (id ==R.id.image_unpublish ){
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_Complete_ListView_Activity.this,
 					Task_List_Publish_UnComplete_ListView_Activity.class));
-			
-			break;
-		case R.id.image_accept:
-
+		}else if (id ==R.id.image_accept){
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_Complete_ListView_Activity.this,
 					Task_List_Accept_Complete_ListView_Activity.class));
-			break;
-		case R.id.image_unaccept:
-
+		}else if (id ==R.id.image_unaccept){
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_Complete_ListView_Activity.this,
 					Task_List_Accept_UnComplete_ListView_Activity.class));
-			break;
-
-		default:
-			Log.e("info", "default");
-			break;
 		}
+		// switch (v.getId()) {
+		// case R.id.image_root:
+		// openMenu();
+		// break;
+		// case R.id.image_publish:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_Complete_ListView_Activity.this,
+		// Task_List_Publish_Complete_ListView_Activity.class));
+		// break;
+		// case R.id.image_unpublish:
+		//
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_Complete_ListView_Activity.this,
+		// Task_List_Publish_UnComplete_ListView_Activity.class));
+		//
+		// break;
+		// case R.id.image_accept:
+		//
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_Complete_ListView_Activity.this,
+		// Task_List_Accept_Complete_ListView_Activity.class));
+		// break;
+		// case R.id.image_unaccept:
+		//
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_Complete_ListView_Activity.this,
+		// Task_List_Accept_UnComplete_ListView_Activity.class));
+		// break;
+		//
+		// default:
+		// Log.e("info", "default");
+		// break;
+		// }
 
 	}
 

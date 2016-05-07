@@ -5,6 +5,7 @@ import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import yalantis.com.sidemenu.interfaces.Resourceble;
@@ -42,11 +43,17 @@ import android.widget.Toast;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVConstants;
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVPush;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.SaveCallback;
+import com.avos.avoscloud.SendCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -58,7 +65,6 @@ import com.science.strangertofriend.fragment.UserFragment;
 import com.science.strangertofriend.ui.AlterActivity;
 import com.science.strangertofriend.ui.CallFragment;
 import com.science.strangertofriend.ui.SettingActivity;
-import com.science.strangertofriend.ui.Task_List_Accept_Complete_ListView_Activity;
 import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.utils.GetUserTaskLists;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
@@ -67,6 +73,7 @@ import com.yalantis.contextmenu.lib.MenuParams;
 import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
 import com.yalantis.contextmenu.lib.interfaces.OnMenuItemLongClickListener;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends ActionBarActivity implements
 		ViewAnimator.ViewAnimatorListener, OnMenuItemClickListener,
 		OnMenuItemLongClickListener {
@@ -128,7 +135,10 @@ public class MainActivity extends ActionBarActivity implements
 		initListener();
 		setActionBar();
 		createMenuList();
-		
+
+		// 信息推送的相关操作
+		androidSetPush();
+
 		// mMenuList 为菜单每个项的内容
 		// contentFragment 为主体显示继承自Fragment 并实现了ScreenShotable接口
 		// 最后一个参数为ViewAnimator.ViewAnimatorListener
@@ -136,26 +146,57 @@ public class MainActivity extends ActionBarActivity implements
 		// 在ViewAnimator 中创建view 并添加到 linearLayout 菜单中.
 		mViewAnimator = new ViewAnimator<>(this, mMenuList, mShakeFragment,
 				mDrawerLayout, this);
-		//以下所做均为数据库被改动而做的数据同步操作
+		// 以下所做均为数据库被改动而做的数据同步操作
 		if (null != currentUser) {
-			
+
 			if (!AVService.isUserContainsAvater(currentUser)) {
-				 addAvaterToUser();
+				addAvaterToUser();
 			}
-			AVQuery<AVObject> query=new AVQuery<AVObject>("userAccount");
-			query.whereEqualTo("username", AVUser.getCurrentUser().getUsername());
+			AVQuery<AVObject> query = new AVQuery<AVObject>("userAccount");
+			query.whereEqualTo("username", AVUser.getCurrentUser()
+					.getUsername());
 			query.findInBackground(new FindCallback<AVObject>() {
-				
+
 				@Override
 				public void done(List<AVObject> arg0, AVException arg1) {
-						if(arg0.size()==0){
-							AVService.initaccount(AVUser.getCurrentUser().getUsername());
-						}
+					if (arg0.size() == 0) {
+						AVService.initaccount(AVUser.getCurrentUser()
+								.getUsername());
+					}
 				}
 			});
-			
+
 		}
 	}
+
+	/**
+	 * 信息推送 开始InstallationID的相关设置
+	 */
+	private void androidSetPush() {
+		final HashMap<String, String> map = new HashMap<String, String>();
+		PushService.subscribe(this, "public", getClass());
+		AVInstallation.getCurrentInstallation().saveInBackground();
+		AVInstallation.getCurrentInstallation().saveInBackground(
+				new SaveCallback() {
+					public void done(AVException e) {
+						if (e == null) {
+							// 保存成功
+							// 关联 installationId 到用户表等操作……
+							AVInstallation.getCurrentInstallation()
+									.saveInBackground();
+						} else {
+							// 保存失败，输出错误信息
+							Log.e("installationId", "errroeeeeeeee");
+						}
+					}
+				});
+
+		Intent intent = getIntent();
+		AVAnalytics.trackAppOpened(intent);
+		intent.putExtra(AVConstants.PUSH_INTENT_KEY, 1);
+	}
+
+	
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	private void initSystemBar() {
@@ -209,22 +250,35 @@ public class MainActivity extends ActionBarActivity implements
 		mFragmentManager = getSupportFragmentManager();
 		btnCall = (Button) findViewById(R.id.btnCall);
 		btnCall.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				switch (v.getId()) {
-				case R.id.btnCall:
+				int id = v.getId();
+				if (id == R.id.btnCall) {
 					callFragement = new CallFragment();
-					getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, callFragement).commit();
-//					Intent intentCall = new Intent(MainActivity.this,CallActivity.class);
-//					startActivity(intentCall);
-					break;
-
-				default:
-					break;
+					getSupportFragmentManager().beginTransaction()
+							.replace(R.id.content_frame, callFragement)
+							.commit();
+					// Intent intentCall = new
+					// Intent(MainActivity.this,CallActivity.class);
+					// startActivity(intentCall);
 				}
-				
+				// switch (v.getId()) {
+				// case R.id.btnCall:
+				// callFragement = new CallFragment();
+				// getSupportFragmentManager().beginTransaction()
+				// .replace(R.id.content_frame, callFragement)
+				// .commit();
+				// // Intent intentCall = new
+				// // Intent(MainActivity.this,CallActivity.class);
+				// // startActivity(intentCall);
+				// break;
+				//
+				// default:
+				// break;
+				// }
+
 			}
 		});
 		initMenuFragment();
@@ -247,9 +301,9 @@ public class MainActivity extends ActionBarActivity implements
 
 		MenuObject close = new MenuObject();
 		close.setResource(R.drawable.close_drawer);
-		
-//		MenuObject call = new MenuObject("拨号");
-//		call.setResource(R.drawable.close_drawer);
+
+		// MenuObject call = new MenuObject("拨号");
+		// call.setResource(R.drawable.close_drawer);
 
 		MenuObject set = new MenuObject("应用设置");
 		set.setResource(R.drawable.set);
@@ -260,9 +314,8 @@ public class MainActivity extends ActionBarActivity implements
 		MenuObject quit = new MenuObject("退出应用");
 		quit.setResource(R.drawable.quit);
 
-		
 		menuObjects.add(close);
-//		menuObjects.add(call);
+		// menuObjects.add(call);
 		menuObjects.add(set);
 		menuObjects.add(user);
 		menuObjects.add(quit);
@@ -436,7 +489,7 @@ public class MainActivity extends ActionBarActivity implements
 			return replaceAddressListFragment(screenShotable, topPosition);
 		case "Task":
 			new GetUserTaskLists(this);
-			
+
 		default:
 			return screenShotable;
 		}
@@ -480,10 +533,10 @@ public class MainActivity extends ActionBarActivity implements
 		case 0:
 			break;
 
-//		case 1:
-//			Intent intentCall = new Intent(this,CallActivity.class);
-//			startActivity(intentCall);
-//			break;
+		// case 1:
+		// Intent intentCall = new Intent(this,CallActivity.class);
+		// startActivity(intentCall);
+		// break;
 		case 1:
 			Intent intentSet = new Intent(this, SettingActivity.class);
 			startActivity(intentSet);
@@ -653,7 +706,7 @@ public class MainActivity extends ActionBarActivity implements
 							String username = currentUser.getUsername();
 							AVService.upLoadAvater(currentUser, url, username,
 									new SignUpCallback() {
-										
+
 										@Override
 										public void done(AVException arg0) {
 											if (arg0 != null) {
@@ -662,9 +715,12 @@ public class MainActivity extends ActionBarActivity implements
 														Toast.LENGTH_LONG)
 														.show();
 												Log.i("Storestate", "filure");
-											}else {
+											} else {
 												Log.i("Storestate", "success");
-												Toast.makeText(appContext, "保存成功", Toast.LENGTH_LONG).show();
+												Toast.makeText(appContext,
+														"保存成功",
+														Toast.LENGTH_LONG)
+														.show();
 											}
 										}
 									});

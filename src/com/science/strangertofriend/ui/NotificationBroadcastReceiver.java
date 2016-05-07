@@ -30,7 +30,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver{
 	}
 	
 	public void gotoChatActivity(Context context){
-		Intent intent = new Intent(context,ChatActivity.class);
+		Intent intent = new Intent(context,chatActivity.class);
 		context.startActivity(intent);
 	}
 

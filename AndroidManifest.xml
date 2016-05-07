@@ -43,6 +43,11 @@
     <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
+    <!-- 推送服务 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".AppContext"
         android:allowBackup="true"
@@ -113,6 +118,12 @@
         </activity>
         <activity android:name=".TestCircleAvater" >
         </activity>
+
+        <!-- 推送服务 -->
+        <service
+            android:name="com.avos.avoscloud.PushService"
+            android:exported="true" />
+
         <!-- 百度地图定位开始 -->
         <service
             android:name="com.baidu.location.f"
@@ -136,8 +147,16 @@
         <receiver android:name="com.science.strangertofriend.ui.NotificationBroadcastReceiver" >
         </receiver>
 
+        <!-- 推送服务 -->
         <service android:name="com.avos.avoscloud.PushService" />
-
+        <!-- 推送 Receiver -->
+        <receiver android:name="com.avos.avoscloud.AVBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".receiver.MessageReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

@@ -158,7 +158,7 @@ public class MessageFragment extends Fragment implements ScreenShotable,
 						.getItemAtPosition(position);
 				String clientName = oConvsData.getConvsClientName();
 				Intent intent = new Intent(getActivity(),
-						com.science.strangertofriend.ui.ChatActivity.class);
+						com.science.strangertofriend.ui.chatActivity.class);
 				intent.putExtra("taskPubliName", clientName);
 				getActivity().startActivity(intent);
 			}

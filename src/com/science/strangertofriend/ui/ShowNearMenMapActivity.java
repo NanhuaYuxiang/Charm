@@ -585,15 +585,14 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-		case R.id.map_common:
+		int itemId = item.getItemId();
+		if(itemId == R.id.map_common){
 			mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-			break;
-		case R.id.map_site:
+
+		}else if(itemId ==R.id.map_site){
 			mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
-			break;
-		case R.id.map_traffic:
+
+		}else if (itemId == R.id.map_traffic){
 			if (mBaiduMap.isTrafficEnabled()) {
 				mBaiduMap.setTrafficEnabled(false);
 				item.setTitle("实时地图(off)");
@@ -601,10 +600,27 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				mBaiduMap.setTrafficEnabled(true);
 				item.setTitle("实时地图(on)");
 			}
-			break;
-		default:
-			break;
 		}
+
+		// switch (item.getItemId()) {
+		// case R.id.map_common:
+		// mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+		// break;
+		// case R.id.map_site:
+		// mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+		// break;
+		// case R.id.map_traffic:
+		// if (mBaiduMap.isTrafficEnabled()) {
+		// mBaiduMap.setTrafficEnabled(false);
+		// item.setTitle("实时地图(off)");
+		// } else {
+		// mBaiduMap.setTrafficEnabled(true);
+		// item.setTitle("实时地图(on)");
+		// }
+		// break;
+		// default:
+		// break;
+		// }
 		return super.onOptionsItemSelected(item);
 	}
 

@@ -65,7 +65,6 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 		super.registerForContextMenu(listView);
 	}
 
-
 	/**
 	 * 判断当前页面是否有任务，没有则显示no_task图片
 	 * 
@@ -76,15 +75,16 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 			img_no_task.setVisibility(View.INVISIBLE);
 		} else {
 			img_no_task.setVisibility(View.VISIBLE);
-			//img_no_task.setImageDrawable(getDrawable(R.drawable.notask_accep_unaccom));
+			// img_no_task.setImageDrawable(getDrawable(R.drawable.notask_accep_unaccom));
 			img_no_task.setImageResource(R.drawable.notask_accep_unaccom);
 		}
 	}
+
 	/**
 	 * 初始化ListView
 	 */
 	private void initListView() {
-		img_no_task=(ImageView) findViewById(R.id.img_no_task);
+		img_no_task = (ImageView) findViewById(R.id.img_no_task);
 		listView = (ListView) this.findViewById(R.id.task_publish_list);
 		adapter = Task_Accept_UnComplete_Adapter.initAdapter(this);
 		listView.setAdapter(adapter);
@@ -112,43 +112,65 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 	 */
 	@Override
 	public void onClick(View v) {
-		Log.e("info", "id:" + v.getId());
-		switch (v.getId()) {
-		case R.id.image_root:
+		// Log.e("info", "id:" + v.getId());
+		int id = v.getId();
+		if (id == R.id.image_root) {
 			openMenu();
-			break;
-		case R.id.image_publish:
+		} else if (id == R.id.image_publish) {
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Accept_UnComplete_ListView_Activity.this,
 					Task_List_Publish_Complete_ListView_Activity.class));
-			break;
-		case R.id.image_unpublish:
+		} else if (id == R.id.image_unpublish) {
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Accept_UnComplete_ListView_Activity.this,
 					Task_List_Publish_UnComplete_ListView_Activity.class));
-			break;
-		case R.id.image_accept:
-			closeMenu();
-			finish();
-			startActivity(new Intent(
-					Task_List_Accept_UnComplete_ListView_Activity.this,
-					Task_List_Accept_Complete_ListView_Activity.class));
-			break;
-		case R.id.image_unaccept:
+		} else if (id == R.id.image_unaccept) {
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Accept_UnComplete_ListView_Activity.this,
 					Task_List_Accept_UnComplete_ListView_Activity.class));
-			break;
-
-		default:
-			break;
 		}
+		// switch (v.getId()) {
+		// case R.id.image_root:
+		// openMenu();
+		// break;
+		// case R.id.image_publish:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Accept_UnComplete_ListView_Activity.this,
+		// Task_List_Publish_Complete_ListView_Activity.class));
+		// break;
+		// case R.id.image_unpublish:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Accept_UnComplete_ListView_Activity.this,
+		// Task_List_Publish_UnComplete_ListView_Activity.class));
+		// break;
+		// case R.id.image_accept:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Accept_UnComplete_ListView_Activity.this,
+		// Task_List_Accept_Complete_ListView_Activity.class));
+		// break;
+		// case R.id.image_unaccept:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Accept_UnComplete_ListView_Activity.this,
+		// Task_List_Accept_UnComplete_ListView_Activity.class));
+		// break;
+		//
+		// default:
+		// break;
+		// }
 
 	}
 
@@ -232,6 +254,7 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 	}
 
 	AVObject post = null;
+
 	/**
 	 * 完成任务
 	 * 
@@ -249,13 +272,12 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 		String tableName = "Task";
 		AVQuery<AVObject> query = new AVQuery<AVObject>(tableName);
 
-
 		query.getInBackground(task.getObjectId(), new GetCallback<AVObject>() {
-			
+
 			@Override
 			public void done(AVObject arg0, AVException arg1) {
-				post=arg0;
-				post.put("isAccomplished",true);
+				post = arg0;
+				post.put("isAccomplished", true);
 				post.saveInBackground(new SaveCallback() {
 					@Override
 					public void done(AVException e) {
@@ -268,7 +290,7 @@ public class Task_List_Accept_UnComplete_ListView_Activity extends BaseActivity
 				});
 			}
 		});
-		
+
 	}
 
 	private void closeMenu() {

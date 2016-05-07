@@ -32,7 +32,7 @@ import de.greenrobot.event.EventBus;
 public class ReceiveMessageHandler extends
 		AVIMTypedMessageHandler<AVIMTypedMessage> {
 
-	private ChatActivity chatActivity;
+	private chatActivity chatActivity;
 	private List<ChatMessage> messageList;
 	private ChatAdapter chatAdapter;
 	private Context context;

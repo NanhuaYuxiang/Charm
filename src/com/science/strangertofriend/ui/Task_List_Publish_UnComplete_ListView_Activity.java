@@ -54,7 +54,7 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 			R.id.image_unpublish, R.id.image_accept, R.id.image_unaccept };
 	private ListView listView = null;
 	private Task_Publish_UnComplete_Adapter adapter = null;
-	private int price=0;//任务香金数
+	private int price = 0;// 任务香金数
 	private AVUser acceptor;
 
 	@Override
@@ -117,45 +117,74 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 	@Override
 	public void onClick(View v) {
 		Log.e("info", "id:" + v.getId());
-		switch (v.getId()) {
-		case R.id.image_root:
+		int id = v.getId();
+		if (id == R.id.image_root) {
 			openMenu();
-			break;
-		case R.id.image_publish:
+
+		} else if (id == R.id.image_publish) {
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Publish_Complete_ListView_Activity.class));
-			break;
-		case R.id.image_unpublish:
+		} else if (id == R.id.image_unpublish) {
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Publish_UnComplete_ListView_Activity.class));
-
-			break;
-		case R.id.image_accept:
+		} else if (id == R.id.image_accept) {
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Accept_Complete_ListView_Activity.class));
-
-			break;
-		case R.id.image_unaccept:
+		} else if (id == R.id.image_unaccept) {
 			closeMenu();
 			finish();
 			startActivity(new Intent(
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Accept_UnComplete_ListView_Activity.class));
-
-			break;
-
-		default:
-			break;
 		}
+		// switch (v.getId()) {
+		// case R.id.image_root:
+		// openMenu();
+		// break;
+		// case R.id.image_publish:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_UnComplete_ListView_Activity.this,
+		// Task_List_Publish_Complete_ListView_Activity.class));
+		// break;
+		// case R.id.image_unpublish:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_UnComplete_ListView_Activity.this,
+		// Task_List_Publish_UnComplete_ListView_Activity.class));
+		//
+		// break;
+		// case R.id.image_accept:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_UnComplete_ListView_Activity.this,
+		// Task_List_Accept_Complete_ListView_Activity.class));
+		//
+		// break;
+		// case R.id.image_unaccept:
+		// closeMenu();
+		// finish();
+		// startActivity(new Intent(
+		// Task_List_Publish_UnComplete_ListView_Activity.this,
+		// Task_List_Accept_UnComplete_ListView_Activity.class));
+		//
+		// break;
+		//
+		// default:
+		// break;
+		// }
 
 	}
 
@@ -197,7 +226,7 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 			break;
 		case Menu.FIRST + 3:// 完成
 			Toast.makeText(getApplicationContext(), "完成" + position,
-			 Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG).show();
 			accepteTask(position);
 			break;
 		default:
@@ -239,6 +268,7 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 	}
 
 	AVObject post = null;
+
 	/**
 	 * 完成任务
 	 * 
@@ -253,17 +283,17 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 		Task_Publish_Complete_Adapter.vector.add(task);
 		Task_Publish_Complete_Adapter.initAdapter().notifyDataSetChanged();
 
-		//Log.i("taskid", task.getObjectId() + "");
+		// Log.i("taskid", task.getObjectId() + "");
 		final AVQuery<AVObject> query = new AVQuery<AVObject>("Task");
 		query.include("acceptedUser");
 		query.getInBackground(task.getObjectId(), new GetCallback<AVObject>() {
-			
+
 			@Override
 			public void done(AVObject arg0, AVException arg1) {
 				post = arg0;
 				post.put("isAccomplished", true);
-				price=Integer.parseInt(post.getString("price"));
-				acceptor=post.getAVUser("acceptedUser");
+				price = Integer.parseInt(post.getString("price"));
+				acceptor = post.getAVUser("acceptedUser");
 				post.saveInBackground(new SaveCallback() {
 					@Override
 					public void done(AVException e) {
@@ -279,45 +309,46 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 		});
 
 	}
+
 	/**
 	 * 更新个人香金数
 	 */
-	public void updateUserTotalGolds(){
-		if(price!=0){
-			String currentUsername=AVUser.getCurrentUser().getUsername();
-			String acceptorUsername=acceptor.getUsername();
-			
-			//将任务发布人的香金数减少
-			AVQuery<AVObject> query =new AVQuery<AVObject>("userAccount");
+	public void updateUserTotalGolds() {
+		if (price != 0) {
+			String currentUsername = AVUser.getCurrentUser().getUsername();
+			String acceptorUsername = acceptor.getUsername();
+
+			// 将任务发布人的香金数减少
+			AVQuery<AVObject> query = new AVQuery<AVObject>("userAccount");
 			query.whereEqualTo("username", currentUsername);
 			query.findInBackground(new FindCallback<AVObject>() {
-				
+
 				@Override
 				public void done(List<AVObject> arg0, AVException arg1) {
-					AVObject userAccount=arg0.get(arg0.size()-1);
-					int golds=userAccount.getInt("totalGolds");
-					Log.i("golds2", golds+"");
-					userAccount.put("totalGolds", golds-price);
+					AVObject userAccount = arg0.get(arg0.size() - 1);
+					int golds = userAccount.getInt("totalGolds");
+					Log.i("golds2", golds + "");
+					userAccount.put("totalGolds", golds - price);
 					userAccount.saveInBackground();
 				}
 			});
-			//将任务接收人的数目增加
-			AVQuery<AVObject> query2 =new AVQuery<AVObject>("userAccount");
+			// 将任务接收人的数目增加
+			AVQuery<AVObject> query2 = new AVQuery<AVObject>("userAccount");
 			query2.whereEqualTo("username", acceptorUsername);
 			query2.findInBackground(new FindCallback<AVObject>() {
-				
+
 				@Override
 				public void done(List<AVObject> arg0, AVException arg1) {
-					AVObject userAccount=arg0.get(arg0.size()-1);
-					int golds=userAccount.getInt("totalGolds");
-					Log.i("golds3", golds+"");
-					userAccount.put("totalGolds", golds+price);
+					AVObject userAccount = arg0.get(arg0.size() - 1);
+					int golds = userAccount.getInt("totalGolds");
+					Log.i("golds3", golds + "");
+					userAccount.put("totalGolds", golds + price);
 					userAccount.saveInBackground();
 				}
 			});
 		}
 	}
-	
+
 	private void closeMenu() {
 		for (int i = 0; i < imageIds.length; i++) {
 			AnimatorSet animatorSet = new AnimatorSet();
