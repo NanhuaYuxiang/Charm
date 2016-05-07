@@ -338,7 +338,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			public void run() {
 				AVQuery<AVObject> query = new AVQuery<>("Task");
 				// 查找附近10km内的任务
-				query.include("pub_user.userAvater");   
+				query.include("pub_user.userAvater");
+				query.whereNotEqualTo("isAccomplished", true);
 				query.whereWithinKilometers("geoPoint", mMyPoint, 10);
 				// query.whereNotEqualTo("publisherName", mUsername);
 				try {
