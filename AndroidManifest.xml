@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -51,7 +51,7 @@
     <application
         android:name=".AppContext"
         android:allowBackup="true"
-        android:icon="@drawable/lasted_logo"
+        android:icon="@drawable/lasted_logo_meitu_1"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <meta-data
