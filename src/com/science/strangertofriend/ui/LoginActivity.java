@@ -105,7 +105,7 @@ public class LoginActivity<AVIMException> extends BaseActivity {
 
 	// 根据当前输入用户名查找回调
 	private void findGenderCallback() {
-		mUsernameString = mUser.getText().toString();
+		mUsernameString = mUser.getText().toString().trim();
 
 		AVQuery<AVObject> query = new AVQuery<AVObject>("Gender");
 		if (isEmail(mUsernameString)) {
@@ -138,8 +138,8 @@ public class LoginActivity<AVIMException> extends BaseActivity {
 		@Override
 		public void onClick(View v) {
 
-			mUsernameString = mUser.getText().toString();
-			mPasswordString = mPassword.getText().toString();
+			mUsernameString = mUser.getText().toString().trim();
+			mPasswordString = mPassword.getText().toString().trim();
 			if (mUsernameString.isEmpty()) {
 				Toast.makeText(LoginActivity.this,
 						R.string.error_register_user_name_null,

@@ -51,6 +51,7 @@ import com.avos.avoscloud.AVPush;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SendCallback;
@@ -137,7 +138,9 @@ public class MainActivity extends ActionBarActivity implements
 		createMenuList();
 
 		// 信息推送的相关操作
-		androidSetPush();
+		// androidSetPush();
+		// 更新用户当前的InstallationId
+		updataInstallationId();
 
 		// mMenuList 为菜单每个项的内容
 		// contentFragment 为主体显示继承自Fragment 并实现了ScreenShotable接口
@@ -170,6 +173,28 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/**
+	 * 更新installationId
+	 */
+	private void updataInstallationId() {
+		// 获取当前用户的ID
+		String currentUserId = " ";
+		AVUser currentUser = AVUser.getCurrentUser();
+		if (currentUser != null) {
+			currentUserId = currentUser.getObjectId();
+		}
+		// 更新当前用户的installationId
+		AVQuery<AVObject> query = new AVQuery<>("_User");
+		query.getInBackground(currentUserId, new GetCallback<AVObject>() {
+			@Override
+			public void done(AVObject user, AVException e) {
+				user.put("installationId", AVInstallation
+						.getCurrentInstallation().getInstallationId());
+				user.saveInBackground();
+			}
+		});
+	}
+
+	/**
 	 * 信息推送 开始InstallationID的相关设置
 	 */
 	private void androidSetPush() {
@@ -195,8 +220,6 @@ public class MainActivity extends ActionBarActivity implements
 		AVAnalytics.trackAppOpened(intent);
 		intent.putExtra(AVConstants.PUSH_INTENT_KEY, 1);
 	}
-
-	
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	private void initSystemBar() {

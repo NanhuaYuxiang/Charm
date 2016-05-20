@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -45,7 +46,6 @@ public class BaseActivity extends Activity {
 	private static boolean isExit = false;
 	public int i = -1;
 	private View mView;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,13 +55,12 @@ public class BaseActivity extends Activity {
 		if (!appContext.isNetworkConnected())
 			Toast.makeText(this, R.string.network_not_connected,
 					Toast.LENGTH_LONG).show();
-
 		// 沉浸式状态栏设置
 		initSystemBar();
 		// 将activity加入到AppManager堆栈中
 		AppManager.getAppManager().addActivity(this);
 	}
-
+	
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	public void initSystemBar() {
 		if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {

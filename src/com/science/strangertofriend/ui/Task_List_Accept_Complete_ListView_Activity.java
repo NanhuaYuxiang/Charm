@@ -11,10 +11,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.animation.BounceInterpolator;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -50,7 +52,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 			R.id.image_unpublish, R.id.image_accept, R.id.image_unaccept };
 	private ListView listView = null;
 	private Task_Accept_Complete_Adapter adapter = null;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,10 +61,13 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		initListView();
 		isShow_Img_NoTask();
 		initAnimations();// 初始化动画
+		//Toast.makeText(this,"屏幕宽度为："+ getScreenWidth(), Toast.LENGTH_LONG).show();
 		// 设置上下文菜单
 		super.registerForContextMenu(listView);
 	}
 
+	
+	
 	/**
 	 * 判断当前页面是否有任务，没有则显示no_task图片
 	 * 
@@ -260,7 +265,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		for (int i = 0; i < imageIds.length; i++) {
 			AnimatorSet animatorSet = new AnimatorSet();
 			ObjectAnimator animator1 = ObjectAnimator.ofFloat(
-					imageViews.get(i), "translationX", 150 * i, 0);
+					imageViews.get(i), "translationX", getScreenWidth()/5 * i, 0);
 			animatorSet.playTogether(animator1);
 			animatorSet.setDuration(500);
 			animatorSet.setInterpolator(new BounceInterpolator());
@@ -273,7 +278,7 @@ public class Task_List_Accept_Complete_ListView_Activity extends BaseActivity
 		for (int i = 0; i < imageIds.length; i++) {
 			AnimatorSet animatorSet = new AnimatorSet();
 			ObjectAnimator animator1 = ObjectAnimator.ofFloat(
-					imageViews.get(i), "translationX", 0, 150 * i);
+					imageViews.get(i), "translationX", 0, getScreenWidth()/5 * i);
 			animatorSet.playTogether(animator1);
 			animatorSet.setDuration(500);
 			animatorSet.setInterpolator(new BounceInterpolator());

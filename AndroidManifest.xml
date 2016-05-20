@@ -116,6 +116,10 @@
         </activity>
         <activity android:name=".ui.AddTaskActivity" >
         </activity>
+        
+        <activity android:name=".ui.chatActivity" >
+        </activity>
+        
         <activity android:name=".TestCircleAvater" >
         </activity>
 

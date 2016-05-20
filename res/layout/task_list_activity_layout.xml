@@ -28,40 +28,40 @@
         android:dividerHeight="2px"
         android:layout_marginTop="50dp" >
     </ListView>
-
+<!--发布且完成的  -->
     <ImageView
         android:id="@+id/image_publish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/pub_accom" />
-
+        android:src="@drawable/fa_wan" />
+<!-- 发布且未完成的 -->
     <ImageView
         android:id="@+id/image_unpublish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/pub_unaccom" />
-
+        android:src="@drawable/fa_wei" />
+<!--  接收且完成的-->
     <ImageView
         android:id="@+id/image_accept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/accep_accom" />
-
+        android:src="@drawable/jie_wan" />
+<!--  接收且未完成的-->
     <ImageView
         android:id="@+id/image_unaccept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/accep_unaccom" />
+        android:src="@drawable/jie_wei" />
 
     <ImageView
         android:id="@+id/image_root"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:src="@drawable/root" />
+        android:src="@drawable/gen" />
 
 </FrameLayout>

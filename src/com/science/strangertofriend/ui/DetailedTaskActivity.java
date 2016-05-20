@@ -12,6 +12,7 @@ import com.avos.avoscloud.AVPush;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SendCallback;
 import com.avos.avoscloud.im.v2.AVIMClient;
@@ -223,8 +224,14 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 					currentTask.put("isAccepted", true);
 					currentTask.put("acceptedName", currentUser.getUsername());
 					currentTask.saveInBackground();
-					String pub_user = currentTask.get("pub_user").toString();
-					androidPush(pub_user);// 推送
+					// String pub_user = currentTask.get("pub_user").toString();
+					// androidPush(pub_user);// 推送
+					AVObject pub_user = currentTask.getAVObject("pub_user");
+					String objectId = pub_user.getObjectId();
+					// String objectId = pub_user.get("objectId").toString();
+					// String int1 = pub_user.getString("objectId");
+					// System.out.println("Objectint1:" + int1);
+					androidPush(objectId);// 推送
 				}
 			}
 		});
@@ -240,26 +247,40 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 	 * 推送
 	 */
 	private void androidPush(String pub_user) {
-
 		AVQuery<AVObject> query = new AVQuery<>("_User");
-		query.whereEqualTo("objectId", pub_user);
-		query.findInBackground(new FindCallback<AVObject>() {
+		query.getInBackground(pub_user, new GetCallback<AVObject>() {
 			@Override
-			public void done(List<AVObject> list, AVException e) {
-				List<AVObject> users = list;// 符合 priority = 0 的 Todo 数组
-				AVObject user = users.get(0);
-				String installationId = user.get("installationId").toString();
-				AVQuery pushQuery = AVInstallation.getQuery();
-				// 假设 THE_INSTALLATION_ID 是保存在用户表里的 installationId，
-				// 可以在应用启动的时候获取并保存到用户表
-				pushQuery.whereEqualTo("installationId", installationId);
-				AVPush.sendMessageInBackground("你发布的新任务已被接收", pushQuery,
-						new SendCallback() {
-							@Override
-							public void done(AVException e) {
+			public void done(AVObject user, AVException e) {
+				// object 就是 id 为 558e20cbe4b060308e3eb36c 的 Todo 对象实例
+				String installationId = user.getString("installationId");
 
-							}
-						});
+				AVPush push = new AVPush();
+				// 设置消息
+				push.setMessage("你有新发布的任务被被接收");
+				// 设置查询条件，
+				push.setQuery(AVInstallation.getQuery().whereEqualTo(
+						"installationId", installationId));
+				// 推送
+				push.sendInBackground(new SendCallback() {
+					@Override
+					public void done(AVException e) {
+						// Toast toast = null;
+						if (e == null) {
+							// toast = Toast.makeText(
+							// getApplicationContext(),
+							// "Send successfully.",
+							// Toast.LENGTH_SHORT);
+						} else {
+							// toast = Toast.makeText(
+							// getApplicationContext(),
+							// "Send fails with :"
+							// + e.getMessage(),
+							// Toast.LENGTH_LONG);
+						}
+						// 放心大胆地show，我们保证 callback 运行在 UI 线程。
+						// toast.show();
+					}
+				});
 			}
 		});
 
