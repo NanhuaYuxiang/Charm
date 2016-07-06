@@ -162,7 +162,9 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 			}
 		}.start();
 	}
-
+	/**
+	 * 发布任务
+	 */
 	public void publishTask() {
 		String themeString = theme.getText().toString();
 		String descriptionString = description.getText().toString();

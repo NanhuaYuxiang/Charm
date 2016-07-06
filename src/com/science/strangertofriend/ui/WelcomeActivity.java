@@ -1,16 +1,32 @@
 package com.science.strangertofriend.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVCloud;
+import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FunctionCallback;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.LocationClientOption.LocationMode;
+import com.baidu.mapapi.SDKInitializer;
 import com.science.strangertofriend.AppManager;
 import com.science.strangertofriend.MainActivity;
 import com.science.strangertofriend.R;
@@ -24,10 +40,19 @@ import com.science.strangertofriend.guide.GuideActivity;
 public class WelcomeActivity extends Activity {
 
 	private ImageView mWelcomeImg;
+	private double latitude, longitude;
+	public LocationClient mLocationClient = null;
+	public BDLocationListener myListener =null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// 定位相关
+		SDKInitializer.initialize(getApplicationContext());
+		mLocationClient = new LocationClient(getApplicationContext()); // 声明LocationClient类
+		myListener = new MyLocationListener();
+		mLocationClient.registerLocationListener(myListener); // 注册监听函数
+		initLocationOption();
 
 		// 将activity加入到AppManager堆栈中
 		AppManager.getAppManager().addActivity(this);
@@ -35,6 +60,7 @@ public class WelcomeActivity extends Activity {
 		SharedPreferences settingPreferences = getSharedPreferences(
 				"WelcomeActivity", 0);
 		boolean isFirstIn = settingPreferences.getBoolean("isFirstIn", true);
+		// 首次打开app
 		if (isFirstIn) {
 			settingPreferences.edit().putBoolean("isFirstIn", false).commit();
 			Intent intent = new Intent(WelcomeActivity.this,
@@ -42,12 +68,14 @@ public class WelcomeActivity extends Activity {
 			startActivity(intent);
 			WelcomeActivity.this.finish();
 		} else {
+			// 为登录情况
 			if (AVUser.getCurrentUser() == null) {
 
 				Intent intent = new Intent(WelcomeActivity.this,
 						LoginActivity.class);
 				startActivity(intent);
 				WelcomeActivity.this.finish();
+				// 已登录情况
 			} else {
 
 				getWindow().setFlags(
@@ -74,12 +102,66 @@ public class WelcomeActivity extends Activity {
 					public void onAnimationEnd(Animation animation) {
 						Intent intent = new Intent(WelcomeActivity.this,
 								MainActivity.class);
-						startActivity(intent);
-						WelcomeActivity.this.finish();
+						 intent.putExtra("latitude", latitude);
+						 startActivity(intent);
+						 WelcomeActivity.this.finish();
 					}
 				});
 			}
 		}
+	}
+
+	private  class MyLocationListener implements BDLocationListener {
+
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			latitude = location.getLatitude();
+			longitude = location.getLongitude();
+			
+			
+			notifyLeancloud();
+		}
+
+	}
+
+	private void initLocationOption() {
+		LocationClientOption option = new LocationClientOption();
+		// option.setLocationMode(LocationMode.Hight_Accuracy);//设置定位模式
+		// option.setNeedDeviceDirect(true);//返回的定位结果包含手机机头的方向
+		option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
+		option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
+		option.setOpenGps(true);
+		option.setScanSpan(1000 * 60);// 每隔1分钟发一次定位请求
+		mLocationClient.setLocOption(option);
+	}
+	
+	public void notifyLeancloud(){
+		Map<String, Object> dicParameters = new HashMap<String, Object>();
+		dicParameters.put("instalId", "50c65102-cc81-4148-b226-a1d91912ba3b");
+		dicParameters.put("latitude", latitude);
+		dicParameters.put("longitude", longitude);
+		// 调用云函数 averageStars
+		AVCloud.callFunctionInBackground("queryGeo", dicParameters, new FunctionCallback<Object>() {
+
+			@Override
+			public void done(Object object, AVException exception) {
+				
+			}
+		});
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		//开始定位
+		mLocationClient.start();
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		//停止定位
+		mLocationClient.stop();
 	}
 
 }

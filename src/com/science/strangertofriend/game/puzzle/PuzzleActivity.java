@@ -48,7 +48,6 @@ import com.yalantis.contextmenu.lib.interfaces.OnMenuItemClickListener;
 /**
  * @description Æ´Í¼ÓÎÏ·
  * 
- * @author ĞÒÔËScience ³ÂÍÁŸö
  * @school University of South China
  * @email chentushen.science@gmail.com,274240671@qq.com
  * @2015-5-24

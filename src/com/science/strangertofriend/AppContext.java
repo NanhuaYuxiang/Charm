@@ -22,7 +22,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.science.strangertofriend.ui.ChatRoomActivity;
+import com.science.strangertofriend.ui.DetailedTaskActivity;
 import com.science.strangertofriend.ui.ReceiveMessageHandler;
+import com.science.strangertofriend.ui.ShowNearMenMapActivity;
 
 /**
  * @description 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -80,7 +82,7 @@ public class AppContext extends Application {
 		 */
 		// 设置默认打开的 Activity
 		PushService.setDefaultPushCallback(getApplicationContext(),
-				MainActivity.class);
+				ShowNearMenMapActivity.class);
 		// 订阅频道，当该频道消息到来的时候，打开对应的 Activity
 		PushService.subscribe(getApplicationContext(), "public",
 				MainActivity.class);

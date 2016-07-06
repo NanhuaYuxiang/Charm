@@ -7,6 +7,7 @@ import io.codetail.animation.ViewAnimationUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import yalantis.com.sidemenu.interfaces.Resourceble;
 import yalantis.com.sidemenu.interfaces.ScreenShotable;
@@ -43,18 +44,18 @@ import android.widget.Toast;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import com.avos.avoscloud.AVAnalytics;
+import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVConstants;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVPush;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.FunctionCallback;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.SaveCallback;
-import com.avos.avoscloud.SendCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -66,6 +67,7 @@ import com.science.strangertofriend.fragment.UserFragment;
 import com.science.strangertofriend.ui.AlterActivity;
 import com.science.strangertofriend.ui.CallFragment;
 import com.science.strangertofriend.ui.SettingActivity;
+import com.science.strangertofriend.ui.WelcomeActivity;
 import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.utils.GetUserTaskLists;
 import com.yalantis.contextmenu.lib.ContextMenuDialogFragment;
@@ -109,12 +111,14 @@ public class MainActivity extends ActionBarActivity implements
 	private ImageView mTitleMore;
 	private Button btnCall;
 
+	double latitude;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		currentUser = AVUser.getCurrentUser();
-		Log.i("currentuSser", currentUser.getUsername() + "");
 		// avos用户反馈系统,在用户打开App时，通知用户新的反馈回复
 		FeedbackAgent agent = new FeedbackAgent(MainActivity.this);
 		agent.sync();
@@ -750,7 +754,7 @@ public class MainActivity extends ActionBarActivity implements
 						}
 					}
 				});
-
 	}
-
+	
+	
 }

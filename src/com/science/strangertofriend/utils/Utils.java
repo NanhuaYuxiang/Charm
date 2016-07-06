@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 /**
  * @description 工具类
  * 
- * @author 幸运Science 陈土燊
  * @school University of South China
  * @email chentushen.science@gmail.com,274240671@qq.com
  * @2015-5-27

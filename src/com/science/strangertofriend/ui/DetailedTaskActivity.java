@@ -115,61 +115,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 				acceptTaskBtn.setText("任务已被接受");
 			}
 		}
-		// switch(v.getId()){
-		// case R.id.back_img:
-		// finish();
-		// break;
-		// case R.id.contactTaskPeopleBtn:
-		// Intent chatIntent = new
-		// Intent(DetailedTaskActivity.this,ChatActivity.class);
-		// chatIntent.putExtra("taskPubliName",
-		// intent.getStringExtra("publisherName"));
-		// startActivity(chatIntent);
-		// break;
-		// case R.id.acceptTaskBtn:
-		// if(!isTaskAccepted()){
-		// final SweetAlertDialog dialog=new
-		// SweetAlertDialog(DetailedTaskActivity.this,
-		// SweetAlertDialog.WARNING_TYPE);
-		// dialog.setTitleText("");
-		// dialog.setContentText("确定接收任务？");
-		// dialog.setCancelable(true);
-		// dialog.setCancelText("取消");
-		// dialog.setConfirmClickListener(new OnSweetClickListener() {
-		//
-		// @Override
-		// public void onClick(SweetAlertDialog sweetAlertDialog) {
-		// if(!isTaskBelongToMyself()){
-		// acceptTask();
-		// }else {
-		// new
-		// SweetAlertDialog(DetailedTaskActivity.this,SweetAlertDialog.ERROR_TYPE)
-		// .setTitleText("Sorry")
-		// .setContentText("不可以接收自己的任务哦")
-		// .show();
-		// }
-		// dialog.cancel();
-		// }
-		// });
-		// dialog.setCancelClickListener(new OnSweetClickListener() {
-		//
-		// @Override
-		// public void onClick(SweetAlertDialog sweetAlertDialog) {
-		// dialog.cancel();
-		// }
-		// });
-		// dialog.show();
-		// }else {
-		// new
-		// SweetAlertDialog(DetailedTaskActivity.this,SweetAlertDialog.ERROR_TYPE)
-		// .setTitleText("sorry")
-		// .setContentText("任务已经被接受了哦，下次早点哦！")
-		// .show();
-		// acceptTaskBtn.setText("任务已被接受");
-		// }
-		// break;
-		// }
-	}
+   	}
 
 	public void init() {
 		mCircleImageView = (CircleImageView) findViewById(R.id.avatar);
@@ -206,7 +152,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 	}
 
 	/*
-	 * 向服务器数据库保存数据
+	 * 接收任务，向服务器数据库保存数据
 	 */
 	public void acceptTask() {
 		AVQuery<AVObject> taskQuery = new AVQuery<AVObject>("Task");
@@ -256,7 +202,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 
 				AVPush push = new AVPush();
 				// 设置消息
-				push.setMessage("你有新发布的任务被被接收");
+				push.setMessage("你有新发布的任务被接收");
 				// 设置查询条件，
 				push.setQuery(AVInstallation.getQuery().whereEqualTo(
 						"installationId", installationId));

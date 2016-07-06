@@ -3,6 +3,7 @@ package com.science.strangertofriend.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
+import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVGeoPoint;
@@ -31,11 +33,13 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.FunctionCallback;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.cloud.NearbySearchInfo;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -233,6 +237,9 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 	}
 
+	/**
+	 * 初始化定位信息
+	 */
 	private void initLocation() {
 
 		mLocationClient = new LocationClient(getApplicationContext());
@@ -275,6 +282,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 
 		@Override
 		public void onReceiveLocation(BDLocation location) {
+			
+			
 			MyLocationData data = new MyLocationData.Builder()
 					.direction(currentX).accuracy(location.getRadius())
 					.latitude(location.getLatitude())
@@ -285,7 +294,6 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			cityCode = location.getCityCode();
 			getOffLineMap();
 			downloadOfflineMap(Integer.parseInt(cityCode));
-			Log.i("cityCode", cityCode + location.getCity());
 			// 自定义方向箭头
 			mIconLocation = BitmapDescriptorFactory
 					.fromResource(R.drawable.navi_map_gps_locked);
@@ -294,7 +302,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			MyLocationConfiguration configuration = new MyLocationConfiguration(
 					LocationMode.NORMAL, true, mIconLocation);
 			mBaiduMap.setMyLocationConfigeration(configuration);
-
+			
 			// 更新经纬度
 			mLatitude = location.getLatitude();
 			mLongtitude = location.getLongitude();
@@ -313,8 +321,6 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				mBaiduMap.animateMapStatus(msu);
 				isFirstIn = false;
 
-				Toast.makeText(context, location.getAddrStr(),
-						Toast.LENGTH_LONG).show();
 
 				// 查找附近1000米的人
 				// findMenNearby();
@@ -327,7 +333,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	
 
 	/**
-	 * 查找附近的服务
+	 * 查找附近的任务
 	 */
 	public void findTaskNearBy() {
 		taskNearBy.clear();
@@ -505,48 +511,6 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				intent.putExtra("pub_user", task.getPub_user().toString());
 
 				startActivity(intent);
-				// final LocationMenList menList = (LocationMenList) extraInfo;
-				// .getSerializable("menList");
-				//
-				// InfoWindow infoWindow;
-				// final LatLng latLng = marker.getPosition();
-				// TextView textView = new TextView(context);
-				// textView.setBackgroundResource(R.drawable.location_tips);
-				// textView.setPadding(23, 20, 20, 40);
-				// textView.setTextColor(Color.WHITE);
-				// textView.setText(menList.getUsername());
-				//
-				// infoWindow = new InfoWindow(BitmapDescriptorFactory
-				// .fromView(textView), latLng, -45,
-				// new OnInfoWindowClickListener() {
-				//
-				// @Override
-				// public void onInfoWindowClick() {
-				// // 解密游戏
-				// decodeGame(menList.getUsername(),
-				// menList.getLatitude(),
-				// menList.getLongtitude(),
-				// menList.getUserEmail(),
-				// menList.getGender(),
-				// menList.getLocationTime());
-				// }
-				// });
-				// mBaiduMap.showInfoWindow(infoWindow);
-
-				// InfoWindow infoWindow;
-				// final LatLng latLng=marker.getPosition();
-
-				// infoWindow=new
-				// InfoWindow(BitmapDescriptorFactory.fromView(imageView),
-				// latLng, -30, new OnInfoWindowClickListener() {
-				//
-				// @Override
-				// public void onInfoWindowClick() {
-				// Toast.makeText(context, task.getPublisherName(),
-				// Toast.LENGTH_SHORT).show();
-				// }
-				// });
-				// mBaiduMap.showInfoWindow(infoWindow);
 				return true;
 			}
 		});
@@ -603,25 +567,6 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			}
 		}
 
-		// switch (item.getItemId()) {
-		// case R.id.map_common:
-		// mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-		// break;
-		// case R.id.map_site:
-		// mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
-		// break;
-		// case R.id.map_traffic:
-		// if (mBaiduMap.isTrafficEnabled()) {
-		// mBaiduMap.setTrafficEnabled(false);
-		// item.setTitle("实时地图(off)");
-		// } else {
-		// mBaiduMap.setTrafficEnabled(true);
-		// item.setTitle("实时地图(on)");
-		// }
-		// break;
-		// default:
-		// break;
-		// }
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -690,5 +635,5 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 	public static double getLongitude() {
 		return mLongtitude;
 	}
-
+	
 }
