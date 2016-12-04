@@ -66,6 +66,7 @@ import com.science.strangertofriend.fragment.ShakeFragment;
 import com.science.strangertofriend.fragment.UserFragment;
 import com.science.strangertofriend.ui.AlterActivity;
 import com.science.strangertofriend.ui.CallFragment;
+import com.science.strangertofriend.ui.ElderlyActivity;
 import com.science.strangertofriend.ui.SettingActivity;
 import com.science.strangertofriend.ui.WelcomeActivity;
 import com.science.strangertofriend.utils.AVService;
@@ -248,12 +249,12 @@ public class MainActivity extends ActionBarActivity implements
 	private void initComponent() {
 
 		mTitleText = (TextView) findViewById(R.id.title);
-		mTitleText.setText("摇一摇附近任务");
+		mTitleText.setText("余香");
 		// mMessageFragment = new MessageFragment();
 		// mAddressListFragment=new AddressListFragment();
 		mShakeFragment = new ShakeFragment();
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, mShakeFragment).commit();
+//		getSupportFragmentManager().beginTransaction()
+//				.replace(R.id.content_frame, mShakeFragment).commit();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerLayout.setScrimColor(Color.TRANSPARENT);
 
@@ -275,43 +276,30 @@ public class MainActivity extends ActionBarActivity implements
 		// 上下文菜单
 		mTitleMore = (ImageView) findViewById(R.id.title_more);
 		mFragmentManager = getSupportFragmentManager();
+		
+		/**
 		btnCall = (Button) findViewById(R.id.btnCall);
 		btnCall.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				int id = v.getId();
 				if (id == R.id.btnCall) {
 					callFragement = new CallFragment();
 					getSupportFragmentManager().beginTransaction()
 							.replace(R.id.content_frame, callFragement)
 							.commit();
-					// Intent intentCall = new
-					// Intent(MainActivity.this,CallActivity.class);
-					// startActivity(intentCall);
 				}
-				// switch (v.getId()) {
-				// case R.id.btnCall:
-				// callFragement = new CallFragment();
-				// getSupportFragmentManager().beginTransaction()
-				// .replace(R.id.content_frame, callFragement)
-				// .commit();
-				// // Intent intentCall = new
-				// // Intent(MainActivity.this,CallActivity.class);
-				// // startActivity(intentCall);
-				// break;
-				//
-				// default:
-				// break;
-				// }
 
 			}
 		});
+		*/
 		initMenuFragment();
 	}
 
-	// 上下文菜单
+	/** 初始化上下文菜单
+	 * 
+	 */
 	private void initMenuFragment() {
 
 		MenuParams menuParams = new MenuParams();
@@ -322,29 +310,34 @@ public class MainActivity extends ActionBarActivity implements
 		mMenuDialogFragment = ContextMenuDialogFragment.newInstance(menuParams);
 	}
 
-	// 上下文菜单
+	/** 获取上下文菜单
+	 * 
+	 * @return
+	 */
 	private List<MenuObject> getMenuObjects() {
 		List<MenuObject> menuObjects = new ArrayList<>();
 
 		MenuObject close = new MenuObject();
 		close.setResource(R.drawable.close_drawer);
 
-		// MenuObject call = new MenuObject("拨号");
-		// call.setResource(R.drawable.close_drawer);
-
 		MenuObject set = new MenuObject("应用设置");
 		set.setResource(R.drawable.set);
 
 		MenuObject user = new MenuObject("资料更改");
 		user.setResource(R.drawable.user);
+		
+		MenuObject elderly= new MenuObject("老人专区");
+		elderly.setResource(R.drawable.default_user_img);
 
 		MenuObject quit = new MenuObject("退出应用");
 		quit.setResource(R.drawable.quit);
+		
+
 
 		menuObjects.add(close);
-		// menuObjects.add(call);
 		menuObjects.add(set);
 		menuObjects.add(user);
+		menuObjects.add(elderly);
 		menuObjects.add(quit);
 		return menuObjects;
 	}
@@ -475,17 +468,6 @@ public class MainActivity extends ActionBarActivity implements
 		return mMessageFragment;
 	}
 
-	// 任务列表切换动画实现
-	// public ScreenShotable replaceTaskFragment(ScreenShotable screenShotable,
-	// int topPosition){
-	// CircularRevealAnima(screenShotable, topPosition);
-	// mTitleText.setText("任务");
-	// // mTaskFragment = new TaskFragment();
-	// getSupportFragmentManager().beginTransaction()
-	// .replace(R.id.content_frame, mTaskFragment).commit();
-	//
-	// return mTaskFragment;
-	// }
 
 	// 通讯录视图切换动画实现
 	public ScreenShotable replaceAddressListFragment(
@@ -559,11 +541,6 @@ public class MainActivity extends ActionBarActivity implements
 		switch (position) {
 		case 0:
 			break;
-
-		// case 1:
-		// Intent intentCall = new Intent(this,CallActivity.class);
-		// startActivity(intentCall);
-		// break;
 		case 1:
 			Intent intentSet = new Intent(this, SettingActivity.class);
 			startActivity(intentSet);
@@ -574,11 +551,13 @@ public class MainActivity extends ActionBarActivity implements
 			break;
 
 		case 3:
-			quitApp();
-			// Intent intent=new Intent(this,TestCircleAvater.class);
-			// startActivity(intent);
+			
+			 Intent intent=new Intent(this,ElderlyActivity.class);
+			 startActivity(intent);
 			break;
-
+		case 4:
+			
+			quitApp();
 		default:
 			break;
 		}

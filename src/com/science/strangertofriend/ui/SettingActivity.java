@@ -2,18 +2,23 @@ package com.science.strangertofriend.ui;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
@@ -27,15 +32,17 @@ import com.science.strangertofriend.widget.RevealLayout;
  * 
  */
 
-public class SettingActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity implements OnCheckedChangeListener {
 
 	private RevealLayout mRevealLayout;
 	private RelativeLayout mLayout;
 	private ImageView mBackImg;
 	private TextView mTitle;
 	private TableRow mNumberSafe, mNumberBound, mMessageTip, mSetClearCache,
-			mSetHelp, mSetUpdate, mSetVersion, mUserDeal, mAboutUs;
-
+			mSetHelp, mSetUpdate, mSetVersion, mUserDeal, mAboutUs,mVoiceSetting;
+	private Switch switch_isOpenFaceVerify;
+	public static final String IS_OPEN_FACE_VERIFY="com.science.strangertofriend.ui.SettingActivity";
+	private SharedPreferences.Editor editor;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +53,7 @@ public class SettingActivity extends BaseActivity {
 	}
 
 	private void initView() {
+		switch_isOpenFaceVerify=(Switch) findViewById(R.id.switch_isOpenFaceVerify);
 		mBackImg = (ImageView) findViewById(R.id.back_img);
 		mTitle = (TextView) findViewById(R.id.title);
 		mTitle.setText("设置");
@@ -59,13 +67,27 @@ public class SettingActivity extends BaseActivity {
 		mSetVersion = (TableRow) findViewById(R.id.set_version);
 		mUserDeal = (TableRow) findViewById(R.id.user_deal);
 		mAboutUs = (TableRow) findViewById(R.id.about_us);
+		mVoiceSetting=(TableRow) findViewById(R.id.voice_setting);
 
 		mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout);
 		mLayout = (RelativeLayout) findViewById(R.id.layout);
 		mLayout.setBackgroundColor(Color.WHITE);
+		
+		editor=getSharedPreferences(SettingActivity.IS_OPEN_FACE_VERIFY, MODE_PRIVATE).edit();
+		
+		boolean isopenFace=getSharedPreferences(SettingActivity.IS_OPEN_FACE_VERIFY, MODE_PRIVATE).getBoolean("isOpenFaceVerify", false);
+		if(isopenFace){
+			switch_isOpenFaceVerify.setChecked(true);
+		}else {
+			switch_isOpenFaceVerify.setChecked(false);
+		}
 	}
 
 	private void initListener() {
+		
+		
+		//设置是否开启人脸识别
+		switch_isOpenFaceVerify.setOnCheckedChangeListener(this);
 
 		mRevealLayout.setContentShown(false);
 		mRevealLayout.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -99,11 +121,23 @@ public class SettingActivity extends BaseActivity {
 				SettingActivity.this.finish();
 			}
 		});
-
+		
+		
+		
+		
+		
+		/**
+		//账号安全设置
 		mNumberSafe.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				
+				//是否开启人脸验证
+				Intent intent=new Intent(SettingActivity.this,FaceDetect.class);
+				startActivity(intent);
+				
+			
 				new SweetAlertDialog(SettingActivity.this,
 						SweetAlertDialog.WARNING_TYPE)
 						.setTitleText("账号安全")
@@ -116,9 +150,12 @@ public class SettingActivity extends BaseActivity {
 										sDialog.dismiss();
 									}
 								}).show();
+				
+				
 			}
 
 		});
+		*/
 		mNumberBound.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -187,6 +224,16 @@ public class SettingActivity extends BaseActivity {
 			}
 
 		});
+		
+		mVoiceSetting.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent=new Intent(SettingActivity.this,VoiceSetting.class);
+				startActivity(intent);
+			}
+		});
+		
 		mSetHelp.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -277,6 +324,8 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	@TargetApi(19)
 	public void initSystemBar() {
+
+
 		super.initSystemBar();
 		// 创建状态栏的管理实例
 		SystemBarTintManager tintManager = new SystemBarTintManager(this);
@@ -286,5 +335,26 @@ public class SettingActivity extends BaseActivity {
 		tintManager.setNavigationBarTintEnabled(true);
 		// 设置一个颜色给系统栏
 		tintManager.setTintColor(Color.parseColor("#f698b2"));
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		
+		//查看用户是否已经产生人脸模型,若有则无需上传，若无，则需拍照上传人脸
+		boolean isModelExist=getSharedPreferences(SettingActivity.IS_OPEN_FACE_VERIFY, MODE_PRIVATE).getBoolean("isModelExist", false);
+		//此处objectid来区分不同用户的保存model状态，
+		//防止不同用用户登录同一台手机
+		//若果不存在,需要上传照片产生model
+		if(!isModelExist){
+			Intent intent=new Intent(this,GenerateFaceModel.class);
+			startActivity(intent);
+		}
+		
+		if(isChecked){
+			editor.putBoolean("isOpenFaceVerify", true);
+		}else{
+			editor.putBoolean("isOpenFaceVerify", false);
+		}
+		editor.commit();
 	}
 }

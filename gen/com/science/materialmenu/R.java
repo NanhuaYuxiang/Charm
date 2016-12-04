@@ -12,10 +12,10 @@ public final class R {
 		public static final int activity_vertical_margin = 0x7f090055;
 	}
 	public static final class drawable {
-		public static final int ic_launcher = 0x7f020126;
+		public static final int ic_launcher = 0x7f020129;
 	}
 	public static final class id {
-		public static final int action_settings = 0x7f0c019d;
+		public static final int action_settings = 0x7f0c01b3;
 	}
 	public static final class menu {
 		public static final int main = 0x7f0d0001;

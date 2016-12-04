@@ -38,6 +38,7 @@ public class CallFragment extends Fragment implements OnClickListener {
 		// TODO Auto-generated method stub
 		// 为啥这个布局文件里面木有这个按钮
 		// 我也不知道，二次开发的
+		// 尼玛  -.-炸了
 		btnCallAct = (CircleImageView) mFrag.findViewById(R.id.btnCallAct);
 		btnCallAct.setImageResource(R.drawable.call);
 		btnCallAct.setOnClickListener(this);

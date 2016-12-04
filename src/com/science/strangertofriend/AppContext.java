@@ -17,6 +17,7 @@ import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.avoscloud.leanchatlib.controller.ChatManager;
 import com.avoscloud.leanchatlib.controller.ChatManagerAdapter;
 import com.avoscloud.leanchatlib.model.UserInfo;
+import com.iflytek.cloud.SpeechUtility;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -37,7 +38,9 @@ public class AppContext extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		//—∂∑…”Ô“Ù
+		SpeechUtility.createUtility(AppContext.this, "appid=5835a709");
+		
 		// ImageLoaderÕº∆¨ª∫¥Ê
 		initImageLoader(getApplicationContext());
 

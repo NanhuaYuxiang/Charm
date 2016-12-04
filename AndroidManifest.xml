@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.science.strangertofriend"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="2.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="20" />
 
+    <!-- 获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 获取当前wifi状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 允许程序改变网络连接状态 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!-- 摄相头权限，拍照需要用到 -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!-- SD卡读取权限，用户写入离线定位数据 -->
@@ -120,7 +128,15 @@
         </activity>
         <activity android:name=".TestCircleAvater" >
         </activity>
-
+        <activity android:name=".ui.ElderlyActivity" >
+        </activity>
+        <activity android:name=".ui.VoiceSetting" >
+        </activity>
+        <activity android:name=".ui.FaceDetect" >
+        </activity>
+        <activity android:name=".ui.OnlineFaceVerify" >
+        </activity>
+        <activity android:name=".ui.GenerateFaceModel"></activity>
         <!-- 推送服务 -->
         <service
             android:name="com.avos.avoscloud.PushService"

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/img_user"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/face_detect" />
+
+    <Button
+        android:id="@+id/bt_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/img_user"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/button_click"
+        android:text="拍照"
+        android:textColor="#fff"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/bt_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/bt_camera"
+        android:layout_alignBottom="@+id/bt_camera"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="28dp"
+        android:background="@drawable/button_click"
+        android:text="检测"
+        android:textColor="#fff"
+        android:textSize="20sp" />
+
+</RelativeLayout>

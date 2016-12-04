@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FunctionCallback;
 import com.baidu.location.BDLocation;
@@ -38,12 +39,13 @@ import com.science.strangertofriend.guide.GuideActivity;
  */
 
 public class WelcomeActivity extends Activity {
-
+	
 	private ImageView mWelcomeImg;
 	private double latitude, longitude;
 	public LocationClient mLocationClient = null;
 	public BDLocationListener myListener =null;
-
+	
+	public static final String GEOWIND="com.science.strangertofriend.geowind";//经纬度tag
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,10 +102,22 @@ public class WelcomeActivity extends Activity {
 
 					@Override
 					public void onAnimationEnd(Animation animation) {
-						Intent intent = new Intent(WelcomeActivity.this,
-								MainActivity.class);
-						 intent.putExtra("latitude", latitude);
-						 startActivity(intent);
+						
+						//查看用户是否开启人脸识别功能
+						SharedPreferences sharedPreferences=getSharedPreferences(SettingActivity.IS_OPEN_FACE_VERIFY, MODE_PRIVATE);
+						boolean isOpenFaceVerify=sharedPreferences.getBoolean("isOpenFaceVerify", false);
+						if(isOpenFaceVerify){
+							
+							Intent intent=new Intent(WelcomeActivity.this,OnlineFaceVerify.class);
+							intent.putExtra("latitude", latitude);
+							
+							startActivity(intent);
+						}else{
+							
+							Intent intent = new Intent(WelcomeActivity.this,
+									MainActivity.class);
+							startActivity(intent);
+						}
 						 WelcomeActivity.this.finish();
 					}
 				});
@@ -117,8 +131,13 @@ public class WelcomeActivity extends Activity {
 		public void onReceiveLocation(BDLocation location) {
 			latitude = location.getLatitude();
 			longitude = location.getLongitude();
-			
-			
+			String addString=location.getAddrStr();
+			//将经纬度信息保存起来
+			SharedPreferences.Editor editor=getSharedPreferences(GEOWIND,MODE_PRIVATE).edit();
+			editor.putString("latitude", latitude+"");
+			editor.putString("longitude", longitude+"");
+			editor.putString("addstr", addString);
+			editor.commit();
 			notifyLeancloud();
 		}
 
@@ -137,7 +156,7 @@ public class WelcomeActivity extends Activity {
 	
 	public void notifyLeancloud(){
 		Map<String, Object> dicParameters = new HashMap<String, Object>();
-		dicParameters.put("instalId", "50c65102-cc81-4148-b226-a1d91912ba3b");
+		dicParameters.put("instalId", AVInstallation.getCurrentInstallation().getInstallationId());
 		dicParameters.put("latitude", latitude);
 		dicParameters.put("longitude", longitude);
 		// 调用云函数 averageStars

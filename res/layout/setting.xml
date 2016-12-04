@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ripple="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend" 
+    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#b29ce3"
@@ -41,7 +41,7 @@
     <com.science.strangertofriend.widget.RevealLayout
         android:id="@+id/reveal_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
+        android:layout_height="match_parent"
         android:layout_below="@id/title_layout" >
 
         <RelativeLayout
@@ -107,13 +107,13 @@
                                     android:textColor="#555"
                                     android:textSize="16sp" />
 
-                                <ImageView
+                                <Switch
+                                    android:id="@+id/switch_isOpenFaceVerify"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="right"
                                     android:gravity="center_vertical"
-                                    android:paddingRight="20dp"
-                                    android:src="@drawable/more_item_right" />
+                                    android:paddingRight="10dp" />
                             </TableRow>
                         </TableLayout>
                     </LinearLayout>
@@ -236,6 +236,50 @@
                                     android:includeFontPadding="false"
                                     android:paddingLeft="15dp"
                                     android:text="@string/clear_cache"
+                                    android:textColor="#555"
+                                    android:textSize="16sp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="right"
+                                    android:gravity="center_vertical"
+                                    android:paddingRight="20dp"
+                                    android:src="@drawable/more_item_right" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
+
+                    <!-- 清除缓存 -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:shrinkColumns="0"
+                            android:stretchColumns="0" >
+
+                            <TableRow
+                                android:id="@+id/voice_setting"
+                                android:layout_width="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:background="@drawable/setting_item"
+                                android:paddingBottom="16dp"
+                                android:paddingTop="16dp" >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:drawablePadding="5dp"
+                                    android:gravity="center_vertical"
+                                    android:includeFontPadding="false"
+                                    android:paddingLeft="15dp"
+                                    android:text="@string/voice_setting"
                                     android:textColor="#555"
                                     android:textSize="16sp" />
 

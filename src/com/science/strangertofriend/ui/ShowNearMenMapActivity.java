@@ -306,7 +306,8 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 			// 更新经纬度
 			mLatitude = location.getLatitude();
 			mLongtitude = location.getLongitude();
-
+			
+			
 			if (isFirstIn) {
 
 				if (AppContext.isThisLocation) {

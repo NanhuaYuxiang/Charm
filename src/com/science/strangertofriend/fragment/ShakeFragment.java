@@ -241,11 +241,14 @@ public class ShakeFragment extends Fragment implements ScreenShotable {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				if(mContainerView!=null){
+					
 				Bitmap bitmap = Bitmap.createBitmap(mContainerView.getWidth(),
 						mContainerView.getHeight(), Bitmap.Config.ARGB_8888);
 				Canvas canvas = new Canvas(bitmap);
 				mContainerView.draw(canvas);
 				ShakeFragment.this.mBitmap = bitmap;
+				}
 			}
 		}, 0);
 		// Thread thread = new Thread() {

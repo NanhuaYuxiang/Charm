@@ -97,10 +97,10 @@ public class Task_Accept_Complete_Adapter extends BaseAdapter {
 					.findViewById(R.id.publish_publisher);
 			convertView.setTag(viewHolder);
 			// …Ë÷√—’…´
-//			if (position % 2 == 0) {
-//				convertView
-//						.setBackgroundColor(color.background_floating_material_dark);
-//			}
+			if (position % 2 == 0) {
+				convertView
+						.setBackgroundColor(color.red_btn_bg_color);
+			}
 
 		} else {// convertView “‘ª∫≥Â
 			viewHolder = (ViewHolder) convertView.getTag();

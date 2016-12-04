@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent" >
+
+    <!-- 标题栏 -->
+
+    <RelativeLayout
+        android:layout_marginTop="25dp"
+        android:id="@+id/title_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/title_bg"
+        android:minHeight="55dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="@drawable/scanner_back_img"
+            android:contentDescription="@null"
+            android:minHeight="55dp"
+            android:minWidth="55dp"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#fff"
+            android:text="老年专区"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="375dp"
+        android:layout_below="@id/title_layout2"
+        android:gravity="center_horizontal"
+        android:hint="请说出您的任务"
+        android:textSize="20sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_content"
+        android:layout_centerVertical="true" >
+
+        <!-- 语音输入 -->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_startSay"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="#00ffffff"
+            android:src="@drawable/voice_input"
+            app:border_color="#fff"
+            app:border_width="2dp" />
+        
+         <!-- 发布任务 -->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_publishTask"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_centerInParent="true"
+            android:background="#00ffffff"
+            android:src="@drawable/confirm"
+            app:border_color="#fff"
+            app:border_width="2dp" />
+        <!-- 一键拨号 -->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_phone"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_alignParentRight="true"
+            android:background="#00ffffff"
+            android:src="@drawable/elderly_call"
+            app:border_color="#fff"
+            app:border_width="2dp" />
+    </RelativeLayout>
+
+   
+</RelativeLayout>

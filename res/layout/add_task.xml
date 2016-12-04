@@ -11,7 +11,7 @@
     <!-- 标题栏 -->
 
     <RelativeLayout
-        android:id="@+id/title_layout"
+        android:id="@+id/title_layout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/title_bg"
@@ -65,7 +65,7 @@
 
             <RelativeLayout
                 android:id="@+id/rl_spinner"
-                android:layout_below="@id/title_layout"
+                android:layout_below="@id/title_layout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"

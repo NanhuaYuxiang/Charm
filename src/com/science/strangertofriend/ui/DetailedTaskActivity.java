@@ -254,7 +254,10 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 			taskType.append("网络服务");
 			break;
 		case TaskType.SERVICE_OTHERS:
-			taskType.append("替他服务");
+			taskType.append("其它服务");
+			break;
+		case TaskType.SERVICE_ELDERLY:
+			taskType.append("老人服务");
 			break;
 		default:
 			break;
