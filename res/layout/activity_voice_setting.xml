@@ -6,10 +6,10 @@
     <!-- 标题栏 -->
 
     <RelativeLayout
-        android:layout_marginTop="25dp"
         android:id="@+id/title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:background="@drawable/title_bg"
         android:minHeight="55dp"
         android:orientation="horizontal" >
@@ -33,8 +33,7 @@
             android:textColor="#fff"
             android:textSize="20sp" />
     </RelativeLayout>
-    
-    
+
     <LinearLayout
         android:id="@+id/layout1"
         android:layout_width="match_parent"
@@ -47,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="设置语音结束反馈时间"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/ed_time"
@@ -57,9 +56,8 @@
             android:hint="4"
             android:inputType="number"
             android:textColor="#ff00" />
-    </LinearLayout>
-
-    <LinearLayout
+    </LinearLayout><LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout1"
@@ -102,19 +100,24 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/bt_save"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/button_click"
-            android:padding="10dp"
-            android:text="保存"
-            android:textSize="18sp" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginTop="70dp" android:id="@+id/relativeLayout1">
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/bt_save"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:background="@drawable/button_click"
+        android:padding="10dp"
+        android:text="保存"
+        android:textColor="#fff"
+        android:textSize="18sp" />
 
 </RelativeLayout>

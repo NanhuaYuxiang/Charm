@@ -13,13 +13,11 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.LogUtil.log;
 import com.science.strangertofriend.adapter.Task_Accept_Complete_Adapter;
 import com.science.strangertofriend.adapter.Task_Accept_UnComplete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_Complete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_UnComplete_Adapter;
 import com.science.strangertofriend.bean.Task;
-import com.science.strangertofriend.widget.DataGetCompleteBroadcastReceiver;
 
 /**
  * 获取个人任务历史清单的工具类
@@ -130,7 +128,6 @@ public class GetUserTaskLists {
 				intent.setAction("com.science.strangertofriend.action");
 				intent.putExtra("isFinished", true);
 				context.sendBroadcast(intent);
-				Log.i("broadcast", "发送广播咯");
 				return;
 			}
 			
@@ -167,7 +164,6 @@ public class GetUserTaskLists {
 					intent.setAction("com.science.strangertofriend.action");
 					intent.putExtra("isFinished", true);
 					context.sendBroadcast(intent);
-					Log.i("broadcast", "发送广播咯");
 				}
 
 			}

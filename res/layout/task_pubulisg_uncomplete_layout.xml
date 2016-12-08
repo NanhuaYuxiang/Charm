@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="30dp"
+    android:layout_marginLeft="10dp"
     android:orientation="vertical" >
 
     <!-- 发布任务但未完成的XML布局文件 -->
@@ -16,17 +16,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="12dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="@string/completed_publisher"
-            android:textSize="15dp" />
+            android:drawableLeft="@drawable/pub_user"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/publish_publisher"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textSize="15dp" />
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:textSize="15sp" />
     </LinearLayout>
     <!-- 任务类型 -->
 
@@ -38,17 +41,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
+            android:drawableLeft="@drawable/sign_icon"
+            android:gravity="center_vertical"
             android:text="@string/completed_taskType"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/publish_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textSize="15dp" />
+            android:gravity="center_vertical"
+            android:layout_weight="2"
+            android:textSize="15sp" />
     </LinearLayout>
     <!-- 时间 -->
 
@@ -60,17 +66,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="@string/completed_taskTime"
-            android:textSize="15dp" />
+            android:drawableLeft="@drawable/clock"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/publish_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textSize="15dp" />
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:textSize="15sp" />
     </LinearLayout>
     <!-- 地点 -->
 
@@ -82,17 +91,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="@string/completed_taskAddress"
-            android:textSize="15dp" />
+            android:drawableLeft="@drawable/current_place"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/publish_address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textSize="15dp" />
+            android:gravity="center_vertical"
+            android:layout_weight="2"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <!-- 金币 -->
@@ -105,17 +117,20 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/money"
             android:text="@string/completed_taskGold"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/publish_gold"
             android:layout_width="0dp"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textSize="15dp" />
+            android:layout_weight="2"
+            android:textSize="15sp" />
     </LinearLayout>
     <!-- 猎人 -->
 
@@ -127,18 +142,21 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
+            android:drawableLeft="@drawable/acount"
+            android:gravity="center_vertical"
             android:layout_weight="1"
             android:text="@string/completed_hunter"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/publish_hunter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:text="任务还没又被接收哦"
-            android:textSize="15dp" />
+            android:gravity="center_vertical"
+            android:layout_weight="2"
+            android:text="无"
+            android:textSize="15sp" />
     </LinearLayout>
     <!-- 状态 -->
 
@@ -150,7 +168,9 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:drawableLeft="@drawable/task_des"
             android:layout_weight="1"
             android:text="@string/completed_topsy_turvy"
             android:textSize="15dp" />
@@ -158,8 +178,9 @@
         <TextView
             android:id="@+id/publish_topsy_turvy"
             android:layout_width="0dp"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="2"
             android:textSize="15dp" />
     </LinearLayout>
 

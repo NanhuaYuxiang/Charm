@@ -4,52 +4,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-   <!--  <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_marginTop="25dp"
-        android:hint="任务列表空空的呢-.-"
-        android:visibility="invisible"
-        android:textSize="25dp" /> -->
-        
-        <ImageView 
-            android:id="@+id/img_no_task"
-            android:layout_height="fill_parent"
-            android:layout_width="match_parent"
-            android:visibility="invisible"
-            />
+    <ImageView
+        android:id="@+id/img_no_task"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:visibility="invisible" />
 
     <ListView
         android:id="@+id/task_publish_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:divider="#F0F"
-        android:dividerHeight="3px"
-        android:layout_marginTop="50dp" >
+        android:dividerHeight="3px" >
     </ListView>
-<!--发布且完成的  -->
+    <!-- 发布且完成的 -->
+
     <ImageView
         android:id="@+id/image_publish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
         android:src="@drawable/fa_wan" />
-<!-- 发布且未完成的 -->
+    <!-- 发布且未完成的 -->
+
     <ImageView
         android:id="@+id/image_unpublish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
         android:src="@drawable/fa_wei" />
-<!--  接收且完成的-->
+    <!-- 接收且完成的 -->
+
     <ImageView
         android:id="@+id/image_accept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
         android:src="@drawable/jie_wan" />
-<!--  接收且未完成的-->
+    <!-- 接收且未完成的 -->
+
     <ImageView
         android:id="@+id/image_unaccept"
         android:layout_width="wrap_content"

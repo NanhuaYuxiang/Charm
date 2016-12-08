@@ -11,7 +11,7 @@
     <!-- 标题栏 -->
 
     <RelativeLayout
-        android:id="@+id/title_layout1"
+        android:id="@+id/title_layout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/title_bg"
@@ -65,7 +65,6 @@
 
             <RelativeLayout
                 android:id="@+id/rl_spinner"
-                android:layout_below="@id/title_layout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -297,33 +296,30 @@
                     android:background="#ccc" />
             </RelativeLayout>
 
-            <!--
-                 <com.science.strangertofriend.widget.RippleView
-                android:id="@+id/rippleView"
-                android:layout_width="match_parent"
+            <RatingBar
+                android:id="@+id/ratingBar_task"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/add_task_layout"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="30dp"
-                app:rv_ripplePadding="30dp"
-                ripple:rv_type="simpleRipple"
-                ripple:rv_zoom="false" >
-            -->
+                android:layout_alignLeft="@+id/rl_spinner"
+                android:layout_below="@+id/add_task_layout"
+                android:layout_marginTop="15dp"
+                android:progressTint="#ff6787"
+                android:numStars="5" />
 
             <Button
                 android:id="@+id/distribute"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/add_task_layout"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/ratingBar_task"
+                android:layout_marginTop="19dp"
                 android:background="@drawable/button_click"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
                 android:text="发布"
                 android:textColor="#fff"
                 android:textSize="18sp" />
-            <!-- </com.science.strangertofriend.widget.RippleView> -->
+
         </RelativeLayout>
     </com.science.strangertofriend.widget.RevealLayout>
 

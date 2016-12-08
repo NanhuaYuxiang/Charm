@@ -327,7 +327,7 @@ public class MainActivity extends ActionBarActivity implements
 		user.setResource(R.drawable.user);
 		
 		MenuObject elderly= new MenuObject("老人专区");
-		elderly.setResource(R.drawable.default_user_img);
+		elderly.setResource(R.drawable.elderly_logo);
 
 		MenuObject quit = new MenuObject("退出应用");
 		quit.setResource(R.drawable.quit);

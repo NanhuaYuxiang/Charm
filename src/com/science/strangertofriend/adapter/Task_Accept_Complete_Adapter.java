@@ -97,10 +97,10 @@ public class Task_Accept_Complete_Adapter extends BaseAdapter {
 					.findViewById(R.id.publish_publisher);
 			convertView.setTag(viewHolder);
 			// 设置颜色
-			if (position % 2 == 0) {
-				convertView
-						.setBackgroundColor(color.red_btn_bg_color);
-			}
+//			if (position % 2 == 0) {
+//				convertView
+//						.setBackgroundColor(color.red_btn_bg_color);
+//			}
 
 		} else {// convertView 以缓冲
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -204,7 +204,7 @@ public class Task_Accept_Complete_Adapter extends BaseAdapter {
 		String type=vector.get(position).getType();
 		switch (type) {
 		case TaskType.SERVICE_CATERING:
-			
+			viewHolder.publish_type.setText("餐饮服务");
 			break;
 		case TaskType.SERVICE_EDUCATION:
 			viewHolder.publish_type.setText("教育服务");

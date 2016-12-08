@@ -28,7 +28,6 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.SaveCallback;
-import com.avos.avoscloud.LogUtil.log;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.adapter.Task_Accept_UnComplete_Adapter;
 import com.science.strangertofriend.adapter.Task_Publish_Complete_Adapter;
@@ -146,45 +145,6 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 					Task_List_Publish_UnComplete_ListView_Activity.this,
 					Task_List_Accept_UnComplete_ListView_Activity.class));
 		}
-		// switch (v.getId()) {
-		// case R.id.image_root:
-		// openMenu();
-		// break;
-		// case R.id.image_publish:
-		// closeMenu();
-		// finish();
-		// startActivity(new Intent(
-		// Task_List_Publish_UnComplete_ListView_Activity.this,
-		// Task_List_Publish_Complete_ListView_Activity.class));
-		// break;
-		// case R.id.image_unpublish:
-		// closeMenu();
-		// finish();
-		// startActivity(new Intent(
-		// Task_List_Publish_UnComplete_ListView_Activity.this,
-		// Task_List_Publish_UnComplete_ListView_Activity.class));
-		//
-		// break;
-		// case R.id.image_accept:
-		// closeMenu();
-		// finish();
-		// startActivity(new Intent(
-		// Task_List_Publish_UnComplete_ListView_Activity.this,
-		// Task_List_Accept_Complete_ListView_Activity.class));
-		//
-		// break;
-		// case R.id.image_unaccept:
-		// closeMenu();
-		// finish();
-		// startActivity(new Intent(
-		// Task_List_Publish_UnComplete_ListView_Activity.this,
-		// Task_List_Accept_UnComplete_ListView_Activity.class));
-		//
-		// break;
-		//
-		// default:
-		// break;
-		// }
 
 	}
 
@@ -327,7 +287,6 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 				public void done(List<AVObject> arg0, AVException arg1) {
 					AVObject userAccount = arg0.get(arg0.size() - 1);
 					int golds = userAccount.getInt("totalGolds");
-					Log.i("golds2", golds + "");
 					userAccount.put("totalGolds", golds - price);
 					userAccount.saveInBackground();
 				}
@@ -341,7 +300,6 @@ public class Task_List_Publish_UnComplete_ListView_Activity extends
 				public void done(List<AVObject> arg0, AVException arg1) {
 					AVObject userAccount = arg0.get(arg0.size() - 1);
 					int golds = userAccount.getInt("totalGolds");
-					Log.i("golds3", golds + "");
 					userAccount.put("totalGolds", golds + price);
 					userAccount.saveInBackground();
 				}

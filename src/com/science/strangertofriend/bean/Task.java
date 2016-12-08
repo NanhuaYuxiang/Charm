@@ -2,6 +2,8 @@ package com.science.strangertofriend.bean;
 
 import java.io.Serializable;
 
+import android.R.integer;
+
 import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVUser;
 
@@ -31,10 +33,25 @@ public class Task implements Serializable {
 	private String type;
 	private AVUser pub_user;
 	private AVUser acp_user;
+	private int credits;//任务信用要求值
 	
 	public Task() {
 		super();
 	}
+
+	
+	
+	public int getCredits() {
+		return credits;
+	}
+
+
+
+	public void setCredits(int credits) {
+		this.credits = credits;
+	}
+
+
 
 	public AVUser getPub_user() {
 		return pub_user;

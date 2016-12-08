@@ -128,7 +128,6 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 	 *            ListView的id
 	 */
 	private void initValues(ViewHolder viewHolder, int position) {
-
 		viewHolder.publish_address.setText(vector.get(position).getLocation());
 		viewHolder.publish_gold.setText(vector.get(position).getPrice() + "");
 		viewHolder.publish_time.setText(vector.get(position).getEndTime());
@@ -213,7 +212,7 @@ public class Task_Publish_Complete_Adapter extends BaseAdapter {
 		String type=vector.get(position).getType();
 		switch (type) {
 		case TaskType.SERVICE_CATERING:
-			
+			viewHolder.publish_type.setText("餐饮服务");
 			break;
 		case TaskType.SERVICE_EDUCATION:
 			viewHolder.publish_type.setText("教育服务");

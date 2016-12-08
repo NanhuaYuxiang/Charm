@@ -215,7 +215,7 @@ public class Task_Publish_UnComplete_Adapter extends BaseAdapter {
 		String type=vector.get(position).getType();
 		switch (type) {
 		case TaskType.SERVICE_CATERING:
-			
+			viewHolder.publish_type.setText("餐饮服务");
 			break;
 		case TaskType.SERVICE_EDUCATION:
 			viewHolder.publish_type.setText("教育服务");

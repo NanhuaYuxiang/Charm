@@ -1,14 +1,12 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="10dp"
-    android:background="#FFFFFF"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".MainActivity" 
-    xmlns:app="http://schemas.android.com/apk/res/com.science.strangertofriend">
+    tools:context=".MainActivity" >
 
     <RelativeLayout
         android:id="@+id/title_layout"
@@ -28,30 +26,24 @@
             android:minHeight="55dp"
             android:minWidth="55dp"
             android:scaleType="centerInside" />
+        
+         <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#fff"
+            android:text="任务详情"
+            android:textSize="20sp" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:paddingTop="5dp" />
-
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#EAEAEA"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp" >
-
-      <!--   <ImageView
-            android:id="@+id/publisherAvaterImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:padding="5dp" /> -->
-
-        <!-- 圆形头像 -->
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/title_layout"
+        android:orientation="horizontal" >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar"
@@ -82,8 +74,9 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
+                android:drawableLeft="@drawable/user_sign"
                 android:text="主题:"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/taskType"
@@ -92,8 +85,9 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
+                android:drawableLeft="@drawable/sign_icon"
                 android:text="任务类型:"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/taskPrice"
@@ -102,89 +96,98 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
+                android:drawableLeft="@drawable/money"
                 android:text="香金:"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="10dp" >
-
-        <Button
-            android:id="@+id/contactTaskPeopleBtn"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:background="#b29ce3"
-            android:padding="10dp"
-            android:text="联系发布人" />
-
-        <Button
-            android:id="@+id/acceptTaskBtn"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:background="#b29ce3"
-            android:padding="10dp"
-            android:text="接受任务" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="#CCCCCC"
-        android:paddingTop="5dp" />
 
     <TextView
         android:id="@+id/taskDescription"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/relativeLayout2"
+        android:layout_marginTop="28dp"
+        android:gravity="center_vertical"
         android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
+        android:paddingLeft="11dp"
         android:paddingTop="10dp"
         android:text="任务描述:"
-        android:textSize="15sp" />
+        android:drawableLeft="@drawable/task_des"
+        android:textSize="20sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="#CCCCCC"
-        android:paddingTop="5dp" />
-
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp" >
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_marginTop="33dp"
+        android:paddingLeft="15dp" >
 
         <TextView
             android:id="@+id/taskPubliName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="发布人的名字:"
+            android:layout_marginTop="10dp"
+            android:text="发布用户： "
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/acount"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/taskLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="地点:"
+            android:layout_below="@id/taskPubliName"
+            android:text="任务地点： "
+            android:gravity="center_vertical"
+            android:drawableLeft="@drawable/current_place"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/taskEndTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="结束时间:"
+            android:layout_below="@id/taskLocation"
+           	android:gravity="center_vertical"
+            android:text="截止时间："
+            android:drawableLeft="@drawable/clock"
             android:textSize="18sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/taskDescription"
+        android:layout_marginTop="23dp"
+        android:paddingBottom="10dp" >
+
+        <Button
+            android:id="@+id/acceptTaskBtn"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/contactTaskPeopleBtn"
+            android:layout_alignBottom="@+id/contactTaskPeopleBtn"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_click"
+            android:padding="10dp"
+            android:textColor="#fff"
+            android:text="接受任务" />
+
+        <Button
+            android:id="@+id/contactTaskPeopleBtn"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_click"
+            android:textColor="#fff"
+            android:padding="10dp"
+            android:text="联系发布人" />
+    </RelativeLayout>
+
+</RelativeLayout>

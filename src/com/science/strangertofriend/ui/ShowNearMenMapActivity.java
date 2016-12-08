@@ -371,6 +371,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 						taskBean.setAccomplished(task
 								.getBoolean("isAccomplished"));
 						taskBean.setPub_user(task.getAVUser("pub_user"));
+						taskBean.setCredits(task.getInt("credits"));
 						taskNearBy.add(taskBean);
 						// 获取头像url
 						AVUser user = (AVUser) task.getAVUser("pub_user");
@@ -507,6 +508,7 @@ public class ShowNearMenMapActivity extends BaseActivity implements
 				intent.putExtra("endtime", task.getEndTime());
 				intent.putExtra("isAccepted", task.isAccepted());
 				intent.putExtra("isAccomplished", task.isAccomplished());
+				intent.putExtra("credits", task.getCredits());
 
 				// 将AVUser传递过去
 				intent.putExtra("pub_user", task.getPub_user().toString());

@@ -18,7 +18,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.readystatesoftware.systembartint.SystemBarTintManager;

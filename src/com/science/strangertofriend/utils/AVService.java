@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.w3c.dom.UserDataHandler;
 
+import android.R.integer;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -324,11 +325,13 @@ public class AVService {
 	 *            是否已被接受
 	 * @param isAccomplished
 	 *            是否已被完成
+	 * @param  credits
+	 * 			该任务的信用要求值
 	 */
 	public static void addNewTask(AVUser user, String publisherName, String acceptedName,
 			String theme, String des, String endTime, AVGeoPoint geoPoint,
 			String location, String price, String service_type,
-			boolean isAccepted, boolean isAccomplished,
+			boolean isAccepted, boolean isAccomplished,int credits,
 			SaveCallback saveCallback) {
 		AVObject task = new AVObject("Task");
 		task.put("pub_user", user);
@@ -343,6 +346,7 @@ public class AVService {
 		task.put("service_type", service_type);
 		task.put("isAccepted", isAccepted);
 		task.put("isAccomplished", isAccomplished);
+		task.put("credits", credits);
 		task.saveInBackground(saveCallback);
 	}
 

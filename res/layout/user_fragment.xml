@@ -155,12 +155,45 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/acount"
+                    android:drawableLeft="@drawable/money"
                     android:gravity="center_vertical"
                     android:textSize="18sp" />
 				
 				
 				
+                <!-- 用户信誉值 -->
+				
+				<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/user_credit"
+                    android:textColor="#f698b2"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#f698b2" />
+
+                <TextView
+                    android:id="@+id/user_credit"
+                    android:text="100"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/acount"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
+                
+                
                 <!-- 每日签到 -->
 
                 <TextView

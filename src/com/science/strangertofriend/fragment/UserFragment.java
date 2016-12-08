@@ -84,6 +84,7 @@ public class UserFragment extends Fragment implements ScreenShotable {
 	private Button mLogout;
 	private ImageView mAlterPic;
 	private TextView user_totalGolds;// 用户香金余额
+	private TextView user_credit;//用户信用值
 
 	public int i = -1;
 
@@ -136,13 +137,14 @@ public class UserFragment extends Fragment implements ScreenShotable {
 
 		mLogout = (Button) mRootView.findViewById(R.id.logout);
 		user_totalGolds = (TextView) mRootView.findViewById(R.id.user_golds);
+		user_credit=(TextView) mRootView.findViewById(R.id.user_credit);
 	}
 
 	private void initData() {
 //		 int golds = 0;
 		mUsername.setText(AVUser.getCurrentUser().getUsername().toString());
 		mUserAcount.setText(AVUser.getCurrentUser().getEmail().toString());
-		// 查询当前用户香金余额
+		// 查询当前用户香金余额和信用值
 		AVQuery<AVObject> query2=new AVQuery<AVObject>("userAccount");
 		query2.whereEqualTo("username", AVUser.getCurrentUser().getUsername());
 		query2.findInBackground(new FindCallback<AVObject>() {
@@ -150,7 +152,9 @@ public class UserFragment extends Fragment implements ScreenShotable {
 			@Override
 			public void done(List<AVObject> arg0, AVException arg1) {
 					AVObject userAccount=arg0.get(arg0.size()-1);
-				    int golds=userAccount.getInt("totalGolds");
+				    int golds=userAccount.getInt("totalGolds");//用户香金数
+				    int credits=userAccount.getInt("credit");
+				    user_credit.setText(credits+"");
 				    user_totalGolds.setText(golds+"");
 			}
 		});

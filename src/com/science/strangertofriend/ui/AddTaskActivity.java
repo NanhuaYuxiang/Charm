@@ -10,12 +10,15 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Rational;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +37,7 @@ import com.science.strangertofriend.bean.Task;
 import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.widget.RevealLayout;
 
-public class AddTaskActivity extends BaseActivity implements OnClickListener {
+public class AddTaskActivity extends BaseActivity implements OnClickListener, OnRatingBarChangeListener {
 	private AVUser currentUser;
 	private RevealLayout mRevealLayout;
 	private RelativeLayout mLayout, mAdd_task_layout;
@@ -51,7 +54,8 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 	private TextView mSpinnerTitle;
 	private List<String> task_types;
 	private String service_type;// 服务类型
-
+	private RatingBar ratingBar_task;
+	private int credits_task=60;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -141,6 +145,10 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 		});
 
 		spinnner.setOnClickListener(this);
+		
+		
+		ratingBar_task.setOnRatingBarChangeListener(this);
+		
 
 	}
 
@@ -178,7 +186,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 		AVGeoPoint geoPoint = new AVGeoPoint(latitude, longitude);
 		AVService.addNewTask(currentUser,publisherName,"", themeString, descriptionString,
 				endTimeString, geoPoint, locationString, price,
-				service_type,false,false, new SaveCallback() {
+				service_type,false,false,credits_task, new SaveCallback() {
 
 					@Override
 					public void done(AVException exception) {
@@ -245,6 +253,7 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void initView() {
+		ratingBar_task=(RatingBar) findViewById(R.id.ratingBar_task);
 		mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout);
 		mAdd_task_layout = (RelativeLayout) findViewById(R.id.add_task_layout);
 		mLayout = (RelativeLayout) findViewById(R.id.layout);
@@ -320,6 +329,15 @@ public class AddTaskActivity extends BaseActivity implements OnClickListener {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void onRatingChanged(RatingBar ratingBar, float rating,
+			boolean fromUser) {
+//		Toast.makeText(this, "rating--->"+rating, Toast.LENGTH_LONG).show();
+		
+		credits_task=(int)rating*20;
+		
 	}
 
 }

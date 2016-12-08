@@ -35,7 +35,7 @@
                     android:id="@+id/map_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/my_location"
+                    android:background="@drawable/location_map"
                     android:contentDescription="@null" />
             </com.science.strangertofriend.widget.RippleView>
             

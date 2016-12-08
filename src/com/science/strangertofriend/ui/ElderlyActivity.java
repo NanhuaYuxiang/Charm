@@ -23,16 +23,19 @@ import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 import com.iflytek.sunflower.FlowerCollector;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.TaskType;
 import com.science.strangertofriend.utils.AVService;
 import com.science.strangertofriend.utils.JsonParser;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.gesture.Prediction;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -167,7 +170,7 @@ public class ElderlyActivity extends BaseActivity implements OnClickListener {
 		}else{
 			AVService.addNewTask(user, user.getCurrentUser().getUsername(), "",
 					"老人任务", content, "无", geoPoint, addstr, "0",
-					TaskType.SERVICE_ELDERLY, false, false, new SaveCallback() {
+					TaskType.SERVICE_ELDERLY, false, false,80, new SaveCallback() {
 
 						@Override
 						public void done(AVException exception) {
@@ -365,4 +368,18 @@ public class ElderlyActivity extends BaseActivity implements OnClickListener {
 		FlowerCollector.onPause(ElderlyActivity.this);
 		super.onPause();
 	}
+	@Override
+	@TargetApi(19)
+	public void initSystemBar() {
+		super.initSystemBar();
+		// 创建状态栏的管理实例
+		SystemBarTintManager tintManager = new SystemBarTintManager(this);
+		// 激活状态栏设置
+		tintManager.setStatusBarTintEnabled(true);
+		// 激活导航栏设置
+		tintManager.setNavigationBarTintEnabled(true);
+		// 设置一个颜色给系统栏
+		tintManager.setTintColor(Color.parseColor("#f698b2"));
+	}
+	
 }

@@ -17,17 +17,22 @@ import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.SendCallback;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.science.strangertofriend.R;
 import com.science.strangertofriend.TaskType;
 import com.science.strangertofriend.bean.Task;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import android.R.bool;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.BaseBundle;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +41,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DetailedTaskActivity extends Activity implements OnClickListener {
+public class DetailedTaskActivity extends BaseActivity implements OnClickListener {
 
 	private AVUser currentUser;
 	private ImageView back, publisherAvaterImage;
@@ -49,6 +54,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 	private Task task;// 从地图传过来的task对象，可用于获取发布人的AVUser对象，其他的都通过intent传递过来了
 	private AVUser pub_user;// 任务发布人的AVUser对象
 	private String selfId = "";
+	private boolean isAcceptorCreditsMeetTask;// 判断当前用户信用值是否满足任务的要求
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +64,9 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 		currentUser = AVUser.getCurrentUser();
 
 		init();
-
+		isAccepterMeetCredits();
 		if (isTaskAccepted()) {
-			acceptTaskBtn.setText("任务已被接受了哦");
+			acceptTaskBtn.setText("任务已被接收");
 		}
 
 	}
@@ -78,6 +84,17 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 			startActivity(chatIntent);
 		} else if (id == R.id.acceptTaskBtn) {
 			if (!isTaskAccepted()) {
+				if (!isAcceptorCreditsMeetTask) {
+					// 提示用户，自己信用值达不到任务要求
+					SweetAlertDialog dialog = new SweetAlertDialog(
+							DetailedTaskActivity.this,
+							SweetAlertDialog.ERROR_TYPE);
+					dialog.setTitleText(" ");
+					dialog.setContentText("对不起，您的信用值达不到任务要求");
+					dialog.setCancelable(true);
+					dialog.show();
+					return;
+				}
 				final SweetAlertDialog dialog = new SweetAlertDialog(
 						DetailedTaskActivity.this,
 						SweetAlertDialog.WARNING_TYPE);
@@ -115,7 +132,7 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 				acceptTaskBtn.setText("任务已被接受");
 			}
 		}
-   	}
+	}
 
 	public void init() {
 		mCircleImageView = (CircleImageView) findViewById(R.id.avatar);
@@ -186,6 +203,56 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 		new SweetAlertDialog(DetailedTaskActivity.this,
 				SweetAlertDialog.SUCCESS_TYPE).setTitleText("Good job!")
 				.setContentText("接收成功").show();
+
+	}
+
+	Handler mHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case 10:
+				isAcceptorCreditsMeetTask = (boolean) msg.obj;
+				break;
+
+			default:
+				break;
+			}
+
+		};
+	};
+
+	/**
+	 * 判断当前用户(任务接受者)的信用值是否达到任务要求
+	 * 
+	 * @return
+	 */
+	public void isAccepterMeetCredits() {
+
+		AVQuery<AVObject> creditQuery = new AVQuery<AVObject>("userAccount");
+		creditQuery.whereEqualTo("username", AVUser.getCurrentUser()
+				.getUsername());
+		creditQuery.findInBackground(new FindCallback<AVObject>() {
+
+			@Override
+			public void done(List<AVObject> arg0, AVException arg1) {
+				boolean flag;
+				if (arg1 == null) {
+					int userCredits = arg0.get(arg0.size() - 1)
+							.getInt("credit");
+					if (getIntent().getIntExtra("credits", 60) > userCredits) {
+						flag = false;
+					} else {
+						flag = true;
+					}
+
+					Message msg = new Message();
+					msg.what = 10;
+					msg.obj = flag;
+					mHandler.sendMessage(msg);
+				}else {
+					Toast.makeText(DetailedTaskActivity.this, "查询信用值失败！"+arg1.getMessage(), Toast.LENGTH_LONG).show();
+				}
+			}
+		});
 
 	}
 
@@ -289,6 +356,20 @@ public class DetailedTaskActivity extends Activity implements OnClickListener {
 	public boolean isTaskAccepted() {
 		boolean isAccepted = intent.getBooleanExtra("isAccepted", false);
 		return isAccepted;
+	}
+	
+	@Override
+	@TargetApi(19)
+	public void initSystemBar() {
+		super.initSystemBar();
+		// 创建状态栏的管理实例
+		SystemBarTintManager tintManager = new SystemBarTintManager(this);
+		// 激活状态栏设置
+		tintManager.setStatusBarTintEnabled(true);
+		// 激活导航栏设置
+		tintManager.setNavigationBarTintEnabled(true);
+		// 设置一个颜色给系统栏
+		tintManager.setTintColor(Color.parseColor("#f698b2"));
 	}
 
 }
